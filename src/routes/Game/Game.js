@@ -48,12 +48,6 @@ export default class Game extends Component {
             currentState: currentState,
         })
 
-
-        // Test tensor product function
-        const a = [[1, 2], [3, 4]]
-        const b = [[1, 3], [2, 4]]
-        console.log(directProduct(a, b))
-
     }
 
     render() {
