@@ -21,17 +21,17 @@ export default class Game extends Component {
             currentState: [1],
             targetState: [],
             numQubits: 0,
-            gateHistory: [],
+            gateHistory: [[]],
         }
     }
 
     componentDidMount() {
         const {levelId} = this.props.route.params
-        const currentState = [1]
         const gateHistory = []
 
         this.setState({
             levelId: levelId,
+            currentState: Levels[levelId].initialState,
             targetState: Levels[levelId].targetState,
             numQubits: Levels[levelId].numQubits,
         })
@@ -39,21 +39,41 @@ export default class Game extends Component {
         for (let i = 0; i < Levels[levelId].numQubits; i++) {
             gateHistory[i] = []
         }
-        for (let i = 1; i < 2 ** Levels[levelId].numQubits; i++) {
-            currentState.push(0)
-        }
 
         this.setState({
             gateHistory: gateHistory,
-            currentState: currentState,
         })
 
     }
 
+
+    renderQubitGates(qubitGates) {
+
+        return(
+            <View style={styles.qubitGateHistoryContainer}>
+                <View style={styles.initialQubitContainer}>
+                    <Text style={styles.initialQubitText}>0</Text>
+                </View>
+                {
+                    qubitGates.map((value, index) => {
+                        {console.log(value)}
+                    })
+                }
+            </View>
+        )
+    }
+
     render() {
+
+        const {gateHistory} = this.state
 
         return(
             <View style={commonStyles.screenCenter}>
+                {
+                    gateHistory.map((value, index) => {
+                        return this.renderQubitGates(value)
+                    })
+                }
             </View>
         )
     }
