@@ -1,3 +1,4 @@
+import Gates from 'common/Gates'
 
 
 // Calculate tensor product of two matrices
@@ -5,7 +6,7 @@
 // Example:
 // tensorProduct([[1, 2], [3, 4]], [[1, 3], [2, 4]]) = [[1, 3, 2, 6], [2, 4, 4, 8], [3, 9, 4, 12], [6, 12, 8, 16]]
 // tensor products are useful when determining gate matrices for multiple qubits
-export default directProduct = (matrix1, matrix2) => {
+export const directProduct = (matrix1, matrix2) => {
 
     const matrix1_rows = matrix1.length
     const matrix2_rows = matrix2.length
@@ -15,9 +16,6 @@ export default directProduct = (matrix1, matrix2) => {
     let result = []
     let res_row = 0
     let res_col = 0
-
-    console.log(matrix1_rows, matrix1_cols)
-    console.log(matrix2_rows, matrix2_cols)
 
     for (let i = 0; i < result_rows; i++) {
         result[i] = []
@@ -36,8 +34,39 @@ export default directProduct = (matrix1, matrix2) => {
         }
     }
 
-    return result
+    console.log('Direct Prodcut Result: ', result)
 
+    return result
 }
 
 
+export const gateOperation = (gate, state) => {
+
+}
+
+export const getMultiQubitGate = (gate, gateIndex, numQubits) => {
+
+    if (gateIndex > numQubits)
+        return
+
+    const gateMatrix = Gates[gate]
+    const identity = Gates['I']
+
+    if (numQubits === 1)
+        return gateMatrix
+
+    let result = gateIndex === 0 ? gateMatrix : indentity
+
+    for (let i = 1; i < numQubits; i++) {
+        if (i === gateIndex) {
+            result = directProduct(result, gateMatrix)
+        }
+        else {
+            result = directProduct(result, identity)
+        }
+    }
+
+    console.log('MultiQubit Gate Operation Result', result)
+
+    return result
+}
