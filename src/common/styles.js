@@ -1,4 +1,4 @@
-import {StyleSheet} from 'react-native'
+import {StyleSheet, Dimensions} from 'react-native'
 import Colors from 'common/Colors'
 
 export default StyleSheet.create({
@@ -11,5 +11,9 @@ export default StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: Colors.backgroundColor,
+    },
+    fullScreen: {
+        height: Dimensions.get('screen').height,
+        width: Dimensions.get('screen').width,
     },
 })
