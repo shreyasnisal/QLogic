@@ -4,10 +4,10 @@ import Colors from '../../common/Colors'
 export default StyleSheet.create({
     btn: {
         width: '90%',
-        marginVertical: 10,
+        marginVertical: 0,
     },
     titleContainer: {
-        marginBottom: 50,
+        marginBottom: 10,
     },
     title: {
         fontSize: 36,
