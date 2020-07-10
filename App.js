@@ -9,9 +9,14 @@
 import React, {Component} from 'react';
 import {NavigationContainer} from '@react-navigation/native'
 import Navigator from 'navigation/Navigator'
-import { StatusBar } from 'react-native';
+import { StatusBar } from 'react-native'
+import {Immersive} from 'react-native-immersive'
 
 export default class App extends Component {
+
+  componentDidMount() {
+    Immersive.setImmersive(true)
+  }
 
   render() {
     return(

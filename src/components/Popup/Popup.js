@@ -17,7 +17,8 @@ export default class Popup extends Component {
 
         if (visible) {
             return(
-                <TouchableOpacity style={[commonStyles.fullScreen, styles.background]} disabled={!cancelable} onPress={onCancel}>
+                <TouchableOpacity style={[commonStyles.fullScreen, styles.container]} disabled={!cancelable} onPress={onCancel}>
+                    <View style={[commonStyles.fullScreen, styles.container, styles.background]} />
                     <View style={styles.popupContainer}>
                         <View style={styles.popupHeaderContainer}>
                             <Text style={styles.title}>{title}</Text>

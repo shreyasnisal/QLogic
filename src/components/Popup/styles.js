@@ -1,9 +1,7 @@
 import {StyleSheet} from 'react-native'
 
 export default StyleSheet.create({
-    background: {
-        opacity: 0.5,
-        backgroundColor: '#000',
+    container: {
         position: "absolute",
         left: 0,
         right: 0,
@@ -12,9 +10,12 @@ export default StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
+    background: {
+        backgroundColor: '#000',
+        opacity: 0.7,
+    },
     popupContainer: {
         backgroundColor: '#fff',
-        opacity: 1,
         width: '50%',
         elevation: 10,
     }
