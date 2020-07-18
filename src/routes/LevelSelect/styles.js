@@ -31,6 +31,10 @@ export default StyleSheet.create({
         width: Dimensions.get('screen').height * 0.16,
         height: Dimensions.get('screen').height * 0.2,
         marginRight: Dimensions.get('screen').width * 0.02,
-        // marginBottom: 10,
-    }
+    },
+    carouselIndicators: {
+        width: '5%',
+        alignSelf: 'center',
+        marginTop: Dimensions.get('screen').height * 0.05,
+    },
 })

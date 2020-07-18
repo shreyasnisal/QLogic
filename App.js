@@ -16,6 +16,15 @@ export default class App extends Component {
 
   componentDidMount() {
     Immersive.setImmersive(true)
+    Immersive.addImmersiveListener(this.restoreImmersive)
+  }
+
+  componentWillUnmount() {
+    Immersive.removeImmersiveListener(this.restoreImmersive)
+  }
+
+  restoreImmersive = () => {
+    Immersive.on()
   }
 
   render() {

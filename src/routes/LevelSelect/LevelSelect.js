@@ -14,6 +14,7 @@ import styles from './styles'
 import LevelButton from 'components/LevelButton/LevelButton'
 import BackButton from 'components/BackButton/BackButton'
 import Levels from 'common/Levels'
+import CarouselIndicators from 'components/CarouselIndicators/CarouselIndicators'
 
 export default class LevelSelect extends Component {
 
@@ -33,11 +34,19 @@ export default class LevelSelect extends Component {
         this.state = {
             pages: pages,
             rows: rows,
+            currentPage: 0,
         }
     }
 
     backButton = () => {
         this.props.navigation.navigate('Home')
+    }
+
+    handleScroll = (event) => {
+        const pageNumber = Math.round(event.nativeEvent.contentOffset.x / Dimensions.get('screen').width)
+        this.setState({
+            currentPage: pageNumber
+        })
     }
     
     render() {
@@ -52,6 +61,7 @@ export default class LevelSelect extends Component {
                     horizontal
                     showsHorizontalScrollIndicator={false}
                     snapToInterval={Dimensions.get('screen').width}
+                    onMomentumScrollEnd={this.handleScroll}
                 >
                     {this.state.pages.map((pageNumber, pageIndex) => {
                         return(
@@ -77,24 +87,10 @@ export default class LevelSelect extends Component {
                                         )
                                 })}
                             </View>
-
                         )
                     })}
-                    {/* <View style={styles.levelsContainer}>
-                        {Levels.map((value, index) => {
-                            return(
-                                <LevelButton
-                                    key={index}
-                                    style={styles.levelBtn}
-                                    isLocked={false}
-                                    stars={2}
-                                    levelNumber={index + 1}
-                                    onPress={() => {}}
-                                />
-                            )
-                        })}
-                    </View> */}
                 </ScrollView>
+                <CarouselIndicators style={styles.carouselIndicators} numPages={this.state.pages.length} currentPage={this.state.currentPage} />
             </View>
         )
     }
