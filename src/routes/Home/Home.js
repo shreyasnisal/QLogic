@@ -21,7 +21,7 @@ export default class Home extends Component {
     }
 
     playButton = () => {
-        this.props.navigation.navigate('Game', {levelId: 0})
+        this.props.navigation.navigate('LevelSelect')
     }
 
     exitButton = () => {
@@ -58,6 +58,8 @@ export default class Home extends Component {
                     primaryBtnAction={this.exitGame}
                     secondaryBtnTitle={'No'}
                     secondaryBtnAction={this.hideExitPopup}
+                    cancelable={true}
+                    onCancel={this.hideExitPopup}
                 />
 
             </View>
