@@ -7,6 +7,7 @@ import {
     ScrollView,
     FlatList,
     Dimensions,
+    AsyncStorage,
 } from 'react-native'
 import PrimaryButton from 'components/PrimaryButton/PrimaryButton'
 import SecondaryButton from 'components/SecondaryButton/SecondaryButton'
@@ -35,7 +36,15 @@ export default class LevelSelect extends Component {
             pages: pages,
             rows: rows,
             currentPage: 0,
+            levelData: []
         }
+    }
+
+    getLevelData = async () => {
+        const levelData = JSON.parse(await AsyncStorage.getItem('levelData'))
+        this.setState({
+            levelData: levelData
+        })
     }
 
     backButton = () => {
@@ -50,6 +59,9 @@ export default class LevelSelect extends Component {
     }
     
     render() {
+
+        const {levelData, pages, rows} = this.state
+
         return(
             <View style={styles.container}>
                 <BackButton onPress={this.backButton} />
@@ -63,10 +75,10 @@ export default class LevelSelect extends Component {
                     snapToInterval={Dimensions.get('screen').width}
                     onMomentumScrollEnd={this.handleScroll}
                 >
-                    {this.state.pages.map((pageNumber, pageIndex) => {
+                    {pages.map((pageNumber, pageIndex) => {
                         return(
                             <View key={pageIndex} style={styles.levelsContainer}>
-                                {this.state.rows.map((rowNumber, rowIndex) => {
+                                {rows.map((rowNumber, rowIndex) => {
                                     if (rowNumber >= pageNumber * 3 && rowNumber < 3 + pageNumber * 3)
                                         return(
                                             <View key={rowIndex} style={styles.levelsRow}>
@@ -76,8 +88,8 @@ export default class LevelSelect extends Component {
                                                         <LevelButton
                                                             key={index}
                                                             style={styles.levelBtn}
-                                                            isLocked={false}
-                                                            stars={2}
+                                                            isLocked={index > levelData.length}
+                                                            stars={levelData[index]}
                                                             levelNumber={index + 1}
                                                             onPress={() => {}}
                                                         />

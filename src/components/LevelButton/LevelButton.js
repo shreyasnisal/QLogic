@@ -24,7 +24,7 @@ export default class LevelButton extends Component {
                     <MaterialIcons name={stars === 3 ? 'star' : 'star-border'} size={20} />
                 </View>}
                 {isLocked && <View style={styles.lockRow}>
-                    <MaterialIcons name='lock' size={20} />
+                    <MaterialIcons name='lock' size={18} />
                 </View>}
             </View>
         )

@@ -6,18 +6,18 @@ export default StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         marginTop: Dimensions.get('screen').height * 0.05,
+        marginBottom: Dimensions.get('screen').height * 0.02,
     },
     title: {
         fontSize: 24,
     },
     levelPagesScrollView: {
-
     },
     levelsContainer: {
         flex: 1,
         width: Dimensions.get('screen').width,
         alignItems: 'center',
-        justifyContent: 'space-between',
+        justifyContent: 'space-between'
     },
     levelsRow: {
         width: '100%',
@@ -25,7 +25,8 @@ export default StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        marginTop: Dimensions.get('screen').height * 0.05,
+        marginTop: Dimensions.get('screen').height * 0.02,
+        marginBottom: Dimensions.get('screen').height * 0.02,
     },
     levelBtn: {
         width: Dimensions.get('screen').height * 0.16,
