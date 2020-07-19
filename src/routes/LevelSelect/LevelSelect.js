@@ -91,7 +91,7 @@ export default class LevelSelect extends Component {
                                                             isLocked={index > levelData.length}
                                                             stars={levelData[index]}
                                                             levelNumber={index + 1}
-                                                            onPress={() => {}}
+                                                            onPress={() => {this.props.navigation.navigate('Game', {levelId: index})}}
                                                         />
                                                     )
                                                 })}

@@ -45,7 +45,6 @@ export default class Home extends Component {
                     <Text style={styles.title}>{'  <Q|Logic>  '}</Text>
                 </View>
                 <PrimaryButton style={styles.btn} onPress={this.playButton} title='Play' />
-                <SecondaryButton style={styles.btn} title='Playground' />
                 <SecondaryButton style={styles.btn} title='Settings' />
                 <SecondaryButton style={styles.btn} title='How to Play' />
                 <SecondaryButton style={styles.btn} onPress={this.exitButton} title='Exit' />

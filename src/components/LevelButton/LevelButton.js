@@ -15,7 +15,7 @@ export default class LevelButton extends Component {
 
         return(
             <View style={[styles.btnContainer, style]}>
-                <TouchableOpacity onPress={onPress} style={[styles.btn, isLocked ? styles.lockedBtn : styles.activeBtn]}>
+                <TouchableOpacity disabled={isLocked} onPress={onPress} style={[styles.btn, isLocked ? styles.lockedBtn : styles.activeBtn]}>
                     <Text style={[styles.text]}>{levelNumber}</Text>
                 </TouchableOpacity>
                 {stars && <View style={styles.starRow}>
