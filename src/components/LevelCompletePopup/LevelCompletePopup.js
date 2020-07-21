@@ -15,6 +15,7 @@ export default class LevelCompletePopup extends Component {
     constructor(props) {
         super(props)
         this.state = {
+            popupScale: new Animated.Value(0),
             star1Scale: new Animated.Value(0),
             star2Scale: new Animated.Value(0),
             star3Scale: new Animated.Value(0),
@@ -23,13 +24,19 @@ export default class LevelCompletePopup extends Component {
 
     render() {
         const {stars, visible, onPressMenu, onPressReplay, onPressNext} = this.props
-        const {star1Scale, star2Scale, star3Scale} = this.state
+        const {popupScale, star1Scale, star2Scale, star3Scale} = this.state
 
         if (!visible) return null;
+
+        Animated.spring(popupScale, {
+            toValue: 1,
+            useNativeDriver: true,
+        }).start()
 
         Animated.spring(star1Scale, {
             toValue: 1,
             friction: 2,
+            delay: 200,
             useNativeDriver: true,
         }).start()
 
@@ -43,7 +50,7 @@ export default class LevelCompletePopup extends Component {
         Animated.spring(star3Scale, {
             toValue: 1,
             friction: 2,
-            delay: 1000,
+            delay: 800,
             useNativeDriver: true,
         }).start()
 
@@ -51,7 +58,7 @@ export default class LevelCompletePopup extends Component {
         return(
             <View style={[commonStyles.fullScreen, styles.container]}>
                 <View style={[commonStyles.fullScreen, styles.container, styles.background]} />
-                <View style={styles.popupContainer}>
+                <Animated.View style={[styles.popupContainer, {transform: [{scale: popupScale}]}]}>
                     <View style={styles.popupHeaderContainer}>
                         <Text style={styles.title}>Level Complete</Text>
                     </View>
@@ -77,7 +84,7 @@ export default class LevelCompletePopup extends Component {
                             <MaterialIcons name='chevron-right' size={50} color={Colors.buttonText} />
                         </TouchableOpacity>}
                     </View>
-                </View>
+                </Animated.View>
             </View>
         )
     }

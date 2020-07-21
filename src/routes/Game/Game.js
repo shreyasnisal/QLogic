@@ -19,6 +19,7 @@ import Gate from 'components/Gate/Gate'
 import Header from 'components/Header/Header'
 import MaterialCommunityIcons from 'react-native-vector-icons/dist/MaterialCommunityIcons'
 import LevelCompletePopup from 'components/LevelCompletePopup/LevelCompletePopup'
+import AsyncStorage from '@react-native-community/async-storage'
 
 export default class Game extends Component {
 
@@ -45,8 +46,10 @@ export default class Game extends Component {
             exitPopupVisible: false,
             selectedGate: null,
             loading: false,
-            levelCompleted: true,
+            levelCompleted: false,
             replayPopupVisible: false,
+            moves: 0,
+            stars: 1,
         }
 
     }
@@ -82,6 +85,49 @@ export default class Game extends Component {
         })
     }
 
+    nextLevel = () => {
+        const {levelId} = this.state
+
+        this.props.navigation.goBack()
+        this.props.navigation.navigate('Game', {levelId: levelId + 1})
+    }
+    
+    checkCompletion = (currentState, targetState) => {
+        if (currentState.length !== targetState.length)
+            return false
+        
+        for (let i = 0; i < currentState.length; i++) {
+            for (let j = 0; j < currentState[i].length; j++) {
+                if (currentState[i][j] !== targetState[i][j])
+                    return false
+            }
+        }
+
+        return true
+    }
+
+    levelComplete = async () => {
+        let levelsData = JSON.parse(await AsyncStorage.getItem('levelsData'))
+        if (!levelsData) levelsData = []
+        const {moves, levelId} = this.state
+        let stars = 1
+
+        if (moves <= Levels[levelId].minMoves) {
+            stars = 3
+        }
+        else if (moves <= Levels[levelId].maxMoves_2star) {
+            stars = 2
+        }
+
+        levelsData[levelId] = stars
+        AsyncStorage.setItem('levelsData', JSON.stringify(levelsData))
+
+        this.setState({
+            stars: stars,
+            levelCompleted: true,
+        })
+    }
+
     selectGate = (gateName) => {
         this.setState({
             selectedGate: gateName
@@ -94,12 +140,14 @@ export default class Game extends Component {
             loading: true
         })
 
-        const {gateHistory, selectedGate, numQubits, currentState} = this.state
+        const {gateHistory, selectedGate, numQubits, currentState, moves, targetState} = this.state
         gateHistory[qubitIndex].push(selectedGate)
 
         const gateMatrix = GateOperations.getMultiQubitGate(selectedGate, qubitIndex, numQubits)
-        const targetState = GateOperations.operateGate(gateMatrix, currentState)
-        console.log(targetState)
+        const newState = GateOperations.operateGate(gateMatrix, currentState)
+        if (this.checkCompletion(newState, targetState)) {
+            this.levelComplete()
+        }
 
         for (let i = 0; i < numQubits; i++) {
             if (i !== qubitIndex)
@@ -108,6 +156,7 @@ export default class Game extends Component {
 
         this.setState({
             loading: false,
+            moves: moves + 1,
         })
     }
 
@@ -150,7 +199,7 @@ export default class Game extends Component {
 
     render() {
 
-        const {gateHistory, exitPopupVisible, usableGates, levelCompleted} = this.state
+        const {gateHistory, exitPopupVisible, usableGates, levelCompleted, stars} = this.state
 
         return(
             <View style={commonStyles.container}>
@@ -190,10 +239,10 @@ export default class Game extends Component {
                 />
                 <LevelCompletePopup
                     visible={levelCompleted}
-                    stars={3}
+                    stars={stars}
                     onPressMenu={this.exitToMenu}
                     onPressReplay={this.resetLevel}
-                    onPressNext={() => {}}
+                    onPressNext={this.nextLevel}
                 />
             </View>
         )

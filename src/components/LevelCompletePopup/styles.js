@@ -18,7 +18,6 @@ export default StyleSheet.create({
     popupContainer: {
         backgroundColor: '#fff',
         width: '30%',
-        elevation: 10,
         alignItems: 'center',
     },
     starsRow: {

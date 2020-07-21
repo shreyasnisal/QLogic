@@ -1,9 +1,6 @@
 import {StyleSheet, Dimensions} from 'react-native'
 
 export default StyleSheet.create({
-    levelPagesScrollView: {
-        marginBottom: 0,
-    },
     levelsContainer: {
         flex: 1,
         width: Dimensions.get('screen').width,

@@ -20,9 +20,9 @@ export default class LevelButton extends Component {
                     <Text style={[styles.text, isLocked ? styles.lockedText : styles.unlockedText]}>{levelNumber}</Text>
                 </TouchableOpacity>
                 {stars && <View style={styles.starRow}>
-                    <MaterialIcons name={'star'} size={30} color={Colors.headerColor} style={styles.star1} />
-                    {stars >= 2 && <MaterialIcons name={'star'} size={30} color={Colors.headerColor} style={styles.star2} />}
-                    {stars >= 3 && <MaterialIcons name={'star'} size={30} color={Colors.headerColor} style={styles.star3} />}
+                    <MaterialIcons name={'star'} size={30} color={Colors.lockBlue} style={styles.star1} />
+                    {stars >= 2 && <MaterialIcons name={'star'} size={30} color={Colors.lockBlue} style={styles.star2} />}
+                    {stars >= 3 && <MaterialIcons name={'star'} size={30} color={Colors.lockBlue} style={styles.star3} />}
                 </View>}
                 {isLocked && <View style={styles.lock}>
                     <MaterialIcons name='lock' size={25} color={Colors.lockBlue} />

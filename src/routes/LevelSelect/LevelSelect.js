@@ -7,7 +7,6 @@ import {
     ScrollView,
     FlatList,
     Dimensions,
-    AsyncStorage,
 } from 'react-native'
 import PrimaryButton from 'components/PrimaryButton/PrimaryButton'
 import SecondaryButton from 'components/SecondaryButton/SecondaryButton'
@@ -18,8 +17,11 @@ import Levels from 'common/Levels'
 import CarouselIndicators from 'components/CarouselIndicators/CarouselIndicators'
 import Header from 'components/Header/Header'
 import Background from 'components/Background/Background'
+import AsyncStorage from '@react-native-community/async-storage'
 
 export default class LevelSelect extends Component {
+
+    mScrollView = React.createRef()
 
     constructor(props) {
         super(props)
@@ -38,15 +40,24 @@ export default class LevelSelect extends Component {
             pages: pages,
             rows: rows,
             currentPage: 0,
-            levelData: []
+            levelsData: []
         }
+
+        this.props.navigation.addListener('focus', this.getLevelsData)
     }
 
-    getLevelData = async () => {
-        const levelData = JSON.parse(await AsyncStorage.getItem('levelData'))
+    componentWillUnmount() {
+        this.props.navigation.removeListener('focus', this.getLevels)
+    }
+
+    getLevelsData = async () => {
+        const levelsData = JSON.parse(await AsyncStorage.getItem('levelsData'))
         this.setState({
-            levelData: levelData
+            levelsData: levelsData ? levelsData : []
         })
+
+        const scrollToPage = levelsData ? (levelsData.length + 1) / 15 : 0
+        this.mScrollView.current.scrollTo({x: scrollToPage * Dimensions.get('screen').width, animated: true})
     }
 
     backButton = () => {
@@ -62,18 +73,19 @@ export default class LevelSelect extends Component {
     
     render() {
 
-        const {levelData, pages, rows} = this.state
+        const {levelsData, pages, rows} = this.state
 
         return(
             <View style={commonStyles.container}>
                 <Header title='Select a Level' onPressBack={this.backButton} />
                 <Background />
                 <ScrollView
-                    style={styles.levelPagesScrollView}
+                    ref={this.mScrollView}
                     horizontal
                     showsHorizontalScrollIndicator={false}
                     snapToInterval={Dimensions.get('screen').width}
                     onMomentumScrollEnd={this.handleScroll}
+                    pinchGestureEnabled={false}
                 >
                     {pages.map((pageNumber, pageIndex) => {
                         return(
@@ -88,8 +100,8 @@ export default class LevelSelect extends Component {
                                                         <LevelButton
                                                             key={index}
                                                             style={styles.levelBtn}
-                                                            isLocked={index > levelData.length}
-                                                            stars={levelData[index]}
+                                                            isLocked={index > levelsData.length}
+                                                            stars={levelsData[index]}
                                                             levelNumber={index + 1}
                                                             onPress={() => {this.props.navigation.navigate('Game', {levelId: index})}}
                                                         />
