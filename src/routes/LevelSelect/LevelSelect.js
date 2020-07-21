@@ -11,11 +11,13 @@ import {
 } from 'react-native'
 import PrimaryButton from 'components/PrimaryButton/PrimaryButton'
 import SecondaryButton from 'components/SecondaryButton/SecondaryButton'
+import commonStyles from 'common/styles'
 import styles from './styles'
 import LevelButton from 'components/LevelButton/LevelButton'
-import BackButton from 'components/BackButton/BackButton'
 import Levels from 'common/Levels'
 import CarouselIndicators from 'components/CarouselIndicators/CarouselIndicators'
+import Header from 'components/Header/Header'
+import Background from 'components/Background/Background'
 
 export default class LevelSelect extends Component {
 
@@ -63,11 +65,9 @@ export default class LevelSelect extends Component {
         const {levelData, pages, rows} = this.state
 
         return(
-            <View style={styles.container}>
-                <BackButton onPress={this.backButton} />
-                <View style={styles.titleContainer}>
-                    <Text style={styles.title}>Select a Level</Text>
-                </View>
+            <View style={commonStyles.container}>
+                <Header title='Select a Level' onPressBack={this.backButton} />
+                <Background />
                 <ScrollView
                     style={styles.levelPagesScrollView}
                     horizontal

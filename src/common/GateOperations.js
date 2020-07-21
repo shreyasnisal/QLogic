@@ -34,16 +34,37 @@ export const directProduct = (matrix1, matrix2) => {
         }
     }
 
-    console.log('Direct Prodcut Result: ', result)
+    return result
+}
+
+
+export const operateGate = (gate, state) => {
+    const gate_rows = gate.length
+    const gate_cols = gate[0].length
+    const state_rows = state.length
+
+    if (gate_cols !== state_rows)
+        return null
+
+    const result = []
+    for (let i = 0; i < state_rows; i++) {
+        result[i] = []
+    }
+
+    // standard matrix multiplication code
+    for (let i = 0; i < gate_rows; i++) {
+        result[i][0] = 0
+        for (let j = 0; j < gate_cols; j++) {
+            result[i][0] += gate[i][j] * state[j][0]
+        }
+    }
 
     return result
 }
 
 
-export const gateOperation = (gate, state) => {
-
-}
-
+// function to extrapolate a single qubit gate to a multi-qubit system
+// returns the final gate matrix to be applied to be applied to the entire system
 export const getMultiQubitGate = (gate, gateIndex, numQubits) => {
 
     if (gateIndex > numQubits)
@@ -55,7 +76,7 @@ export const getMultiQubitGate = (gate, gateIndex, numQubits) => {
     if (numQubits === 1)
         return gateMatrix
 
-    let result = gateIndex === 0 ? gateMatrix : indentity
+    let result = gateIndex === 0 ? gateMatrix : identity
 
     for (let i = 1; i < numQubits; i++) {
         if (i === gateIndex) {
@@ -65,8 +86,6 @@ export const getMultiQubitGate = (gate, gateIndex, numQubits) => {
             result = directProduct(result, identity)
         }
     }
-
-    console.log('MultiQubit Gate Operation Result', result)
 
     return result
 }

@@ -1,6 +1,33 @@
 import {StyleSheet, Dimensions} from 'react-native'
+import Colors from 'common/Colors'
 
 export default StyleSheet.create({
+    qubitGateHistoryContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    initialQubitContainer: {
+        width: Dimensions.get('screen').width * 0.1,
+        height: Dimensions.get('screen').width * 0.03,
+        borderRadius: Dimensions.get('screen').width * 0.1,
+        backgroundColor: Colors.buttonColor,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    connectingLine: {
+        borderColor: Colors.buttonColor,
+        borderBottomWidth: 2,
+        width: '10%',
+    },
+    blankLine: {
+        borderColor: Colors.buttonColor,
+        borderBottomWidth: 2,
+        width: '11%',
+    },
+    appliedGate: {
+    },
+    gatePlaceContainer: {
+    },
     gatesContainer: {
         backgroundColor: '#fff',
         position: 'absolute',

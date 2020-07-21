@@ -5,16 +5,20 @@ import {
     View,
     ActivityIndicator,
     ScrollView,
+    TouchableOpacity,
 } from 'react-native'
 import commonStyles from 'common/styles'
 import styles from './styles'
 import Levels from 'common/Levels'
 import Colors from 'common/Colors'
 import * as GateOperations from 'common/GateOperations'
+import Gates from 'common/Gates'
 import { getMultiQubitGate } from '../../common/GateOperations'
-import BackButton from 'components/BackButton/BackButton'
 import Popup from 'components/Popup/Popup'
 import Gate from 'components/Gate/Gate'
+import Header from 'components/Header/Header'
+import MaterialCommunityIcons from 'react-native-vector-icons/dist/MaterialCommunityIcons'
+import LevelCompletePopup from 'components/LevelCompletePopup/LevelCompletePopup'
 
 export default class Game extends Component {
 
@@ -39,7 +43,12 @@ export default class Game extends Component {
             usableGates: Levels[levelId].gates,
             gateHistory: gateHistory,
             exitPopupVisible: false,
+            selectedGate: null,
+            loading: false,
+            levelCompleted: true,
+            replayPopupVisible: false,
         }
+
     }
 
     showExitPopup = () => {
@@ -58,6 +67,50 @@ export default class Game extends Component {
         this.props.navigation.navigate('LevelSelect')
     }
 
+    resetLevel = () => {
+        const {levelId} = this.state
+        const gateHistory = []
+        for (let i = 0; i < Levels[levelId].numQubits; i++) {
+            gateHistory[i] = []
+        }
+
+        this.setState({
+            currentState: Levels[levelId].initialState,
+            gateHistory: gateHistory,
+            levelCompleted: false,
+            resetPopupVisible: false,
+        })
+    }
+
+    selectGate = (gateName) => {
+        this.setState({
+            selectedGate: gateName
+        })
+    }
+
+    placeGate = (qubitIndex) => {
+
+        this.setState({
+            loading: true
+        })
+
+        const {gateHistory, selectedGate, numQubits, currentState} = this.state
+        gateHistory[qubitIndex].push(selectedGate)
+
+        const gateMatrix = GateOperations.getMultiQubitGate(selectedGate, qubitIndex, numQubits)
+        const targetState = GateOperations.operateGate(gateMatrix, currentState)
+        console.log(targetState)
+
+        for (let i = 0; i < numQubits; i++) {
+            if (i !== qubitIndex)
+                gateHistory[i].push('-')
+        }
+
+        this.setState({
+            loading: false,
+        })
+    }
+
 
     renderQubitGates(qubitGates, qubitIndex) {
 
@@ -68,20 +121,40 @@ export default class Game extends Component {
                 </View>
                 {
                     qubitGates.map((value, index) => {
-                        {this.renderGate(value, index)}
+                        if (value !== '-') {
+                            return (
+                                <>
+                                    <View style={styles.connectingLine} />
+                                    <Gate
+                                        name={value}
+                                        style={styles.appliedGate}
+                                        disabled={true}
+                                    />
+                                </>
+                            )
+                        }
+                        else {
+                            return (
+                                <View style={styles.blankLine} />
+                            )
+                        }
                     })
                 }
+                <View style={styles.connectingLine} />
+                <TouchableOpacity style={styles.gatePlaceContainer} onPress={() => this.placeGate(qubitIndex)}>
+                    <MaterialCommunityIcons name='circle-outline' size={40} color={Colors.headerTextColor} />
+                </TouchableOpacity>
             </View>
         )
     }
 
     render() {
 
-        const {gateHistory, exitPopupVisible, usableGates} = this.state
+        const {gateHistory, exitPopupVisible, usableGates, levelCompleted} = this.state
 
         return(
             <View style={commonStyles.container}>
-                <BackButton onPress={this.showExitPopup} />
+                <Header onPressBack={this.showExitPopup} />
                 <View style={styles.gatesContainer}>
                     {
                         // render usable gate buttons
@@ -92,7 +165,7 @@ export default class Game extends Component {
                                     name={value}
                                     style={styles.gateBtn}
                                     disabled={false}
-                                    onPress={() => {}}
+                                    onPress={() => {this.selectGate(value)}}
                                 />
                             )
                         })
@@ -114,6 +187,13 @@ export default class Game extends Component {
                     secondaryBtnAction={this.hideExitPopup}
                     cancelable={true}
                     onCancel={this.hideExitPopup}
+                />
+                <LevelCompletePopup
+                    visible={levelCompleted}
+                    stars={3}
+                    onPressMenu={this.exitToMenu}
+                    onPressReplay={this.resetLevel}
+                    onPressNext={() => {}}
                 />
             </View>
         )

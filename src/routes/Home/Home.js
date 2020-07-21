@@ -10,6 +10,8 @@ import styles from './styles'
 import PrimaryButton from 'components/PrimaryButton/PrimaryButton'
 import SecondaryButton from 'components/SecondaryButton/SecondaryButton'
 import Popup from 'components/Popup/Popup'
+import Header from 'components/Header/Header'
+import Background from '../../components/Background/Background'
 
 export default class Home extends Component {
 
@@ -40,15 +42,14 @@ export default class Home extends Component {
         const {exitPopupVisible} = this.state
 
         return(
-            <View style={commonStyles.screenCenter}>
-                <View style={styles.titleContainer}>
-                    <Text style={styles.title}>{'  <Q|Logic>  '}</Text>
+            <View style={commonStyles.container}>
+                <Background />
+                <Header title='<Q | Logic>' onPressHelp={() => {}} onPressSettings={() => {}} />
+                <View style={styles.buttonsContainer}>
+                    <PrimaryButton style={styles.btn} onPress={this.playButton} title='Play' />
+                    <PrimaryButton style={styles.btn} onPress={() => {}} title='Playground' />
+                    <SecondaryButton style={styles.btn} onPress={this.exitButton} title='Exit' />
                 </View>
-                <PrimaryButton style={styles.btn} onPress={this.playButton} title='Play' />
-                <SecondaryButton style={styles.btn} title='Settings' />
-                <SecondaryButton style={styles.btn} title='How to Play' />
-                <SecondaryButton style={styles.btn} onPress={this.exitButton} title='Exit' />
-
                 <Popup
                     visible={exitPopupVisible}
                     title={'Exit'}

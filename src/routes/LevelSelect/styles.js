@@ -1,23 +1,14 @@
 import {StyleSheet, Dimensions} from 'react-native'
 
 export default StyleSheet.create({
-    titleContainer: {
-        width: '100%',
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginTop: Dimensions.get('screen').height * 0.05,
-        marginBottom: Dimensions.get('screen').height * 0.02,
-    },
-    title: {
-        fontSize: 24,
-    },
     levelPagesScrollView: {
+        marginBottom: 0,
     },
     levelsContainer: {
         flex: 1,
         width: Dimensions.get('screen').width,
         alignItems: 'center',
-        justifyContent: 'space-between'
+        // justifyContent: 'space-between'
     },
     levelsRow: {
         width: '100%',
@@ -25,17 +16,19 @@ export default StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        marginTop: Dimensions.get('screen').height * 0.02,
+        marginTop: Dimensions.get('screen').height * 0.05,
         marginBottom: Dimensions.get('screen').height * 0.02,
     },
     levelBtn: {
         width: Dimensions.get('screen').height * 0.16,
-        height: Dimensions.get('screen').height * 0.2,
+        height: Dimensions.get('screen').height * 0.16,
+        // height: Dimensions.get('screen').height * 0.2,
         marginRight: Dimensions.get('screen').width * 0.02,
     },
     carouselIndicators: {
-        width: '5%',
+        width: '100%',
         alignSelf: 'center',
-        marginTop: Dimensions.get('screen').height * 0.05,
+        // marginTop: Dimensions.get('screen').height * 0.05,
+        marginBottom: Dimensions.get('screen').height * 0.05,
     },
 })

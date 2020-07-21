@@ -1,17 +1,22 @@
-import {StyleSheet} from 'react-native'
+import {StyleSheet, Dimensions} from 'react-native'
 import Colors from '../../common/Colors'
 
 export default StyleSheet.create({
+    buttonsContainer: {
+        flex: 1,
+        alignSelf: 'center',
+        justifyContent: 'center',
+        width: '40%',
+    },
     btn: {
-        width: '90%',
-        marginVertical: 0,
+        marginVertical: Dimensions.get('screen').height * 0.03,
     },
     titleContainer: {
         marginBottom: 10,
     },
     title: {
         fontSize: 36,
-        color: Colors.themeColor,
+        color: Colors.buttonColor,
         fontWeight: 'bold'
     }
 })

@@ -3,16 +3,16 @@ import Colors from 'common/Colors'
 
 export default StyleSheet.create({
     btnStyle: {
-        backgroundColor: Colors.backgroundColor,
+        backgroundColor: 'rgba(0, 0, 0, 0)',
         alignItems: 'center',
         justifyContent: 'center',
         paddingVertical: '2%',
         borderRadius: 5,
         borderWidth: 1,
-        borderColor: Colors.themeColor,
+        borderColor: Colors.buttonColor,
     },
     title: {
-        color: Colors.themeColor,
+        color: Colors.buttonColor,
         fontSize: 20,
     }
 })
