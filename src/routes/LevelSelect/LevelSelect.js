@@ -56,7 +56,7 @@ export default class LevelSelect extends Component {
             levelsData: levelsData ? levelsData : []
         })
 
-        const scrollToPage = levelsData ? (levelsData.length + 1) / 15 : 0
+        const scrollToPage = Math.floor(levelsData ? (levelsData.length + 1) / 15 : 0)
         this.mScrollView.current.scrollTo({x: scrollToPage * Dimensions.get('screen').width, animated: true})
     }
 
