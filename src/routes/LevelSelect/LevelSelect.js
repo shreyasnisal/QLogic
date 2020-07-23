@@ -42,7 +42,9 @@ export default class LevelSelect extends Component {
             currentPage: 0,
             levelsData: []
         }
+    }
 
+    componentDidMount() {
         this.props.navigation.addListener('focus', this.getLevelsData)
     }
 

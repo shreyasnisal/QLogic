@@ -39,6 +39,10 @@ export default class Game extends Component {
             gateHistory[i] = []
         }
 
+        if (levelId === 0) {
+            this.showIntro()
+        }
+
         // add required variables to component's state
         this.state = {
             levelId: levelId,
@@ -56,6 +60,19 @@ export default class Game extends Component {
             stars: 1,
             controlQubit: null,
             lines: [],
+            tipPopupVisible: true,
+            introPopupVisible: false,
+        }
+    }
+
+    showIntro = async () => {
+        const shownIntro = JSON.parse(await AsyncStorage.getItem('shownIntro'))
+
+        if (!shownIntro) {
+            this.setState({
+                introPopupVisible: true,
+                tipPopupVisible: false,
+            })
         }
     }
 
@@ -73,6 +90,21 @@ export default class Game extends Component {
 
     exitToMenu = () => {
         this.props.navigation.navigate('LevelSelect')
+    }
+
+    hideTipPopup = () => {
+        this.setState({
+            tipPopupVisible: false,
+        })
+    }
+
+    hideIntroPopup = () => {
+        AsyncStorage.setItem('shownIntro', JSON.stringify(true))
+
+        this.setState({
+            introPopupVisible: false,
+            tipPopupVisible: true,
+        })
     }
 
     resetLevel = () => {
@@ -273,7 +305,7 @@ export default class Game extends Component {
 
     render() {
 
-        const {gateHistory, exitPopupVisible, usableGates, levelCompleted, stars, lines} = this.state
+        const {gateHistory, exitPopupVisible, usableGates, levelCompleted, stars, lines, tipPopupVisible, levelId, introPopupVisible} = this.state
 
         return(
             <View style={commonStyles.container}>
@@ -321,6 +353,20 @@ export default class Game extends Component {
                     onPressReplay={this.resetLevel}
                     onPressNext={this.nextLevel}
                 />
+                {Levels[levelId].tipText && <Popup
+                    visible={tipPopupVisible}
+                    title={Levels[levelId].tipHeading}
+                    info={Levels[levelId].tipText}
+                    primaryBtnTitle={'Okay'}
+                    primaryBtnAction={this.hideTipPopup}
+                />}
+                {levelId === 0 && <Popup
+                    visible={introPopupVisible}
+                    title={'Welcome to QLogic!'}
+                    info={'Your aim is to use quantum gates and take quantum bits (qubits) to the final state given in each level. Happy quantum-puzzling!'}
+                    primaryBtnTitle={'Let\'s Play!'}
+                    primaryBtnAction={this.hideIntroPopup}
+                />}
             </View>
         )
     }
