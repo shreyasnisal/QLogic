@@ -5,6 +5,7 @@ import {createStackNavigator} from '@react-navigation/stack'
 import Home from 'routes/Home/Home'
 import Game from 'routes/Game/Game'
 import LevelSelect from 'routes/LevelSelect/LevelSelect'
+import HowToPlay from 'routes/HowToPlay/HowToPlay'
 
 const Stack = createStackNavigator()
 
@@ -15,6 +16,7 @@ export default class Navigator extends Component {
                 <Stack.Screen name='Home' component={Home} options={{ headerShown: false }} />
                 <Stack.Screen name='LevelSelect' component={LevelSelect} options={{ headerShown: false}} />
                 <Stack.Screen name='Game' component={Game} options={{ headerShown: false}} />
+                <Stack.Screen name='HowToPlay' component={HowToPlay} options={{ headerShown: false}} />
             </Stack.Navigator>
         )
     }

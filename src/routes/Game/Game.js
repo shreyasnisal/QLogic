@@ -6,6 +6,7 @@ import {
     ActivityIndicator,
     ScrollView,
     TouchableOpacity,
+    Dimensions,
 } from 'react-native'
 import commonStyles from 'common/styles'
 import styles from './styles'
@@ -20,8 +21,11 @@ import Header from 'components/Header/Header'
 import MaterialCommunityIcons from 'react-native-vector-icons/dist/MaterialCommunityIcons'
 import LevelCompletePopup from 'components/LevelCompletePopup/LevelCompletePopup'
 import AsyncStorage from '@react-native-community/async-storage'
+import Line from 'components/Line/Line'
 
 export default class Game extends Component {
+
+    liney1 = null
 
     constructor(props) {
         super(props)
@@ -50,8 +54,9 @@ export default class Game extends Component {
             replayPopupVisible: false,
             moves: 0,
             stars: 1,
+            controlQubit: null,
+            lines: [],
         }
-
     }
 
     showExitPopup = () => {
@@ -128,40 +133,97 @@ export default class Game extends Component {
         })
     }
 
+    addLine = (xPos, y2, qubitIndex) => {
+        const y1 = this.liney1
+        const {lines} = this.state
+        lines.push(<Line xPosition={xPos} bottom={y2} top={y1} />)
+        this.setState({lines: lines})
+
+        this.liney1 = null
+    }
+
     selectGate = (gateName) => {
-        this.setState({
-            selectedGate: gateName
-        })
+
+        if (gateName[0] === 'C') {
+            this.setState({
+                selectedGate: gateName + '_c',
+            })
+        }
+        else {
+            this.setState({
+                selectedGate: gateName
+            })
+        }
     }
 
     placeGate = (qubitIndex) => {
+
+        const {gateHistory, selectedGate, numQubits, currentState, moves, targetState, controlQubit} = this.state
+        let gateMatrix = null
+        let newState = null
 
         this.setState({
             loading: true
         })
 
-        const {gateHistory, selectedGate, numQubits, currentState, moves, targetState} = this.state
-        gateHistory[qubitIndex].push(selectedGate)
-
-        const gateMatrix = GateOperations.getMultiQubitGate(selectedGate, qubitIndex, numQubits)
-        const newState = GateOperations.operateGate(gateMatrix, currentState)
-        if (this.checkCompletion(newState, targetState)) {
-            this.levelComplete()
+        if (!selectedGate) {
+            this.setState({
+                loading: false,
+            })
+            return
         }
 
-        for (let i = 0; i < numQubits; i++) {
-            if (i !== qubitIndex)
-                gateHistory[i].push('-')
+        if (controlQubit === qubitIndex) {
+            this.setState({
+                loading: false,
+            })
+            return
+        }
+
+        gateHistory[qubitIndex].push(selectedGate)
+
+        if (selectedGate[selectedGate.length - 1] === 'c') {
+            const newGate = selectedGate[0] + selectedGate[1] + selectedGate[2] + 't'
+            
+            this.setState({
+                controlQubit: qubitIndex,
+                selectedGate: newGate
+            })
+        }
+        else {
+            if (selectedGate[selectedGate.length - 1] === 't') {
+                gateMatrix = GateOperations.getControlGate(selectedGate[1], numQubits, controlQubit, qubitIndex)
+            }
+            else {
+                gateMatrix = GateOperations.getMultiQubitGate(selectedGate, qubitIndex, numQubits)
+            }
+            newState = GateOperations.operateGate(gateMatrix, currentState)
+            
+            if (this.checkCompletion(newState, targetState)) {
+                this.levelComplete()
+            }
+    
+            for (let i = 0; i < numQubits; i++) {
+                if ((i !== qubitIndex) && i !== controlQubit)
+                    gateHistory[i].push('-')
+            }
+
+            this.setState({
+                controlQubit: null,
+                moves: moves + 1,
+                selectedGate: null,
+            })
         }
 
         this.setState({
             loading: false,
-            moves: moves + 1,
         })
     }
 
 
     renderQubitGates(qubitGates, qubitIndex) {
+        
+        const {selectedGate, controlQubit} = this.state
 
         return(
             <View key={qubitIndex} style={styles.qubitGateHistoryContainer}>
@@ -178,6 +240,14 @@ export default class Game extends Component {
                                         name={value}
                                         style={styles.appliedGate}
                                         disabled={true}
+                                        onLayoutCallback={(x, y, width, height, pageX, pageY) => {
+                                            if (value[value.length - 1] === 'c') {
+                                                this.liney1 = pageY + height/2
+                                            }
+                                            else if (value[value.length - 1] === 't') {
+                                                this.addLine(pageX + width/2, pageY + height/2)
+                                            }
+                                        }}
                                     />
                                 </>
                             )
@@ -189,17 +259,21 @@ export default class Game extends Component {
                         }
                     })
                 }
-                <View style={styles.connectingLine} />
-                <TouchableOpacity style={styles.gatePlaceContainer} onPress={() => this.placeGate(qubitIndex)}>
-                    <MaterialCommunityIcons name='circle-outline' size={40} color={Colors.headerTextColor} />
-                </TouchableOpacity>
+                {
+                    <>
+                        <View style={styles.connectingLine} />
+                        <TouchableOpacity style={styles.gatePlaceContainer} onPress={() => this.placeGate(qubitIndex)}>
+                            <MaterialCommunityIcons name='circle-outline' size={40} color={Colors.headerTextColor} />
+                        </TouchableOpacity>
+                    </>
+                }
             </View>
         )
     }
 
     render() {
 
-        const {gateHistory, exitPopupVisible, usableGates, levelCompleted, stars} = this.state
+        const {gateHistory, exitPopupVisible, usableGates, levelCompleted, stars, lines} = this.state
 
         return(
             <View style={commonStyles.container}>
@@ -220,6 +294,9 @@ export default class Game extends Component {
                         })
                     }
                 </View>
+                {lines.map((value, index) => {
+                    return value
+                })}
                 {
                     //render qubits
                     gateHistory.map((value, index) => {

@@ -22,10 +22,10 @@ export default class Header extends Component {
                     <MaterialIcons name='chevron-left' color={Colors.headerTextColor} size={40} />
                 </TouchableOpacity>}
                 {(onPressHelp || onPressSettings) && <View style={styles.headerRightIcons}>
-                    {onPressHelp && <TouchableOpacity style={styles.headerIconBtn} onPress={onPressBack}>
+                    {onPressHelp && <TouchableOpacity style={styles.headerIconBtn} onPress={onPressHelp}>
                         <MaterialIcons name='help' color={Colors.headerTextColor} size={30} />
                     </TouchableOpacity>}
-                    {onPressSettings && <TouchableOpacity style={styles.headerIconBtn} onPress={onPressBack}>
+                    {onPressSettings && <TouchableOpacity style={styles.headerIconBtn} onPress={onPressSettings}>
                         <MaterialIcons name='settings' color={Colors.headerTextColor} size={30} />
                     </TouchableOpacity>}
                 </View>}

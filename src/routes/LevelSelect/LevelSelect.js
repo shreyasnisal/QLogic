@@ -51,12 +51,14 @@ export default class LevelSelect extends Component {
     }
 
     getLevelsData = async () => {
+        // AsyncStorage.removeItem('levelsData')
+        // AsyncStorage.removeItem('rateUsPopup')
         const levelsData = JSON.parse(await AsyncStorage.getItem('levelsData'))
         this.setState({
             levelsData: levelsData ? levelsData : []
         })
 
-        const scrollToPage = levelsData ? (levelsData.length + 1) / 15 : 0
+        const scrollToPage = Math.floor(levelsData ? (levelsData.length) / 15 : 0)
         this.mScrollView.current.scrollTo({x: scrollToPage * Dimensions.get('screen').width, animated: true})
     }
 

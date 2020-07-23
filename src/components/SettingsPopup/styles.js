@@ -1,4 +1,5 @@
-import {StyleSheet} from 'react-native'
+import {StyleSheet, Dimensions} from 'react-native'
+import Colors from 'common/Colors'
 
 export default StyleSheet.create({
     container: {
@@ -12,6 +13,11 @@ export default StyleSheet.create({
     },
     popupContainer: {
         backgroundColor: '#fff',
-        width: '50%',
-    }
+        width: '30%',
+    },
+    row: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+    },
 })

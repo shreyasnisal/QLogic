@@ -16,4 +16,8 @@ export default StyleSheet.create({
         height: Dimensions.get('screen').height,
         width: Dimensions.get('screen').width,
     },
+    popupBackground: {
+        backgroundColor: '#000',
+        opacity: 0.7,
+    },
 })

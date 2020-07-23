@@ -57,7 +57,7 @@ export default class LevelCompletePopup extends Component {
 
         return(
             <View style={[commonStyles.fullScreen, styles.container]}>
-                <View style={[commonStyles.fullScreen, styles.container, styles.background]} />
+                <View style={[commonStyles.fullScreen, styles.container, commonStyles.popupBackground]} />
                 <Animated.View style={[styles.popupContainer, {transform: [{scale: popupScale}]}]}>
                     <View style={styles.popupHeaderContainer}>
                         <Text style={styles.title}>Level Complete</Text>
