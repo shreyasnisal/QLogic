@@ -21,6 +21,7 @@ export default class Home extends Component {
 
     constructor(props) {
         super(props)
+
         this.state = {
             exitPopupVisible: false,
             rateUsPopupVisible: false,
@@ -98,7 +99,7 @@ export default class Home extends Component {
         return(
             <View style={commonStyles.container}>
                 <Background />
-                <Header title='<Q | Logic>' onPressHelp={this.helpButton} onPressSettings={this.settingsButton} />
+                <Header title='<Q | Logic>' onPressHelp={this.helpButton} />
                 <View style={styles.buttonsContainer}>
                     <PrimaryButton style={styles.btn} onPress={this.playButton} title='Play' />
                     <PrimaryButton style={styles.btn} onPress={() => {}} title='Playground' />
