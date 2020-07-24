@@ -36,9 +36,15 @@ export default StyleSheet.create({
         width: '100%',
         alignItems: 'center',
         justifyContent: 'center',
+        zIndex: 2,
     },
     gateBtn: {
         height: Dimensions.get('screen').height * 0.15,
         width: Dimensions.get('screen').height * 0.15,
-    }
+    },
+    gameScrollView: {
+        width: Dimensions.get('screen').width,
+        height: Dimensions.get('screen').height,
+        flexDirection: 'column',
+    },
 })

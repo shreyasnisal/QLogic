@@ -45,11 +45,11 @@ export default class LevelSelect extends Component {
     }
 
     componentDidMount() {
-        this.props.navigation.addListener('focus', this.getLevelsData)
+        this.props.navigation.addListener('onDidFocus', this.getLevelsData)
     }
 
     componentWillUnmount() {
-        this.props.navigation.removeListener('focus', this.getLevels)
+        this.props.navigation.removeListener('onDidFocus', this.getLevels)
     }
 
     getLevelsData = async () => {

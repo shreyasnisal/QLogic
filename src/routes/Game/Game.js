@@ -7,6 +7,7 @@ import {
     ScrollView,
     TouchableOpacity,
     Dimensions,
+    findNodeHandle,
 } from 'react-native'
 import commonStyles from 'common/styles'
 import styles from './styles'
@@ -272,12 +273,13 @@ export default class Game extends Component {
                                         name={value}
                                         style={styles.appliedGate}
                                         disabled={true}
+                                        parentScrollView={this.gameScrollView}
                                         onLayoutCallback={(x, y, width, height, pageX, pageY) => {
                                             if (value[value.length - 1] === 'c') {
-                                                this.liney1 = pageY + height/2
+                                                this.liney1 = y + height/2
                                             }
                                             else if (value[value.length - 1] === 't') {
-                                                this.addLine(pageX + width/2, pageY + height/2)
+                                                this.addLine(x + width/2, y + height/2)
                                             }
                                         }}
                                     />
@@ -326,15 +328,21 @@ export default class Game extends Component {
                         })
                     }
                 </View>
-                {lines.map((value, index) => {
-                    return value
-                })}
-                {
-                    //render qubits
-                    gateHistory.map((value, index) => {
-                        return this.renderQubitGates(value, index)
-                    })
-                }
+                <ScrollView
+                    horizontal
+                    contentContainerStyle={styles.gameScrollView}
+                    ref={ref => {this.gameScrollView = ref}}
+                >
+                    {lines.map((value, index) => {
+                        return value
+                    })}
+                    {
+                        //render qubits
+                        gateHistory.map((value, index) => {
+                            return this.renderQubitGates(value, index)
+                        })
+                    }
+                </ScrollView>
                 <Popup
                     visible={exitPopupVisible}
                     title={'Exit'}

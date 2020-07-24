@@ -3,10 +3,10 @@
 // Modify freely and remove before launch
 export default [
     {
-        numQubits: 1,
-        initialState: [[1], [0]], // |0>
-        targetState: [[0], [1]], // |1>
-        gates: ['X'],
+        numQubits: 3,
+        initialState: [[1], [0], [0], [0], [0], [0], [0], [0]], // |0>
+        targetState: [[0], [1], [0], [0], [1], [0], [0], [0]], // |1>
+        gates: ['X', 'CX'],
         minMoves: 1,
         maxMoves_2star: 3,
         tipHeading: 'The X Gate',
