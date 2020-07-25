@@ -13,6 +13,11 @@ export default class Gate extends Component {
 
     render() {
         const {disabled, onPress, name, style, onLayoutCallback, parentScrollView} = this.props
+        let gateNameStyle = null
+
+        if (name === '-') {
+            gateNameStyle = styles.noGate            
+        }
 
         return(
             <View
@@ -27,8 +32,8 @@ export default class Gate extends Component {
                     }
                 }}
             >
-                <TouchableOpacity disabled={disabled} onPress={onPress} style={[styles.gateBtn, style]}>
-                    <Text style={styles.gateName}>{name}</Text>
+                <TouchableOpacity disabled={disabled} onPress={onPress} style={[styles.gateBtn, style, gateNameStyle]}>
+                    {name !== '-' && <Text style={styles.gateName}>{name}</Text>}
                 </TouchableOpacity>
             </View>
         )

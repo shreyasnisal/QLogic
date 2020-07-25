@@ -27,6 +27,7 @@ import Line from 'components/Line/Line'
 export default class Game extends Component {
 
     liney1 = null
+    qubitContainer = []
 
     constructor(props) {
         super(props)
@@ -63,6 +64,8 @@ export default class Game extends Component {
             lines: [],
             tipPopupVisible: true,
             introPopupVisible: false,
+            gameScrollViewWidth: Dimensions.get('screen').width,
+            qubitLines: [],
         }
     }
 
@@ -175,6 +178,19 @@ export default class Game extends Component {
         this.liney1 = null
     }
 
+    addQubitLine = (xPos, yPos) => {
+        const {qubitLines} = this.state
+
+        qubitLines.push(
+            <View style={{position: 'absolute', left: xPos, top: yPos, width: '100%', flexDirection: 'row',}}>
+                <View style={styles.line} />
+                <View style={[styles.line, styles.dash]} />
+                <View style={[styles.line, styles.dash]} />
+            </View>
+        )
+        this.setState({qubitLines: qubitLines})
+    }
+
     selectGate = (gateName) => {
 
         if (gateName[0] === 'C') {
@@ -187,6 +203,8 @@ export default class Game extends Component {
                 selectedGate: gateName
             })
         }
+
+        this.gameScrollView.scrollToEnd()
     }
 
     placeGate = (qubitIndex) => {
@@ -260,58 +278,75 @@ export default class Game extends Component {
 
         return(
             <View key={qubitIndex} style={styles.qubitGateHistoryContainer}>
-                <View style={styles.initialQubitContainer}>
+                <View
+                    ref={ref => {this.qubitContainer[qubitIndex] = ref}}
+                    style={styles.initialQubitContainer}
+                    onLayout={({nativeEvent}) => {
+                        if (this.qubitContainer[qubitIndex]) {
+                            this.qubitContainer[qubitIndex].measureLayout(findNodeHandle(this.gameScrollView), (x, y, width, height, pageX, pageY) => {
+                                this.addQubitLine(x + width, y + height/2)
+                            })
+                        }
+                    }}
+                >
                     <Text style={styles.initialQubitText}>{`qubit-${qubitIndex}`}</Text>
                 </View>
                 {
                     qubitGates.map((value, index) => {
-                        if (value !== '-') {
-                            return (
-                                <>
-                                    <View style={styles.connectingLine} />
-                                    <Gate
-                                        name={value}
-                                        style={styles.appliedGate}
-                                        disabled={true}
-                                        parentScrollView={this.gameScrollView}
-                                        onLayoutCallback={(x, y, width, height, pageX, pageY) => {
-                                            if (value[value.length - 1] === 'c') {
-                                                this.liney1 = y + height/2
-                                            }
-                                            else if (value[value.length - 1] === 't') {
-                                                this.addLine(x + width/2, y + height/2)
-                                            }
-                                        }}
-                                    />
-                                </>
-                            )
-                        }
-                        else {
-                            return (
-                                <View style={styles.blankLine} />
-                            )
-                        }
+                        return(
+                            <Gate
+                                name={value}
+                                style={styles.appliedGate}
+                                disabled={true}
+                                parentScrollView={this.gameScrollView}
+                                onLayoutCallback={(x, y, width, height, pageX, pageY) => {
+                                    if (value[value.length - 1] === 'c') {
+                                        this.liney1 = y + height/2
+                                    }
+                                    else if (value[value.length - 1] === 't') {
+                                        this.addLine(x + width/2, y + height/2)
+                                    }
+
+                                    if (Math.abs(this.state.gameScrollViewWidth - x - width) < Dimensions.get('screen').width * 0.2) {
+                                        this.setState({
+                                            gameScrollViewWidth: this.state.gameScrollViewWidth + Dimensions.get('screen').width * 0.2,
+                                        })
+                                    }
+                                }}
+                            />
+                        )
                     })
                 }
-                {
-                    <>
-                        <View style={styles.connectingLine} />
-                        <TouchableOpacity style={styles.gatePlaceContainer} onPress={() => this.placeGate(qubitIndex)}>
-                            <MaterialCommunityIcons name='circle-outline' size={40} color={Colors.headerTextColor} />
-                        </TouchableOpacity>
-                    </>
-                }
+                {selectedGate && qubitIndex !== controlQubit && <TouchableOpacity style={styles.gatePlaceBtn} onPress={() => this.placeGate(qubitIndex)} />}
             </View>
         )
     }
 
     render() {
 
-        const {gateHistory, exitPopupVisible, usableGates, levelCompleted, stars, lines, tipPopupVisible, levelId, introPopupVisible} = this.state
+        const {gateHistory, exitPopupVisible, usableGates, levelCompleted, stars, lines, tipPopupVisible, levelId, introPopupVisible, qubitLines} = this.state
 
         return(
             <View style={commonStyles.container}>
                 <Header onPressBack={this.showExitPopup} />
+                <ScrollView
+                    horizontal
+                    contentContainerStyle={[styles.gameScrollView, {width: this.state.gameScrollViewWidth}]}
+                    ref={ref => {this.gameScrollView = ref}}
+                >
+                    {qubitLines.map((value, index) => {
+                        return value
+                    })}
+                    {lines.map((value, index) => {
+                        return value
+                    })}
+                    {
+                        //render qubits
+                        gateHistory.map((value, index) => {
+                            return this.renderQubitGates(value, index)
+                        })
+                    }
+                </ScrollView>
                 <View style={styles.gatesContainer}>
                     {
                         // render usable gate buttons
@@ -328,21 +363,6 @@ export default class Game extends Component {
                         })
                     }
                 </View>
-                <ScrollView
-                    horizontal
-                    contentContainerStyle={[styles.gameScrollView]}
-                    ref={ref => {this.gameScrollView = ref}}
-                >
-                    {lines.map((value, index) => {
-                        return value
-                    })}
-                    {
-                        //render qubits
-                        gateHistory.map((value, index) => {
-                            return this.renderQubitGates(value, index)
-                        })
-                    }
-                </ScrollView>
                 <Popup
                     visible={exitPopupVisible}
                     title={'Exit'}

@@ -5,8 +5,12 @@ export default StyleSheet.create({
         backgroundColor: '#000',
         alignItems: 'center',
         justifyContent: 'center',
+        width: 50,
     },
     gateName: {
         color: '#fff',
+    },
+    noGate: {
+        backgroundColor: 'rgba(0, 0, 0, 0)',
     }
 })

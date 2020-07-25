@@ -5,6 +5,7 @@ export default StyleSheet.create({
     qubitGateHistoryContainer: {
         flexDirection: 'row',
         alignItems: 'center',
+        height: Dimensions.get('screen').height * 0.1,
     },
     initialQubitContainer: {
         width: Dimensions.get('screen').width * 0.1,
@@ -14,37 +15,42 @@ export default StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
-    connectingLine: {
-        borderColor: Colors.buttonColor,
-        borderBottomWidth: 2,
-        width: Dimensions.get('screen').width * 0.1,
-    },
-    blankLine: {
-        borderColor: Colors.buttonColor,
-        borderBottomWidth: 2,
-        width: Dimensions.get('screen').width * 0.11,
-    },
     appliedGate: {
+        marginLeft: Dimensions.get('screen').width * 0.1,
     },
-    gatePlaceContainer: {
+    gatePlaceBtn: {
+        borderStyle: 'dashed',
+        borderRadius: 1,
+        borderWidth: 1,
+        borderColor: Colors.backgroundGreyColor,
+        width: Dimensions.get('screen').height * 0.1,
+        height: Dimensions.get('screen').height * 0.1,
+        backgroundColor: Colors.backgroundColor,
+        marginLeft: Dimensions.get('screen').width * 0.1,
     },
     gatesContainer: {
         backgroundColor: '#fff',
-        position: 'absolute',
-        bottom: 0,
-        left: 0,
         width: '100%',
         alignItems: 'center',
         justifyContent: 'center',
         zIndex: 2,
+        flexDirection: 'row',
     },
     gateBtn: {
         height: Dimensions.get('screen').height * 0.15,
         width: Dimensions.get('screen').height * 0.15,
     },
     gameScrollView: {
-        width: Dimensions.get('screen').width * 100,
-        height: Dimensions.get('screen').height,
+        justifyContent: 'space-evenly',
         flexDirection: 'column',
     },
+    line: {
+        borderColor: Colors.backgroundGreyColor,
+        borderBottomWidth: 2,
+        width: '70%',
+    },
+    dash: {
+        marginLeft: '1%',
+        width: '7%',
+    }
 })
