@@ -330,7 +330,7 @@ export default class Game extends Component {
                 </View>
                 <ScrollView
                     horizontal
-                    contentContainerStyle={styles.gameScrollView}
+                    contentContainerStyle={[styles.gameScrollView]}
                     ref={ref => {this.gameScrollView = ref}}
                 >
                     {lines.map((value, index) => {

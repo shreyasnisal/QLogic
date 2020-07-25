@@ -17,12 +17,12 @@ export default StyleSheet.create({
     connectingLine: {
         borderColor: Colors.buttonColor,
         borderBottomWidth: 2,
-        width: '10%',
+        width: Dimensions.get('screen').width * 0.1,
     },
     blankLine: {
         borderColor: Colors.buttonColor,
         borderBottomWidth: 2,
-        width: '11%',
+        width: Dimensions.get('screen').width * 0.11,
     },
     appliedGate: {
     },
@@ -43,7 +43,7 @@ export default StyleSheet.create({
         width: Dimensions.get('screen').height * 0.15,
     },
     gameScrollView: {
-        width: Dimensions.get('screen').width,
+        width: Dimensions.get('screen').width * 100,
         height: Dimensions.get('screen').height,
         flexDirection: 'column',
     },

@@ -20,7 +20,7 @@ export default class Gate extends Component {
                 onLayout={({nativeEvent}) => {
                     if (this.marker && parentScrollView) {
                         this.marker.measureLayout(findNodeHandle(parentScrollView), (x, y, width, height, pageX, pageY) => {
-                            console.log(x, y, width, height, pageX, pageY)
+                            
                             if (onLayoutCallback)
                                 return onLayoutCallback(x, y, width, height, pageX, pageY)
                         })
