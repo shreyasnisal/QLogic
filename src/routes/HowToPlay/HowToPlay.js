@@ -3,6 +3,7 @@ import {
     View,
     Text, 
     TouchableOpacity,
+    BackHandler,
 } from 'react-native'
 import commonStyles from 'common/styles'
 import styles from './styles'
@@ -17,10 +18,18 @@ export default class HowToPlay extends Component {
         this.state = {
             currentPage: 0,
         }
+
+        BackHandler.addEventListener('hardwareBackPress', this.backButton)
+    }
+
+    componentWillUnmount() {
+        BackHandler.removeEventListener('hardwareBackPress', this.backButton)
     }
 
     backButton = () => {
         this.props.navigation.navigate('Home')
+
+        return true
     }
     
     render() {

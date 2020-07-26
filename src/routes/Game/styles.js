@@ -6,6 +6,7 @@ export default StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         height: Dimensions.get('screen').height * 0.1,
+        marginLeft: Dimensions.get('screen').width * 0.05,
     },
     initialQubitContainer: {
         width: Dimensions.get('screen').width * 0.1,
@@ -47,7 +48,7 @@ export default StyleSheet.create({
     line: {
         borderColor: Colors.backgroundGreyColor,
         borderBottomWidth: 2,
-        width: '70%',
+        width: '90%',
     },
     dash: {
         marginLeft: '1%',

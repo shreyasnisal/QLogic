@@ -42,14 +42,17 @@ export default class LevelSelect extends Component {
             currentPage: 0,
             levelsData: []
         }
+
+        BackHandler.addEventListener('hardwareBackPress', this.backButton)
     }
 
     componentDidMount() {
-        this.props.navigation.addListener('onDidFocus', this.getLevelsData)
+        this.props.navigation.addListener('focus', this.getLevelsData)
     }
 
     componentWillUnmount() {
-        this.props.navigation.removeListener('onDidFocus', this.getLevels)
+        this.props.navigation.removeListener('focus', this.getLevels)
+        BackHandler.removeEventListener('hardwareBackPress', this.backButton)
     }
 
     getLevelsData = async () => {
@@ -66,6 +69,8 @@ export default class LevelSelect extends Component {
 
     backButton = () => {
         this.props.navigation.navigate('Home')
+
+        return true
     }
 
     handleScroll = (event) => {

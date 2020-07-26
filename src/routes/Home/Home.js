@@ -29,10 +29,29 @@ export default class Home extends Component {
         }
 
         this.props.navigation.addListener('focus', this.getLevelsData)
+        BackHandler.addEventListener('hardwareBackPress', this.hardwareBackPress)
     }
 
     componentWillUnmount() {
         this.props.navigation.removeListener('focus', this.getLevelsData)
+        BackHandler.removeEventListener('hardwareBackPress', this.hardwareBackPress)
+    }
+
+    hardwareBackPress = () => {
+        const {exitPopupVisible, rateUsPopupVisible} = this.state
+
+        if (exitPopupVisible) {
+            this.hideExitPopup()
+        }
+        else if (rateUsPopupVisible) {
+            this.hideRateUsPopup()
+        }
+        else {
+            this.exitButton()
+        }
+
+        return true
+
     }
 
     playButton = () => {
@@ -52,8 +71,13 @@ export default class Home extends Component {
     }
 
     openStore = () => {
+
+        AsyncStorage.setItem('rated', JSON.stringify(true))
+
         if (Platform.OS === 'android')
             Linking.openURL('https://play.google.com/store/apps/details?id=com.onetyme.talk')
+    
+        this.hideRateUsPopup()
     }
 
     helpButton = () => {
@@ -78,10 +102,11 @@ export default class Home extends Component {
 
     getLevelsData = async () => {
         const levelsData = JSON.parse(await AsyncStorage.getItem('levelsData'))
+        const rated = JSON.parse(await AsyncStorage.getItem('rated'))
         let shownRateUsPopup = JSON.parse(await AsyncStorage.getItem('rateUsPopup'))
         if (!shownRateUsPopup) shownRateUsPopup = []
         
-        if (levelsData && levelsData.length >= 15) {
+        if (levelsData && !rated && levelsData.length >= 15) {
             if (!shownRateUsPopup || shownRateUsPopup.length < levelsData.length / 15) {
                 this.setState({
                     rateUsPopupVisible: true

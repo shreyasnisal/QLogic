@@ -8,6 +8,7 @@ import {
     TouchableOpacity,
     Dimensions,
     findNodeHandle,
+    BackHandler,
 } from 'react-native'
 import commonStyles from 'common/styles'
 import styles from './styles'
@@ -67,6 +68,28 @@ export default class Game extends Component {
             gameScrollViewWidth: Dimensions.get('screen').width,
             qubitLines: [],
         }
+
+        BackHandler.addEventListener('hardwareBackPress', this.hardwareBackPress)
+    }
+
+    componentWillUnmount() {
+        BackHandler.removeEventListener('hardwareBackPress', this.hardwareBackPress)
+    }
+
+    hardwareBackPress = () => {
+        const {exitPopupVisible, tipPopupVisible} = this.state
+
+        if (exitPopupVisible) {
+            this.hideExitPopup()
+        }
+        else if (tipPopupVisible) {
+            this.exitToMenu()
+        }
+        else {
+            this.showExitPopup()
+        }
+
+        return true
     }
 
     showIntro = async () => {
@@ -172,7 +195,7 @@ export default class Game extends Component {
     addLine = (xPos, y2, qubitIndex) => {
         const y1 = this.liney1
         const {lines} = this.state
-        lines.push(<Line xPosition={xPos} bottom={y2} top={y1} />)
+        lines.push(<Line xPosition={xPos} bottom={y2} top={y1} style={{}} />)
         this.setState({lines: lines})
 
         this.liney1 = null
@@ -184,8 +207,6 @@ export default class Game extends Component {
         qubitLines.push(
             <View style={{position: 'absolute', left: xPos, top: yPos, width: '100%', flexDirection: 'row',}}>
                 <View style={styles.line} />
-                <View style={[styles.line, styles.dash]} />
-                <View style={[styles.line, styles.dash]} />
             </View>
         )
         this.setState({qubitLines: qubitLines})
@@ -275,9 +296,14 @@ export default class Game extends Component {
     renderQubitGates(qubitGates, qubitIndex) {
         
         const {selectedGate, controlQubit} = this.state
+        let reducedBtnMargin = false
+
+        if ((qubitGates.length === 0) && qubitIndex % 2 === 1) {
+            reducedBtnMargin = true
+        }
 
         return(
-            <View key={qubitIndex} style={styles.qubitGateHistoryContainer}>
+            <View key={qubitIndex} style={[styles.qubitGateHistoryContainer, qubitIndex % 2 === 1 ? {paddingLeft: Dimensions.get('screen').width * 0.05} : null]}>
                 <View
                     ref={ref => {this.qubitContainer[qubitIndex] = ref}}
                     style={styles.initialQubitContainer}
@@ -296,7 +322,7 @@ export default class Game extends Component {
                         return(
                             <Gate
                                 name={value}
-                                style={styles.appliedGate}
+                                style={[styles.appliedGate, (qubitIndex % 2 === 1 && index === 0) ? {marginLeft: Dimensions.get('screen').width * 0.05} : null]}
                                 disabled={true}
                                 parentScrollView={this.gameScrollView}
                                 onLayoutCallback={(x, y, width, height, pageX, pageY) => {
@@ -304,7 +330,7 @@ export default class Game extends Component {
                                         this.liney1 = y + height/2
                                     }
                                     else if (value[value.length - 1] === 't') {
-                                        this.addLine(x + width/2, y + height/2)
+                                        this.addLine(x + width/2 + Dimensions.get('screen').width * 0.05 - ((qubitIndex % 2 === 1 && index === 0) ? Dimensions.get('screen').width * 0.025 : 0), y + height/2)
                                     }
 
                                     if (Math.abs(this.state.gameScrollViewWidth - x - width) < Dimensions.get('screen').width * 0.2) {
@@ -317,7 +343,7 @@ export default class Game extends Component {
                         )
                     })
                 }
-                {selectedGate && qubitIndex !== controlQubit && <TouchableOpacity style={styles.gatePlaceBtn} onPress={() => this.placeGate(qubitIndex)} />}
+                {selectedGate && qubitIndex !== controlQubit && <TouchableOpacity style={[styles.gatePlaceBtn, reducedBtnMargin ? {marginLeft: Dimensions.get('screen').width * 0.05} : null]} onPress={() => this.placeGate(qubitIndex)} />}
             </View>
         )
     }
