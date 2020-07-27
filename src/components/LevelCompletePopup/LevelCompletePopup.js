@@ -8,6 +8,7 @@ import {
 import commonStyles from 'common/styles'
 import styles from './styles'
 import MaterialIcons from 'react-native-vector-icons/dist/MaterialIcons'
+import FontAwesome from 'react-native-vector-icons/dist/FontAwesome'
 import Colors from 'common/Colors'
 
 export default class LevelCompletePopup extends Component {
@@ -23,7 +24,7 @@ export default class LevelCompletePopup extends Component {
     }
 
     render() {
-        const {stars, visible, onPressMenu, onPressReplay, onPressNext} = this.props
+        const {levelNumber, stars, visible, onPressMenu, onPressReplay, onPressNext} = this.props
         const {popupScale, star1Scale, star2Scale, star3Scale} = this.state
 
         if (!visible) return null;
@@ -59,18 +60,17 @@ export default class LevelCompletePopup extends Component {
             <View style={[commonStyles.fullScreen, styles.container]}>
                 <View style={[commonStyles.fullScreen, styles.container, commonStyles.popupBackground]} />
                 <Animated.View style={[styles.popupContainer, {transform: [{scale: popupScale}]}]}>
-                    <View style={styles.popupHeaderContainer}>
-                        <Text style={styles.title}>Level Complete</Text>
-                    </View>
+                    <Text style={styles.title}>Level Complete!</Text>
+                    <Text style={styles.infoText}>Congratulations on completing Level {levelNumber}!</Text>
                     <View style={styles.starsRow}>
                         <Animated.View style={{transform: [{scale: star1Scale}]}}>
-                            <MaterialIcons name='star' size={50} color={Colors.lockBlue} />
+                            <FontAwesome style={styles.icon} name='star' size={60} color={Colors.buttonColor} />
                         </Animated.View>
-                        {stars >= 2 && <Animated.View style={{transform: [{scale: star2Scale}]}}>
-                            <MaterialIcons name='star' size={50} color={Colors.lockBlue} />
+                        {<Animated.View style={{transform: [{scale: star2Scale}]}}>
+                            <FontAwesome style={styles.icon} name={stars >= 2 ? 'star' : 'star-o'} size={60} color={stars >= 2 ? Colors.buttonColor : Colors.headerTextColor} />
                         </Animated.View>}
-                        {stars == 3 && <Animated.View style={{transform: [{scale: star3Scale}]}}>
-                            <MaterialIcons name='star' size={50} color={Colors.lockBlue} />
+                        {<Animated.View style={{transform: [{scale: star3Scale}]}}>
+                            <FontAwesome style={styles.icon} name={stars == 3 ? 'star' : 'star-o'} size={60} color={stars == 3 ? Colors.buttonColor : Colors.headerTextColor} />
                         </Animated.View>}
                     </View>
                     <View style={styles.buttonsRow}>

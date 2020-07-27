@@ -144,13 +144,11 @@ export default class Home extends Component {
                 <Popup
                     visible={rateUsPopupVisible}
                     title={'Enjoying QLogic?'}
-                    info={'Rate us on the store!'}
+                    info={'If you are enjoying our game, please take a moment to rate us on the Play Store.'}
                     primaryBtnTitle={'Yes'}
                     primaryBtnAction={this.openStore}
                     secondaryBtnTitle={'Not Now'}
                     secondaryBtnAction={this.hideRateUsPopup}
-                    cancelable={true}
-                    onCancel={this.hideRateUsPopup}
                 />
                 <SettingsPopup
                     visible={settingsPopupVisible}

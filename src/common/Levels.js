@@ -6,7 +6,7 @@ export default [
         numQubits: 3,
         initialState: [[1], [0], [0], [0], [0], [0], [0], [0]], // |0>
         targetState: [[0], [1], [0], [0], [1], [0], [0], [0]], // |1>
-        gates: ['X', 'CX'],
+        gates: ['X', 'Z', 'H', 'CX', 'CZ', 'CH'],
         minMoves: 1,
         maxMoves_2star: 3,
         tipHeading: 'The X Gate',
@@ -17,12 +17,16 @@ export default [
         initialState: [[1], [0]], // |0>
         targetState: [[0], [1]], // |1>
         gates: ['X'], // bit flip
+        minMoves: 1,
+        maxMoves_2star: 3,
     },
     {
         numQubits: 1,
         initialState: [[1], [0]], // |0>
         targetState: [[0], [1]], // |1>
-        gates: ['X'], // bit flip
+        gates: ['X', 'Z'], // bit flip
+        minMoves: 1,
+        maxMoves_2star: 3,
     },
     {
         numQubits: 1,

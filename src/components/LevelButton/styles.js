@@ -20,7 +20,7 @@ export default StyleSheet.create({
         backgroundColor: Colors.backgroundColor,
     },
     activeBtn: {
-        backgroundColor: Colors.buttonColor,
+        backgroundColor: Colors.headerTextColor,
         borderWidth: 0,
     },
     text: {
@@ -30,7 +30,7 @@ export default StyleSheet.create({
         color: Colors.headerTextColor,
     },
     unlockedText: {
-        color: Colors.buttonTextColor
+        color: Colors.backgroundColor,
     },
     starRow: {
         width: '100%',
@@ -38,22 +38,22 @@ export default StyleSheet.create({
     },
     star1: {
         position: "absolute",
-        left: -15,
-        bottom: -15,
+        left: -16,
+        bottom: -20,
     },
     star2: {
         position: "absolute",
-        left: 17.5,
-        bottom: -15,
+        left: 16.75,
+        bottom: -20,
     },
     star3: {
         position: "absolute",
-        right: -15,
-        bottom: -15,
+        right: -16,
+        bottom: -20,
     },
     lock: {
         position: "absolute",
-        right: -12,
-        bottom: -12,
+        right: -17,
+        bottom: -17,
     }
 })

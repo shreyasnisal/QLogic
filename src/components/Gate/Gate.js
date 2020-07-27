@@ -7,6 +7,8 @@ import {
 } from 'react-native'
 import commonStyles from 'common/styles'
 import styles from './styles'
+import MaterialIcons from 'react-native-vector-icons/dist/MaterialIcons'
+import Colors from 'common/Colors'
 
 
 export default class Gate extends Component {
@@ -14,9 +16,20 @@ export default class Gate extends Component {
     render() {
         const {disabled, onPress, name, style, onLayoutCallback, parentScrollView} = this.props
         let gateNameStyle = null
+        let gateBtnContent = null
 
         if (name === '-') {
-            gateNameStyle = styles.noGate            
+            gateNameStyle = styles.noGate
+        }
+        else if (name[name.length - 1] === 'c') {
+            gateNameStyle = styles.controlGate
+            gateBtnContent = <MaterialIcons name='add-circle' color={Colors.lockBlue} size={40} />
+        }
+        else if (name[name.length - 1] === 't') {
+            gateBtnContent = <Text style={styles.gateName}>{name[1]}</Text>
+        }
+        else {
+            gateBtnContent = <Text style={styles.gateName}>{name}</Text>
         }
 
         return(
@@ -33,7 +46,7 @@ export default class Gate extends Component {
                 }}
             >
                 <TouchableOpacity disabled={disabled} onPress={onPress} style={[styles.gateBtn, style, gateNameStyle]}>
-                    {name !== '-' && <Text style={styles.gateName}>{name}</Text>}
+                    {name !== '-' && gateBtnContent}
                 </TouchableOpacity>
             </View>
         )

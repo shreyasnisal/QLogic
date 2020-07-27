@@ -59,6 +59,8 @@ export const operateGate = (gate, state) => {
         result[i][0] = 0
         for (let j = 0; j < gate_cols; j++) {
             result[i][0] += gate[i][j] * state[j][0]
+            if (result[i][0] > 0) result[i][0] = 1
+            if (result[i][0] < 0) result[i][0] = -1
         }
     }
 

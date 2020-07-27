@@ -3,7 +3,7 @@ import Colors from 'common/Colors'
 
 export default StyleSheet.create({
     btnStyle: {
-        backgroundColor: 'rgba(0, 0, 0, 0)',
+        backgroundColor: Colors.backgroundColor,
         alignItems: 'center',
         justifyContent: 'center',
         paddingVertical: '2%',

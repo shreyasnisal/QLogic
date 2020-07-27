@@ -24,6 +24,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/dist/MaterialCommu
 import LevelCompletePopup from 'components/LevelCompletePopup/LevelCompletePopup'
 import AsyncStorage from '@react-native-community/async-storage'
 import Line from 'components/Line/Line'
+import Toast from '../../components/Toast/Toast'
 
 export default class Game extends Component {
 
@@ -58,7 +59,7 @@ export default class Game extends Component {
             selectedGate: null,
             loading: false,
             levelCompleted: false,
-            replayPopupVisible: false,
+            restartPopupVisible: false,
             moves: 0,
             stars: 1,
             controlQubit: null,
@@ -133,6 +134,18 @@ export default class Game extends Component {
             tipPopupVisible: true,
         })
     }
+    
+    restartButton = () => {
+        this.setState({
+            restartPopupVisible: true,
+        })
+    }
+
+    hideRestartPopup = () => {
+        this.setState({
+            restartPopupVisible: false
+        })
+    }
 
     resetLevel = () => {
         const {levelId} = this.state
@@ -145,7 +158,9 @@ export default class Game extends Component {
             currentState: Levels[levelId].initialState,
             gateHistory: gateHistory,
             levelCompleted: false,
-            resetPopupVisible: false,
+            restartPopupVisible: false,
+            lines: [],
+            moves: 0,
         })
     }
 
@@ -214,9 +229,26 @@ export default class Game extends Component {
 
     selectGate = (gateName) => {
 
+        const {selectedGate} = this.state
+
+        if (selectedGate && selectedGate[selectedGate.length - 1] === 't')
+            return
+
         if (gateName[0] === 'C') {
+            if (selectedGate && gateName[0] === selectedGate[0] && gateName[1] === selectedGate[1]) {
+                this.setState({
+                    selectedGate: null
+                })
+            }
+            else {
+                this.setState({
+                    selectedGate: gateName + '_c',
+                })
+            }
+        }
+        else if (gateName === selectedGate) {
             this.setState({
-                selectedGate: gateName + '_c',
+                selectedGate: null,
             })
         }
         else {
@@ -284,6 +316,7 @@ export default class Game extends Component {
                 controlQubit: null,
                 moves: moves + 1,
                 selectedGate: null,
+                currentState: newState,
             })
         }
 
@@ -292,18 +325,58 @@ export default class Game extends Component {
         })
     }
 
+    getStateText = (stateMatrix) => {
+        let stateText = ''
+        const numQubits = Math.log2(stateMatrix.length)
+
+        for (let i = 0; i < stateMatrix.length; i++) {
+            if (stateMatrix[i][0] === 1 || stateMatrix[i][0] === -1) {
+                let tempStr = this.dec2bin(i)
+                while (tempStr.length < numQubits) {
+                    tempStr = '0' + tempStr
+                }
+
+                if (stateMatrix[i][0] === -1) {
+                    stateText += ' - ' + tempStr
+                }
+                else if (stateText === '') {
+                    stateText += tempStr
+                }
+                else if (stateMatrix[i][0] === 1) {
+                    stateText += ' + ' + tempStr
+                }
+                
+            }
+        }
+
+        return stateText
+    }
+
+    dec2bin(dec) {
+        return (dec >>> 0).toString(2);
+    }
+
+    isSelectedGate = (gateName) => {
+        const {selectedGate} = this.state
+
+        if (!selectedGate) return false
+
+        if (gateName === selectedGate) {
+            return true
+        }
+        else if (selectedGate[selectedGate.length - 1] === 'c' || selectedGate[selectedGate.length - 1] === 't') {
+            return gateName[1] === selectedGate[1]
+        }
+
+        return false
+    }
 
     renderQubitGates(qubitGates, qubitIndex) {
         
         const {selectedGate, controlQubit} = this.state
-        let reducedBtnMargin = false
-
-        if ((qubitGates.length === 0) && qubitIndex % 2 === 1) {
-            reducedBtnMargin = true
-        }
 
         return(
-            <View key={qubitIndex} style={[styles.qubitGateHistoryContainer, qubitIndex % 2 === 1 ? {paddingLeft: Dimensions.get('screen').width * 0.05} : null]}>
+            <View key={qubitIndex} style={[styles.qubitGateHistoryContainer]}>
                 <View
                     ref={ref => {this.qubitContainer[qubitIndex] = ref}}
                     style={styles.initialQubitContainer}
@@ -315,14 +388,14 @@ export default class Game extends Component {
                         }
                     }}
                 >
-                    <Text style={styles.initialQubitText}>{`qubit-${qubitIndex}`}</Text>
+                    <Text style={styles.initialQubitText}>{`Qubit ${qubitIndex + 1}  `}</Text>
                 </View>
                 {
                     qubitGates.map((value, index) => {
                         return(
                             <Gate
                                 name={value}
-                                style={[styles.appliedGate, (qubitIndex % 2 === 1 && index === 0) ? {marginLeft: Dimensions.get('screen').width * 0.05} : null]}
+                                style={[styles.appliedGate]}
                                 disabled={true}
                                 parentScrollView={this.gameScrollView}
                                 onLayoutCallback={(x, y, width, height, pageX, pageY) => {
@@ -330,7 +403,7 @@ export default class Game extends Component {
                                         this.liney1 = y + height/2
                                     }
                                     else if (value[value.length - 1] === 't') {
-                                        this.addLine(x + width/2 + Dimensions.get('screen').width * 0.05 - ((qubitIndex % 2 === 1 && index === 0) ? Dimensions.get('screen').width * 0.025 : 0), y + height/2)
+                                        this.addLine(x + width/2 + Dimensions.get('screen').width * 0.025, y + height/2)
                                     }
 
                                     if (Math.abs(this.state.gameScrollViewWidth - x - width) < Dimensions.get('screen').width * 0.2) {
@@ -343,22 +416,33 @@ export default class Game extends Component {
                         )
                     })
                 }
-                {selectedGate && qubitIndex !== controlQubit && <TouchableOpacity style={[styles.gatePlaceBtn, reducedBtnMargin ? {marginLeft: Dimensions.get('screen').width * 0.05} : null]} onPress={() => this.placeGate(qubitIndex)} />}
+                {selectedGate && qubitIndex !== controlQubit && <TouchableOpacity style={[styles.gatePlaceBtn]} onPress={() => this.placeGate(qubitIndex)} />}
             </View>
         )
     }
 
     render() {
 
-        const {gateHistory, exitPopupVisible, usableGates, levelCompleted, stars, lines, tipPopupVisible, levelId, introPopupVisible, qubitLines} = this.state
+        const {gateHistory, exitPopupVisible, usableGates, levelCompleted, stars, lines, tipPopupVisible, levelId, introPopupVisible, qubitLines, restartPopupVisible, moves, currentState, targetState, selectedGate} = this.state
 
         return(
             <View style={commonStyles.container}>
-                <Header onPressBack={this.showExitPopup} />
+                <Header title={`Level ${levelId + 1}`} onPressBack={this.showExitPopup} onPressRestart={this.restartButton} />
+                <View style={styles.statesRow}>
+                    <View style={styles.stateContainer}>
+                        <Text style={styles.stateStaticLabel}>Current State</Text>
+                        <Text style={styles.stateLabel}>{this.getStateText(currentState)}</Text>
+                    </View>
+                    <View style={styles.stateContainer}>
+                        <Text style={styles.stateStaticLabel}>Target State</Text>
+                        <Text style={styles.stateLabel}>{this.getStateText(targetState)}</Text>
+                    </View>
+                </View>
                 <ScrollView
                     horizontal
                     contentContainerStyle={[styles.gameScrollView, {width: this.state.gameScrollViewWidth}]}
                     ref={ref => {this.gameScrollView = ref}}
+                    showsHorizontalScrollIndicator={false}
                 >
                     {qubitLines.map((value, index) => {
                         return value
@@ -373,7 +457,8 @@ export default class Game extends Component {
                         })
                     }
                 </ScrollView>
-                <View style={styles.gatesContainer}>
+                <View style={styles.bottomRow}>
+                    <View style={styles.gatesContainer}>
                     {
                         // render usable gate buttons
                         usableGates.map((value, index) => {
@@ -381,17 +466,21 @@ export default class Game extends Component {
                                 <Gate
                                     key={index}
                                     name={value}
-                                    style={styles.gateBtn}
+                                    style={[styles.gateBtn, this.isSelectedGate(value) ? styles.selectedGate : null]}
                                     disabled={false}
                                     onPress={() => {this.selectGate(value)}}
                                 />
                             )
                         })
                     }
+                    </View>
+                    <View style={styles.movesContainer}>
+                        <Text style={styles.movesLabel}>{moves} Moves </Text>
+                    </View>
                 </View>
                 <Popup
                     visible={exitPopupVisible}
-                    title={'Exit'}
+                    title={'Exit Level'}
                     info={'Are you sure you want to return to the menu? All your progress in this level will be lost.'}
                     primaryBtnTitle={'Yes'}
                     primaryBtnAction={this.exitToMenu}
@@ -400,8 +489,20 @@ export default class Game extends Component {
                     cancelable={true}
                     onCancel={this.hideExitPopup}
                 />
+                <Popup
+                    visible={restartPopupVisible}
+                    title={'Restart Level'}
+                    info={'Are you sure you want to restart this level? All progress in this level will be lost.'}
+                    primaryBtnTitle={'Yes'}
+                    primaryBtnAction={this.resetLevel}
+                    secondaryBtnTitle={'No'}
+                    secondaryBtnAction={this.hideRestartPopup}
+                    cancelable={true}
+                    onCancel={this.hideRestartPopup}
+                />
                 <LevelCompletePopup
                     visible={levelCompleted}
+                    levelNumber={levelId + 1}
                     stars={stars}
                     onPressMenu={this.exitToMenu}
                     onPressReplay={this.resetLevel}
@@ -421,6 +522,10 @@ export default class Game extends Component {
                     primaryBtnTitle={'Let\'s Play!'}
                     primaryBtnAction={this.hideIntroPopup}
                 />}
+                <View style={styles.toastContainer}>
+                    <Toast visible={selectedGate && (selectedGate[selectedGate.length - 1] === 'c')} text='Select control qubit' style={styles.toast} />
+                    <Toast visible={selectedGate && (selectedGate[selectedGate.length - 1] === 't')} text='Select target qubit' style={styles.toast} />
+                </View>
             </View>
         )
     }

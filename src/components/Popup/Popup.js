@@ -37,15 +37,11 @@ export default class Popup extends Component {
             <TouchableOpacity style={[commonStyles.fullScreen, styles.container]} disabled={cancelable ? !cancelable : true} onPress={onCancel ? onCancel : () => {}}>
                 <View style={[commonStyles.fullScreen, styles.container, commonStyles.popupBackground]} />
                 <Animated.View style={[styles.popupContainer, {transform: [{scale: popupScale}]}]}>
-                    <View style={styles.popupHeaderContainer}>
-                        <Text style={styles.title}>{title}</Text>
-                    </View>
-                    <View style={styles.popupInfoContainer}>
-                        <Text style={styles.infoText}>{info}</Text>
-                    </View>
+                    <Text style={styles.title}>{title}</Text>
+                    <Text style={styles.infoText}>{info}</Text>
                     <View style={styles.btnContainer}>
-                        <PrimaryButton style={styles.btn} title={primaryBtnTitle} titleStyle={styles.btnText} onPress={primaryBtnAction} />
                         {secondaryBtnTitle && <SecondaryButton style={styles.btn} title={secondaryBtnTitle} titleStyle={styles.btnText} onPress={secondaryBtnAction} />}
+                        <PrimaryButton style={styles.btn} title={primaryBtnTitle} titleStyle={styles.btnText} onPress={primaryBtnAction} />
                     </View>
                 </Animated.View>
             </TouchableOpacity>

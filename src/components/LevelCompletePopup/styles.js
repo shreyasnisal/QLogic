@@ -13,21 +13,38 @@ export default StyleSheet.create({
     },
     background: {
         backgroundColor: '#000',
-        opacity: 0.7,
+        opacity: 0.5,
     },
     popupContainer: {
-        backgroundColor: '#fff',
-        width: '30%',
-        alignItems: 'center',
+        backgroundColor: Colors.backgroundColor,
+        width: '45%',
+        padding: 20,
+        marginLeft: -Dimensions.get('screen').width * 0.04
+        // alignItems: 'center',
     },
     starsRow: {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
+        marginTop: 10,
+        marginBottom: 10,
     },
     buttonsRow: {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
+    },
+    title: {
+        color: Colors.buttonColor,
+        fontSize: 24,
+        // fontWeight: 'bold',
+    },
+    infoText: {
+        color: Colors.headerTextColor,
+        fontSize: 18,
+        marginTop: 5,
+    },
+    icon: {
+        marginHorizontal: 5,
     }
 })

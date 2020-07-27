@@ -7,6 +7,7 @@ import {
 } from 'react-native'
 import styles from './styles'
 import MaterialIcons from 'react-native-vector-icons/dist/MaterialIcons'
+import FontAwesome from 'react-native-vector-icons/dist/FontAwesome'
 import Colors from 'common/Colors'
 
 export default class LevelButton extends Component {
@@ -20,12 +21,12 @@ export default class LevelButton extends Component {
                     <Text style={[styles.text, isLocked ? styles.lockedText : styles.unlockedText]}>{levelNumber}</Text>
                 </TouchableOpacity>
                 {stars && <View style={styles.starRow}>
-                    <MaterialIcons name={'star'} size={30} color={Colors.lockBlue} style={styles.star1} />
-                    {stars >= 2 && <MaterialIcons name={'star'} size={30} color={Colors.lockBlue} style={styles.star2} />}
-                    {stars >= 3 && <MaterialIcons name={'star'} size={30} color={Colors.lockBlue} style={styles.star3} />}
+                    <FontAwesome name={'star'} size={35} color={Colors.buttonColor} style={styles.star1} />
+                    {stars >= 2 && <FontAwesome name={'star'} size={35} color={Colors.buttonColor} style={styles.star2} />}
+                    {stars >= 3 && <FontAwesome name={'star'} size={35} color={Colors.buttonColor} style={styles.star3} />}
                 </View>}
                 {isLocked && <View style={styles.lock}>
-                    <MaterialIcons name='lock' size={25} color={Colors.lockBlue} />
+                    <MaterialIcons name='lock' size={35} color={Colors.lockBlue} />
                 </View>}
             </View>
         )

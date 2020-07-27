@@ -4,6 +4,6 @@ export default {
     buttonColor: '#ffb838',
     buttonTextColor: '#3d2a05',
     headerColor: '#000',
-    headerTextColor: '#e0d0ac',
+    headerTextColor: '#fee5a5',
     lockBlue: '#00d0fe',
 }

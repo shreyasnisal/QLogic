@@ -6,43 +6,63 @@ export default StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         height: Dimensions.get('screen').height * 0.1,
-        marginLeft: Dimensions.get('screen').width * 0.05,
+        marginLeft: Dimensions.get('screen').width * 0.03,
+        marginBottom: Dimensions.get('screen').height * 0.05,
     },
     initialQubitContainer: {
-        width: Dimensions.get('screen').width * 0.1,
-        height: Dimensions.get('screen').width * 0.03,
+        width: Dimensions.get('screen').width * 0.12,
+        height: Dimensions.get('screen').width * 0.036,
         borderRadius: Dimensions.get('screen').width * 0.1,
         backgroundColor: Colors.buttonColor,
         alignItems: 'center',
         justifyContent: 'center',
     },
+    initialQubitText: {
+        fontSize: 18,
+        fontWeight: 'bold',
+    },
     appliedGate: {
-        marginLeft: Dimensions.get('screen').width * 0.1,
+        marginLeft: Dimensions.get('screen').width * 0.05,
     },
     gatePlaceBtn: {
         borderStyle: 'dashed',
-        borderRadius: 1,
+        borderRadius: 2,
         borderWidth: 1,
-        borderColor: Colors.backgroundGreyColor,
+        borderColor: Colors.headerTextColor,
         width: Dimensions.get('screen').height * 0.1,
         height: Dimensions.get('screen').height * 0.1,
         backgroundColor: Colors.backgroundColor,
-        marginLeft: Dimensions.get('screen').width * 0.1,
+        marginLeft: Dimensions.get('screen').width * 0.05,
     },
-    gatesContainer: {
-        backgroundColor: '#fff',
+    bottomRow: {
         width: '100%',
         alignItems: 'center',
-        justifyContent: 'center',
-        zIndex: 2,
+        justifyContent: 'space-between',
+        paddingHorizontal: 20,
+        paddingBottom: 10,
         flexDirection: 'row',
+    },
+    gatesContainer: {
+        flexDirection: 'row',
+    },
+    movesContainer: {
+        backgroundColor: Colors.headerTextColor,
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+        borderRadius: 5,
+    },
+    movesLabel: {
+        fontSize: 18,
+        color: Colors.backgroundColor,
+        fontWeight: 'bold',
     },
     gateBtn: {
         height: Dimensions.get('screen').height * 0.15,
         width: Dimensions.get('screen').height * 0.15,
+        marginRight: 10,
     },
     gameScrollView: {
-        justifyContent: 'space-evenly',
+        paddingTop: 15,
         flexDirection: 'column',
     },
     line: {
@@ -50,8 +70,36 @@ export default StyleSheet.create({
         borderBottomWidth: 2,
         width: '90%',
     },
-    dash: {
-        marginLeft: '1%',
-        width: '7%',
+    statesRow: {
+        flexDirection: 'row',
+        width: '100%',
+    },
+    stateContainer: {
+        flex: 1,
+        height: '100%',
+        borderWidth: 1,
+        borderColor: Colors.headerTextColor,
+        padding: 5,
+        paddingLeft: 10,
+    },
+    stateStaticLabel: {
+        color: Colors.headerTextColor,
+        fontSize: 16,
+    },
+    stateLabel: {
+        fontSize: 20,
+        color: Colors.headerTextColor,
+        fontWeight: 'bold',
+    },
+    selectedGate: {
+        backgroundColor: Colors.headerColor,
+    },
+    toastContainer: {
+        width: '100%',
+        alignItems: 'center',
+    },
+    toast: {
+        position: 'absolute',
+        bottom: 80,
     }
 })

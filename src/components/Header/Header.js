@@ -13,7 +13,7 @@ export default class Header extends Component {
 
     render() {
 
-        const {title, onPressBack, onPressHelp, onPressSettings} = this.props
+        const {title, onPressBack, onPressHelp, onPressSettings, onPressRestart} = this.props
 
         return(
             <View style={styles.container}>
@@ -21,12 +21,15 @@ export default class Header extends Component {
                 {onPressBack && <TouchableOpacity style={styles.headerIconBtn} onPress={onPressBack}>
                     <MaterialIcons name='chevron-left' color={Colors.headerTextColor} size={40} />
                 </TouchableOpacity>}
-                {(onPressHelp || onPressSettings) && <View style={styles.headerRightIcons}>
+                {(onPressHelp || onPressSettings || onPressRestart) && <View style={styles.headerRightIcons}>
                     {onPressHelp && <TouchableOpacity style={styles.headerIconBtn} onPress={onPressHelp}>
                         <MaterialIcons name='help' color={Colors.headerTextColor} size={30} />
                     </TouchableOpacity>}
                     {onPressSettings && <TouchableOpacity style={styles.headerIconBtn} onPress={onPressSettings}>
                         <MaterialIcons name='settings' color={Colors.headerTextColor} size={30} />
+                    </TouchableOpacity>}
+                    {onPressRestart && <TouchableOpacity style={styles.headerIconBtn} onPress={onPressRestart}>
+                        <MaterialIcons name='refresh' color={Colors.headerTextColor} size={30} />
                     </TouchableOpacity>}
                 </View>}
             </View>
