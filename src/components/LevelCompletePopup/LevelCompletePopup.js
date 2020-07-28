@@ -10,6 +10,8 @@ import styles from './styles'
 import MaterialIcons from 'react-native-vector-icons/dist/MaterialIcons'
 import FontAwesome from 'react-native-vector-icons/dist/FontAwesome'
 import Colors from 'common/Colors'
+import SecondaryButton from '../SecondaryButton/SecondaryButton'
+import PrimaryButton from '../PrimaryButton/PrimaryButton'
 
 export default class LevelCompletePopup extends Component {
 
@@ -74,15 +76,18 @@ export default class LevelCompletePopup extends Component {
                         </Animated.View>}
                     </View>
                     <View style={styles.buttonsRow}>
-                        <TouchableOpacity style={styles.btn} onPress={onPressMenu}>
-                            <MaterialIcons name='menu' size={50} color={Colors.buttonText} />
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.btn} onPress={onPressReplay}>
-                            <MaterialIcons name='replay' size={50} color={Colors.buttonText} />
-                        </TouchableOpacity>
-                        {onPressNext && <TouchableOpacity style={styles.btn} onPress={onPressNext}>
-                            <MaterialIcons name='chevron-right' size={50} color={Colors.buttonText} />
-                        </TouchableOpacity>}
+                        {/* <TouchableOpacity style={styles.btn} onPress={onPressMenu}>
+                            <MaterialIcons name='menu' size={50} color={Colors.backgroundColor} />
+                        </TouchableOpacity> */}
+                        <SecondaryButton onPress={onPressMenu} title='Menu' prefixIcon='menu' style={styles.btn} />
+                        <SecondaryButton onPress={onPressReplay} title='Restart' prefixIcon='refresh' style={styles.btn} />
+                        {onPressNext && <PrimaryButton onPress={onPressNext} title='Next' prefixIcon='chevron-right' style={styles.btn} />}
+                        {/* <TouchableOpacity style={styles.btn} onPress={onPressReplay}>
+                            <MaterialIcons name='replay' size={50} color={Colors.backgroundColor} />
+                        </TouchableOpacity> */}
+                        {/* {onPressNext && <TouchableOpacity style={styles.btn} onPress={onPressNext}>
+                            <MaterialIcons name='chevron-right' size={50} color={Colors.backgroundColor} />
+                        </TouchableOpacity>} */}
                     </View>
                 </Animated.View>
             </View>

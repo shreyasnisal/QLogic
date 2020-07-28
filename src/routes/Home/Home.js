@@ -124,10 +124,10 @@ export default class Home extends Component {
         return(
             <View style={commonStyles.container}>
                 <Background />
-                <Header title='<Q | Logic>' onPressHelp={this.helpButton} />
+                <Header title='<Q | Logic>' />
                 <View style={styles.buttonsContainer}>
                     <PrimaryButton style={styles.btn} onPress={this.playButton} title='Play' />
-                    <PrimaryButton style={styles.btn} onPress={() => {}} title='Playground' />
+                    <PrimaryButton style={styles.btn} onPress={this.helpButton} title='How to Play' />
                     <SecondaryButton style={styles.btn} onPress={this.exitButton} title='Exit' />
                 </View>
                 <Popup

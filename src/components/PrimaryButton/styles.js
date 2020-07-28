@@ -8,9 +8,13 @@ export default StyleSheet.create({
         justifyContent: 'center',
         paddingVertical: '2%',
         borderRadius: 5,
+        flexDirection: 'row',
     },
     title: {
-        color: Colors.buttonTextColor,
-        fontSize: 24,
+        color: Colors.backgroundColor,
+        fontSize: 20,
+    },
+    prefixIcon: {
+        marginRight: 5,
     }
 })

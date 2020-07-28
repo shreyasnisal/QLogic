@@ -10,6 +10,7 @@ export default StyleSheet.create({
         width: '100%',
         backgroundColor: Colors.headerColor,
         elevation: 1,
+        zIndex: 1,
     },
     headerIconBtn: {
         marginLeft: 20,

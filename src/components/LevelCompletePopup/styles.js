@@ -17,9 +17,10 @@ export default StyleSheet.create({
     },
     popupContainer: {
         backgroundColor: Colors.backgroundColor,
-        width: '45%',
+        width: '60%',
         padding: 20,
-        marginLeft: -Dimensions.get('screen').width * 0.04
+        marginLeft: -Dimensions.get('screen').width * 0.04,
+        borderRadius: 10,
         // alignItems: 'center',
     },
     starsRow: {
@@ -32,7 +33,7 @@ export default StyleSheet.create({
     buttonsRow: {
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'center',
+        justifyContent: 'space-evenly',
     },
     title: {
         color: Colors.buttonColor,
@@ -46,5 +47,8 @@ export default StyleSheet.create({
     },
     icon: {
         marginHorizontal: 5,
+    },
+    btn: {
+        width: '30%',
     }
 })

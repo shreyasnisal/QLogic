@@ -394,6 +394,7 @@ export default class Game extends Component {
                     qubitGates.map((value, index) => {
                         return(
                             <Gate
+                                key={index}
                                 name={value}
                                 style={[styles.appliedGate]}
                                 disabled={true}
@@ -510,16 +511,20 @@ export default class Game extends Component {
                 />
                 {Levels[levelId].tipText && <Popup
                     visible={tipPopupVisible}
+                    size={Levels[levelId].image ? 'large' : null}
                     title={Levels[levelId].tipHeading}
                     info={Levels[levelId].tipText}
+                    image={Levels[levelId].image ? Levels[levelId].image : null}
                     primaryBtnTitle={'Okay'}
                     primaryBtnAction={this.hideTipPopup}
                 />}
                 {levelId === 0 && <Popup
                     visible={introPopupVisible}
+                    size='large'
                     title={'Welcome to QLogic!'}
                     info={'Your aim is to use quantum gates and take quantum bits (qubits) to the final state given in each level. Happy quantum-puzzling!'}
                     primaryBtnTitle={'Let\'s Play!'}
+                    image={require('../../assets/images/intro.gif')}
                     primaryBtnAction={this.hideIntroPopup}
                 />}
                 <View style={styles.toastContainer}>
