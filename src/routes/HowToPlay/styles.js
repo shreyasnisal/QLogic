@@ -5,7 +5,8 @@ export default StyleSheet.create({
     page: {
         flex: 1,
         width: Dimensions.get('screen').width,
-        paddingHorizontal: Dimensions.get('screen').width * 0.1,
+        paddingLeft: Dimensions.get('screen').width * 0.08,
+        paddingRight: Dimensions.get('screen').width * 0.1,
         paddingTop: Dimensions.get('screen').height * 0.02,
         paddingBottom: Dimensions.get('screen').width * 0.03,
         justifyContent: 'space-evenly',

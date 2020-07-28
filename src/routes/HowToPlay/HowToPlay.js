@@ -51,7 +51,7 @@ export default class HowToPlay extends Component {
         return(
             <View style={commonStyles.container}>
                 <Header title='How to Play' onPressBack={this.backButton} />
-                <Background />
+                {/* <Background /> */}
                 <ScrollView
                     ref={this.mScrollView}
                     horizontal
