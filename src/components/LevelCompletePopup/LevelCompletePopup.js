@@ -22,14 +22,21 @@ export default class LevelCompletePopup extends Component {
             star1Scale: new Animated.Value(0),
             star2Scale: new Animated.Value(0),
             star3Scale: new Animated.Value(0),
+            showLevel: false,
         }
     }
 
     render() {
-        const {levelNumber, stars, visible, onPressMenu, onPressReplay, onPressNext} = this.props
+        const {levelNumber, stars, visible, onPressMenu, onPressReplay, onPressNext, onCancel} = this.props
         const {popupScale, star1Scale, star2Scale, star3Scale} = this.state
 
         if (!visible) return null;
+
+        if (this.state.showLevel) {
+            return(
+                <TouchableOpacity style={[commonStyles.fullScreen, styles.container]} onPress={() => this.setState({showLevel: false})} />
+            )
+        }
 
         Animated.spring(popupScale, {
             toValue: 1,
@@ -59,7 +66,7 @@ export default class LevelCompletePopup extends Component {
 
 
         return(
-            <View style={[commonStyles.fullScreen, styles.container]}>
+            <TouchableOpacity style={[commonStyles.fullScreen, styles.container]} onPress={() => this.setState({showLevel: true})}>
                 <View style={[commonStyles.fullScreen, styles.container, commonStyles.popupBackground]} />
                 <Animated.View style={[styles.popupContainer, {transform: [{scale: popupScale}]}]}>
                     <Text style={styles.title}>Level Complete!</Text>
@@ -76,21 +83,12 @@ export default class LevelCompletePopup extends Component {
                         </Animated.View>}
                     </View>
                     <View style={styles.buttonsRow}>
-                        {/* <TouchableOpacity style={styles.btn} onPress={onPressMenu}>
-                            <MaterialIcons name='menu' size={50} color={Colors.backgroundColor} />
-                        </TouchableOpacity> */}
                         <SecondaryButton onPress={onPressMenu} title='Menu' prefixIcon='menu' style={styles.btn} />
                         <SecondaryButton onPress={onPressReplay} title='Restart' prefixIcon='refresh' style={styles.btn} />
                         {onPressNext && <PrimaryButton onPress={onPressNext} title='Next' prefixIcon='chevron-right' style={styles.btn} />}
-                        {/* <TouchableOpacity style={styles.btn} onPress={onPressReplay}>
-                            <MaterialIcons name='replay' size={50} color={Colors.backgroundColor} />
-                        </TouchableOpacity> */}
-                        {/* {onPressNext && <TouchableOpacity style={styles.btn} onPress={onPressNext}>
-                            <MaterialIcons name='chevron-right' size={50} color={Colors.backgroundColor} />
-                        </TouchableOpacity>} */}
                     </View>
                 </Animated.View>
-            </View>
+            </TouchableOpacity>
         )
     }
 }

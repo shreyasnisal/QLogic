@@ -10,6 +10,7 @@ export default StyleSheet.create({
         bottom: 0,
         alignItems: 'center',
         justifyContent: 'center',
+        elevation: 2,
     },
     background: {
         backgroundColor: '#000',
@@ -21,7 +22,7 @@ export default StyleSheet.create({
         padding: 20,
         marginLeft: -Dimensions.get('screen').width * 0.04,
         borderRadius: 10,
-        // alignItems: 'center',
+        elevation: 3,
     },
     starsRow: {
         flexDirection: 'row',
