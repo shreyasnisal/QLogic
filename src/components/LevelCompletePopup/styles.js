@@ -11,6 +11,7 @@ export default StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         elevation: 2,
+        zIndex: 2,
     },
     background: {
         backgroundColor: '#000',
@@ -23,6 +24,7 @@ export default StyleSheet.create({
         marginLeft: -Dimensions.get('screen').width * 0.04,
         borderRadius: 10,
         elevation: 3,
+        zIndex: 3,
     },
     starsRow: {
         flexDirection: 'row',

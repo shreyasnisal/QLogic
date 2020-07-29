@@ -49,6 +49,7 @@ export default StyleSheet.create({
     singleBtnContainer: {
         flexDirection: 'row',
         justifyContent: 'flex-end',
+        marginTop: 'auto',
     },
     btn: {
         width: '45%',

@@ -210,7 +210,7 @@ export default class Game extends Component {
     addLine = (xPos, y2, qubitIndex) => {
         const y1 = this.liney1
         const {lines} = this.state
-        lines.push(<Line xPosition={xPos} bottom={y2} top={y1} style={{}} />)
+        lines.push(<Line key={xPos} xPosition={xPos} bottom={y2} top={y1} style={{}} />)
         this.setState({lines: lines})
 
         this.liney1 = null
@@ -220,7 +220,7 @@ export default class Game extends Component {
         const {qubitLines} = this.state
 
         qubitLines.push(
-            <View style={{position: 'absolute', left: xPos, top: yPos, width: '100%', flexDirection: 'row',}}>
+            <View key={yPos} style={{position: 'absolute', left: xPos, top: yPos, width: '100%', flexDirection: 'row',}}>
                 <View style={styles.line} />
             </View>
         )
