@@ -1,4 +1,4 @@
-package com.qlogic;
+package com.paltangames.qlogic;
 
 import android.app.Application;
 import android.content.Context;
