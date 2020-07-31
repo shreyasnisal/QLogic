@@ -12,6 +12,7 @@ import Navigator from 'navigation/Navigator'
 import { StatusBar, Platform } from 'react-native'
 import {Immersive} from 'react-native-immersive'
 import PushNotification from 'react-native-push-notification'
+import SplashScreen from 'react-native-splash-screen'
 
 PushNotification.configure({
 
@@ -36,6 +37,7 @@ export default class App extends Component {
   }
 
   componentDidMount() {
+    SplashScreen.hide()
     Immersive.setImmersive(true)
     Immersive.addImmersiveListener(this.restoreImmersive)
   }
@@ -45,7 +47,7 @@ export default class App extends Component {
 
     PushNotification.localNotificationSchedule({
       message: "It's been a while since you played QLogic. Come solve some puzzles!",
-      date: new Date(Date.now() + 86400 * 7 * 1000),
+      date: new Date(Date.now() + 7 * 86400 * 1000),
     });
   }
 
