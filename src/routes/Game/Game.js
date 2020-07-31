@@ -198,8 +198,10 @@ export default class Game extends Component {
             stars = 2
         }
 
-        levelsData[levelId] = stars
-        AsyncStorage.setItem('levelsData', JSON.stringify(levelsData))
+        if (!levelsData[levelId] || levelsData[levelId] < stars) {
+            levelsData[levelId] = stars
+            AsyncStorage.setItem('levelsData', JSON.stringify(levelsData))
+        }
 
         this.setState({
             stars: stars,

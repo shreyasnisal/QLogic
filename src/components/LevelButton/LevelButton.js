@@ -21,9 +21,9 @@ export default class LevelButton extends Component {
                     <Text style={[styles.text, isLocked ? styles.lockedText : styles.unlockedText]}>{levelNumber}</Text>
                 </TouchableOpacity>
                 {stars && <View style={styles.starRow}>
-                    <FontAwesome name={'star'} size={35} color={Colors.buttonColor} style={styles.star1} />
-                    {stars >= 2 && <FontAwesome name={'star'} size={35} color={Colors.buttonColor} style={styles.star2} />}
-                    {stars >= 3 && <FontAwesome name={'star'} size={35} color={Colors.buttonColor} style={styles.star3} />}
+                    <FontAwesome name={'star'} size={30} color={Colors.buttonColor} />
+                    {stars >= 2 && <FontAwesome name={'star'} size={30} color={Colors.buttonColor} />}
+                    {stars >= 3 && <FontAwesome name={'star'} size={30} color={Colors.buttonColor} />}
                 </View>}
                 {isLocked && <View style={styles.lock}>
                     <MaterialIcons name='lock' size={35} color={Colors.lockBlue} />

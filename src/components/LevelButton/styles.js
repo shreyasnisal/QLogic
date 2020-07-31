@@ -33,23 +33,12 @@ export default StyleSheet.create({
         color: Colors.backgroundColor,
     },
     starRow: {
-        width: '100%',
         flexDirection: 'row',
-    },
-    star1: {
-        position: "absolute",
-        left: -16,
-        bottom: -20,
-    },
-    star2: {
-        position: "absolute",
-        left: 16.75,
-        bottom: -20,
-    },
-    star3: {
-        position: "absolute",
-        right: -16,
-        bottom: -20,
+        position: 'absolute',
+        bottom: -15,
+        left: -14,
+        right: -14,
+        justifyContent: 'space-between',
     },
     lock: {
         position: "absolute",
