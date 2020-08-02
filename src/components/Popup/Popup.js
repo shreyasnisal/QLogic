@@ -30,7 +30,7 @@ export default class Popup extends Component {
 
         Animated.spring(popupScale, {
             toValue: 1,
-            friction: 5,
+            friction: 7,
             useNativeDriver: true,
         }).start()
 
@@ -57,7 +57,7 @@ export default class Popup extends Component {
                 <Animated.View style={[styles.popupContainer, {transform: [{scale: popupScale}]}]}>
                     <Text style={styles.title}>{title}</Text>
                     <Text style={styles.infoText}>{info}</Text>
-                    <View style={styles.btnContainer}>
+                    <View style={secondaryBtnTitle ? styles.btnContainer : styles.singleBtnContainer}>
                         {secondaryBtnTitle && <SecondaryButton style={styles.btn} title={secondaryBtnTitle} titleStyle={styles.btnText} onPress={secondaryBtnAction} />}
                         <PrimaryButton style={styles.btn} title={primaryBtnTitle} titleStyle={styles.btnText} onPress={primaryBtnAction} />
                     </View>

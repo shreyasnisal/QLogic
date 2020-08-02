@@ -1,4 +1,5 @@
 import React, {Component} from 'react'
+import {Animated, Easing} from 'react-native'
 import {createStackNavigator} from '@react-navigation/stack'
 
 //screens
@@ -6,17 +7,32 @@ import Home from 'routes/Home/Home'
 import Game from 'routes/Game/Game'
 import LevelSelect from 'routes/LevelSelect/LevelSelect'
 import HowToPlay from 'routes/HowToPlay/HowToPlay'
+import Colors from 'common/Colors'
 
 const Stack = createStackNavigator()
+
+const config = {
+  animation: 'timing',
+  config: {
+        duration: 500,
+        useNativeDriver: true,
+  },
+};
+
+const forFade = ({ current, closing }) => ({
+    cardStyle: {
+        opacity: current.progress,
+    },
+  });
 
 export default class Navigator extends Component {
     render() {
         return(
-            <Stack.Navigator>
-                <Stack.Screen name='Home' component={Home} options={{ headerShown: false }} />
-                <Stack.Screen name='LevelSelect' component={LevelSelect} options={{ headerShown: false}} />
-                <Stack.Screen name='Game' component={Game} options={{ headerShown: false}} />
-                <Stack.Screen name='HowToPlay' component={HowToPlay} options={{ headerShown: false}} />
+            <Stack.Navigator screenOptions={{ headerShown: false, transitionSpec: {open: config, close: config}, cardStyleInterpolator: forFade, cardStyle: {backgroundColor: Colors.backgroundColor} }}>
+                <Stack.Screen name='Home' component={Home} />
+                <Stack.Screen name='LevelSelect' component={LevelSelect} />
+                <Stack.Screen name='Game' component={Game} />
+                <Stack.Screen name='HowToPlay' component={HowToPlay} />
             </Stack.Navigator>
         )
     }

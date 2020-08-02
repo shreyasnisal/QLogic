@@ -7,9 +7,8 @@ export default StyleSheet.create({
         width: Dimensions.get('screen').width,
         paddingLeft: Dimensions.get('screen').width * 0.08,
         paddingRight: Dimensions.get('screen').width * 0.1,
-        paddingTop: Dimensions.get('screen').height * 0.02,
-        paddingBottom: Dimensions.get('screen').width * 0.03,
-        justifyContent: 'space-evenly',
+        paddingTop: Dimensions.get('screen').height * 0.1,
+        paddingBottom: Dimensions.get('screen').width * 0.05,
         alignItems: 'center',
     },
     text: {
@@ -20,8 +19,10 @@ export default StyleSheet.create({
         marginBottom: Dimensions.get('screen').height * 0.05,
     },
     image: {
-        height: '40%',
-        resizeMode: 'contain',
+        // height: '40%',
+        flex: 1,
+        aspectRatio: 2.88,
+        resizeMode: 'stretch',
     },
     gateHeading: {
         color: Colors.headerTextColor,
@@ -41,4 +42,7 @@ export default StyleSheet.create({
     gateImg: {
         marginLeft: 20,
     },
+    section: {
+        marginTop: '5%',
+    }
 })

@@ -9,7 +9,7 @@ export default [
         minMoves: 1, // the number of moves for the ideal solution
         maxMoves_2star: 3, // the maximum number of moves for which the player should be given 2 stars
         tipHeading: 'The X Gate', // heading for the tip popup (optional)
-        tipText: 'The X gate (also called Bit Flip Gate) takes a qubit from state 0 to 1 and vice versa', // info text for the tip popup (optional)
+        tipText: 'The X gate (also called Bit Flip Gate) takes a qubit from state 0 to 1 and vice versa.', // info text for the tip popup (optional)
     },
     {
         // level-2: 1 > 0
@@ -29,7 +29,7 @@ export default [
         minMoves: 1,
         maxMoves_2star: 3,
         tipHeading: 'The Z Gate',
-        tipText: 'Qubits also have a sign associated with a state, so state 1 is different from state -1. The Z gate takes a qubit from 1 to -1 and vice versa, but has no action on a 0 state'
+        tipText: 'Qubits also have a sign associated with a state, so state 1 is different from state -1. The Z gate takes a qubit from 1 to -1 and vice versa, but has no action on a 0 state.'
     },
     {
         // level-4: 0 > -1
@@ -60,7 +60,7 @@ export default [
         minMoves: 1,
         maxMoves_2star: 3,
         tipHeading: 'The H Gate',
-        tipText: 'A superposition is when a qubit is both 0 and 1 at the same time! A superposition is represented by a + or - sign. The H gate takes a qubit from state 0 to state (0 + 1) and vice versa',
+        tipText: 'A superposition is when a qubit is both 0 and 1 at the same time! A superposition is represented by a + or - sign. The H gate takes a qubit from state 0 to state (0 + 1) and vice versa.',
     },
     {
         // level-7: 1 > 0 - 1
@@ -71,7 +71,7 @@ export default [
         minMoves: 2,
         maxMoves_2star: 3,
         tipHeading: 'The H Gate',
-        tipText: 'The H gate also takes a state 1 to a state (0 - 1) and vice versa',
+        tipText: 'The H gate also takes a state 1 to a state (0 - 1) and vice versa.',
     },
     {
         // level-8: 0 > 0 - 1
@@ -91,7 +91,7 @@ export default [
         minMoves: 1,
         maxMoves_2star: 3,
         tipHeading: 'Operation on Superposition',
-        tipText: 'An operation acts separately on each term separated by a + or - sign',
+        tipText: 'An operation acts separately on each term separated by a + or - sign.',
     },
     {
         // level-10: 1 > 0 + 1
@@ -102,7 +102,7 @@ export default [
         minMoves: 2,
         maxMoves_2star: 3,
         tipHeading: 'No X Gate',
-        tipText: 'Not all gates are available in each level. Try this one without an X gate'
+        tipText: 'Not all gates are available in each level. Try this one without an X gate.'
     },
     {
         // level-11: 01 > 10
@@ -113,7 +113,7 @@ export default [
         minMoves: 2,
         maxMoves_2star: 3,
         tipHeading: '2-Qubits',
-        tipText: 'When working with multiple qubits, remember that the topmost qubit is written as the leftmost digit in the state'
+        tipText: 'When working with multiple qubits, remember that the topmost qubit is written as the leftmost digit in the state.'
     },
     {
         // level-12: 00 > 00 + 01
@@ -133,13 +133,13 @@ export default [
         minMoves: 1,
         maxMoves_2star: 3,
         tipHeading: 'Reminder',
-        tipText: 'A gate operates separately on each term separated by a + or - sign',
+        tipText: 'A gate operates separately on each term separated by a + or - sign.',
     },
     {
         // level-14: 00 > 00 - 10
         numQubits: 2,
         initialState: [[1], [0], [0], [0]],
-        targetState: [[1], [0], [1], [0]],
+        targetState: [[1], [0], [-1], [0]],
         gates: ['X', 'Z', 'H'],
         minMoves: 2,
         maxMoves_2star: 4,
@@ -171,7 +171,7 @@ export default [
         minMoves: 1,
         maxMoves_2star: 3,
         tipHeading: 'Controlled X',
-        tipText: 'The CX gate (Controlled X) does an X operation on a target qubit only if the control qubit is in state 1',
+        tipText: 'The CX gate (Controlled X) does an X operation on a target qubit only if the control qubit is in state 1.',
     },
     {
         // level-18: 00 > 00 + 11
@@ -191,7 +191,7 @@ export default [
         minMoves: 1,
         maxMoves_2star: 3,
         tipHeading: 'Controlled Z',
-        tipText: 'Similar to the CX gate, the CZ gate does a Z operation on the target only if the control qubit is in state 1',
+        tipText: 'Similar to the CX gate, the CZ gate does a Z operation on the target only if the control qubit is in state 1.',
     },
     {
         // level-20: 10 > 10 + 11
@@ -202,7 +202,7 @@ export default [
         minMoves: 1,
         maxMoves_2star: 3,
         tipHeading: 'Controlled H',
-        tipText: 'The controlled H gate does an H operation on the target if the control is in state 1',
+        tipText: 'The controlled H gate does an H operation on the target if the control is in state 1.',
     },
     {
         // level-21: 01 > 01 - 11

@@ -18,7 +18,7 @@ export default class PrimaryButton extends Component {
 
         return(
             <TouchableOpacity onPress={onPress} style={[style, styles.btnStyle]}>
-                {prefixIcon && <MaterialIcons name={prefixIcon} size={25} color={Colors.backgroundColor} style={styles.prefixIcon} />}
+                {prefixIcon && <MaterialIcons name={prefixIcon} size={25} color={Colors.backgroundColor} style={[styles.prefixIcon, prefixIcon === 'chevron-right' ? styles.reduceMargin : null]} />}
                 <Text style={[titleStyle, styles.title]}>{title}</Text>
             </TouchableOpacity>
         )

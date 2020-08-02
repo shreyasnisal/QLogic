@@ -13,12 +13,12 @@ export default StyleSheet.create({
         zIndex: 1,
     },
     headerIconBtn: {
-        marginLeft: 20,
+        marginLeft: 15,
     },
     headerRightIcons: {
         flexDirection: 'row',
         marginLeft: 'auto',
-        marginRight: 30,
+        marginRight: 15,
     },
     titleText: {
         position: 'absolute',

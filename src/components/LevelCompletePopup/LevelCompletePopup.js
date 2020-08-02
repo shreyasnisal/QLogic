@@ -40,6 +40,7 @@ export default class LevelCompletePopup extends Component {
 
         Animated.spring(popupScale, {
             toValue: 1,
+            friction: 7,
             useNativeDriver: true,
         }).start()
 

@@ -55,6 +55,8 @@ export default class HowToPlay extends Component {
                 <ScrollView
                     ref={this.mScrollView}
                     horizontal
+                    scrollEventThrottle={200}
+                    decelerationRate={1}
                     showsHorizontalScrollIndicator={false}
                     snapToInterval={Dimensions.get('screen').width}
                     onMomentumScrollEnd={this.handleScroll}
@@ -67,7 +69,7 @@ export default class HowToPlay extends Component {
                         A qubit (quantum-bit) can have similar states, but it can also be in something called a superposition of states, which is represented as a sum of the two states. 
                         This means that it is on and off at the same time!
                         </Text>
-                        <Text style={styles.text}>
+                        <Text style={[styles.text, styles.section]}>
                         In quantum computation, a qubit which is 0 and 1 at the same time is said to be in a superposition of the two,
                         and is represented as 0 + 1.
                         </Text>
@@ -79,7 +81,7 @@ export default class HowToPlay extends Component {
                         To use a gate, select it and tap on any of the available locations to place it. 
                         Remember that you cannot undo a move once done.
                         </Text>
-                        <Image source={require('../../assets/images/intro.gif')} style={styles.image} />
+                        <Image source={require('../../assets/images/intro.gif')} style={[styles.image, styles.section]} />
                     </View>
                     <View style={styles.page}>
                         <View style={styles.gateInfoContainer}>
@@ -93,7 +95,7 @@ export default class HowToPlay extends Component {
                                 <Gate name='X' disabled='true' style={styles.gateImg} />
                             </View>
                         </View>
-                        <View style={styles.gateInfoContainer}>
+                        <View style={[styles.gateInfoContainer, styles.section]}>
                             <Text style={styles.gateHeading}>Z-Gate </Text>
                             <View style={styles.row}>
                                 <Text style={styles.text}>
@@ -115,7 +117,7 @@ export default class HowToPlay extends Component {
                                 <Gate name='H' disabled='true' style={styles.gateImg} />
                             </View>
                         </View>
-                        <View style={styles.gateInfoContainer}>
+                        <View style={[styles.gateInfoContainer, styles.section]}>
                             <Text style={styles.gateHeading}>Control Gates </Text>
                             <View style={styles.row}>
                                 <Text style={styles.text}>
@@ -133,7 +135,7 @@ export default class HowToPlay extends Component {
                         For example, if the first qubit is in state 0 and the second is in state 1, we write the current state of both together as 01. 
                         If the first is in state 0 + 1, and the second is 0, the combined state would be 00 + 10.
                         </Text>
-                        <Text style={styles.text}>
+                        <Text style={[styles.text, styles.section]}>
                         Using the H-Gate on the first qubit of the state 00 would give 00 + 10. 
                         Using a CX gate on 00 + 10 with the first qubit as control would give 00 + 11, because any gate is operated individually on each term separately. 
                         So for 00, the control qubit is 0 and nothing happens. For 10, the control qubit is 1 and the target is flipped.

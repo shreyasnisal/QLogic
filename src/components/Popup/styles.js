@@ -11,6 +11,7 @@ export default StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         elevation: 2,
+        zIndex: 2,
     },
     popupContainer: {
         backgroundColor: Colors.backgroundColor,
@@ -24,9 +25,10 @@ export default StyleSheet.create({
     },
     largePopupContainer: {
         width: '75%',
-        maxHeight: '95%',
+        height: '95%',
         backgroundColor: Colors.backgroundColor,
         elevation: 3,
+        zIndex: 3,
         padding: 20,
         borderRadius: 10,
     },
@@ -40,7 +42,6 @@ export default StyleSheet.create({
         fontSize: 18,
         marginTop: 10,
         marginBottom: 20,
-        textAlign: 'justify',
     },
     btnContainer: {
         flexDirection: 'row',
@@ -55,7 +56,8 @@ export default StyleSheet.create({
         width: '45%',
     },
     image: {
-        height: '40%',
+        flex: 1,
+        aspectRatio: 2.88,
         resizeMode: 'contain',
     },
     smallBtn: {
