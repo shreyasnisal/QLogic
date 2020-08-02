@@ -20,10 +20,10 @@ export default StyleSheet.create({
         fontSize: 20,
     },
     prefixIcon: {
-        marginRight: 5,
+        marginRight: 10,
     },
     reduceMargin: {
-        marginRight: -2,
+        marginRight: 4,
         marginLeft: -15,
     }
 })

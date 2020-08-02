@@ -17,6 +17,6 @@ export default StyleSheet.create({
         fontSize: 20,
     },
     prefixIcon: {
-        marginRight: 5,
+        marginRight: 10,
     }
 })

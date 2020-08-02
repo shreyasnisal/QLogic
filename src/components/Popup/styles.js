@@ -61,7 +61,6 @@ export default StyleSheet.create({
         resizeMode: 'contain',
     },
     smallBtn: {
-        // width: '20%',
-        paddingHorizontal: 10,
+        width: '27%',
     }
 })

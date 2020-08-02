@@ -14,7 +14,7 @@ const Stack = createStackNavigator()
 const config = {
   animation: 'timing',
   config: {
-        duration: 500,
+        duration: 50,
         useNativeDriver: true,
   },
 };

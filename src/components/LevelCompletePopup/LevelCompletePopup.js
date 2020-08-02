@@ -70,7 +70,7 @@ export default class LevelCompletePopup extends Component {
             <TouchableOpacity style={[commonStyles.fullScreen, styles.container]} onPress={() => this.setState({showLevel: true})}>
                 <View style={[commonStyles.fullScreen, styles.container, commonStyles.popupBackground]} />
                 <Animated.View style={[styles.popupContainer, {transform: [{scale: popupScale}]}]}>
-                    <Text style={styles.title}>Level Complete!</Text>
+                    <Text style={styles.title}>Level Completed!</Text>
                     <Text style={styles.infoText}>Congratulations on completing Level {levelNumber}!</Text>
                     <View style={styles.starsRow}>
                         <Animated.View style={{transform: [{scale: star1Scale}]}}>

@@ -56,7 +56,7 @@ export default class HowToPlay extends Component {
                     ref={this.mScrollView}
                     horizontal
                     scrollEventThrottle={200}
-                    decelerationRate={1}
+                    decelerationRate="fast"
                     showsHorizontalScrollIndicator={false}
                     snapToInterval={Dimensions.get('screen').width}
                     onMomentumScrollEnd={this.handleScroll}
