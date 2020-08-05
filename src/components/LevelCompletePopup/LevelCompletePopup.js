@@ -37,20 +37,29 @@ export default class LevelCompletePopup extends Component {
 
             setTimeout(() => this.coinIncrementFunction(this.props.stars), 1500)
         }
+        else if (prevProps.visible && !this.props.visible) {
+            this.setState({
+                coinsEarned: 0,
+            })
+        }
     }
     
     coinIncrementFunction = async (stars) => {
 
-        const totalCoins = stars * 5 + (stars === 3 ? 5 : 0)
+        const {prevStars} = this.props
 
-        this.coinIncrementTimer = setInterval(() => {
-            this.setState({
-                coinsEarned: this.state.coinsEarned + 1,
-            }, () => {
-                if (this.state.coinsEarned === totalCoins)
-                    clearInterval(this.coinIncrementTimer)
-            })
-        }, 50)
+        const totalCoins = stars * 5 + (stars === 3 ? 5 : 0) - ((prevStars) ? prevStars * 5 + (prevStars === 3 ? 5 : 0) : 0)
+
+        if (totalCoins !== 0) {
+            this.coinIncrementTimer = setInterval(() => {
+                this.setState({
+                    coinsEarned: this.state.coinsEarned + 1,
+                }, () => {
+                    if (this.state.coinsEarned === totalCoins)
+                        clearInterval(this.coinIncrementTimer)
+                })
+            }, 50)
+        }
     }
 
     onPressWhatsApp = () => {
@@ -71,9 +80,9 @@ export default class LevelCompletePopup extends Component {
 
         if (this.state.showLevel) {
             return(
-                <>
-                    <TouchableOpacity style={[commonStyles.fullScreen, styles.container]} onPress={() => this.setState({showLevel: false})} />
-                </>
+                <View style={styles.toastContainer}>
+                    <Toast visible={true} text={'Level Completed'} style={styles.toast} />
+                </View>
             )
         }
 
@@ -106,35 +115,35 @@ export default class LevelCompletePopup extends Component {
 
         if (status === 'FAIL') {
             return(
-                <TouchableOpacity style={[commonStyles.fullScreen, styles.container]} onPress={() => this.setState({showLevel: true})}>
-                <View style={[commonStyles.fullScreen, styles.container, commonStyles.popupBackground]} />
-                <Animated.View style={[styles.popupContainer, {transform: [{scale: popupScale}]}]}>
-                    <Text style={styles.title}>Level Failed!</Text>
-                    <Text style={styles.infoText}>Looks like you're out of time.</Text>
-                    <View style={styles.starsRow}>
-                        <Animated.View style={{transform: [{scale: star1Scale}]}}>
-                            <FontAwesome style={styles.icon} name='star-o' size={60} color={Colors.headerTextColor} />
-                        </Animated.View>
-                        {<Animated.View style={{transform: [{scale: star2Scale}]}}>
-                            <FontAwesome style={styles.icon} name={'star-o'} size={60} color={stars >= 2 ? Colors.buttonColor : Colors.headerTextColor} />
-                        </Animated.View>}
-                        {<Animated.View style={{transform: [{scale: star3Scale}]}}>
-                            <FontAwesome style={styles.icon} name={'star-o'} size={60} color={stars == 3 ? Colors.buttonColor : Colors.headerTextColor} />
-                        </Animated.View>}
-                    </View>
-                    <View style={styles.buttonsRow}>
-                        <SecondaryButton onPress={onPressMenu} title='Menu' prefixIcon='menu' style={styles.btn} />
-                        <SecondaryButton onPress={onPressReplay} title='Restart' prefixIcon='refresh' style={styles.btn} />
-                    </View>
-                </Animated.View>
-            </TouchableOpacity>
+                <View style={[commonStyles.fullScreen, styles.container]}>
+                    <View style={[commonStyles.fullScreen, styles.container, commonStyles.popupBackground]} />
+                    <Animated.View style={[styles.popupContainer, {transform: [{scale: popupScale}]}]}>
+                        <Text style={styles.title}>Level Failed!</Text>
+                        <Text style={styles.infoText}>Looks like you're out of time.</Text>
+                        <View style={styles.starsRow}>
+                            <Animated.View style={{transform: [{scale: star1Scale}]}}>
+                                <FontAwesome style={styles.icon} name='star-o' size={60} color={Colors.headerTextColor} />
+                            </Animated.View>
+                            {<Animated.View style={{transform: [{scale: star2Scale}]}}>
+                                <FontAwesome style={styles.icon} name={'star-o'} size={60} color={stars >= 2 ? Colors.buttonColor : Colors.headerTextColor} />
+                            </Animated.View>}
+                            {<Animated.View style={{transform: [{scale: star3Scale}]}}>
+                                <FontAwesome style={styles.icon} name={'star-o'} size={60} color={stars == 3 ? Colors.buttonColor : Colors.headerTextColor} />
+                            </Animated.View>}
+                        </View>
+                        <View style={styles.buttonsRow}>
+                            <SecondaryButton onPress={onPressMenu} title='Menu' prefixIcon='menu' style={styles.nextBtn} />
+                            <PrimaryButton onPress={onPressReplay} title='Restart' prefixIcon='refresh' style={styles.nextBtn} />
+                        </View>
+                    </Animated.View>
+                </View>
             )
         }
 
 
         return(
-            <TouchableOpacity style={[commonStyles.fullScreen, styles.container]} onPress={() => this.setState({showLevel: true})}>
-                <View style={[commonStyles.fullScreen, styles.container, commonStyles.popupBackground]} />
+            <View style={[commonStyles.fullScreen, styles.container]}>
+                <TouchableOpacity style={[commonStyles.fullScreen, styles.container, commonStyles.popupBackground]} onPress={() => this.setState({showLevel: true})} />
                 <Animated.View style={[styles.popupContainer, {transform: [{scale: popupScale}]}]}>
                     <View style={styles.topRow}>
                         <Text style={styles.title}>Level Completed!</Text>
@@ -163,7 +172,7 @@ export default class LevelCompletePopup extends Component {
                         {onPressNext && <PrimaryButton onPress={onPressNext} title='Next' prefixIcon='chevron-right' style={styles.nextBtn} />}
                     </View>
                 </Animated.View>
-            </TouchableOpacity>
+            </View>
         )
     }
 }

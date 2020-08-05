@@ -20,8 +20,8 @@ export default StyleSheet.create({
         borderRadius: 10,
         flexDirection: 'column',
         marginLeft: -Dimensions.get('screen').width * 0.04,
-        zIndex: 3,
-        elevation: 3,
+        zIndex: 5,
+        elevation: 5,
     },
     largePopupContainer: {
         width: '75%',

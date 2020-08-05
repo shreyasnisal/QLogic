@@ -36,8 +36,8 @@ export default class Popup extends Component {
 
         if (size === 'large') {
             return(
-                <TouchableOpacity style={[commonStyles.fullScreen, styles.container]} disabled={cancelable ? !cancelable : true} onPress={onCancel ? onCancel : () => {}}>
-                    <View style={[commonStyles.fullScreen, styles.container, commonStyles.popupBackground]} />
+                <View style={[commonStyles.fullScreen, styles.container]}>
+                    <TouchableOpacity style={[commonStyles.fullScreen, styles.container, commonStyles.popupBackground]} disabled={cancelable ? !cancelable : true} onPress={onCancel ? onCancel : () => {}} />
                     <Animated.View style={[styles.largePopupContainer, {transform: [{scale: popupScale}]}]}>
                         <Text style={styles.title}>{title}</Text>
                         <Text style={styles.infoText}>{info}</Text>
@@ -47,13 +47,13 @@ export default class Popup extends Component {
                             <PrimaryButton style={styles.smallBtn} title={primaryBtnTitle} titleStyle={styles.btnText} onPress={primaryBtnAction} />
                         </View>
                     </Animated.View>
-                </TouchableOpacity>
+                </View>
             )
         }
 
         return(
-            <TouchableOpacity style={[commonStyles.fullScreen, styles.container]} disabled={cancelable ? !cancelable : true} onPress={onCancel ? onCancel : () => {}}>
-                <View style={[commonStyles.fullScreen, styles.container, commonStyles.popupBackground]} />
+            <View style={[commonStyles.fullScreen, styles.container]}>
+                <TouchableOpacity disabled={cancelable ? !cancelable : true} onPress={onCancel ? onCancel : () => {}} style={[commonStyles.fullScreen, styles.container, commonStyles.popupBackground]} />
                 <Animated.View style={[styles.popupContainer, {transform: [{scale: popupScale}]}]}>
                     <Text style={styles.title}>{title}</Text>
                     <Text style={styles.infoText}>{info}</Text>
@@ -62,7 +62,7 @@ export default class Popup extends Component {
                         <PrimaryButton style={styles.btn} title={primaryBtnTitle} titleStyle={styles.btnText} onPress={primaryBtnAction} />
                     </View>
                 </Animated.View>
-            </TouchableOpacity>
+            </View>
         )
 
     }

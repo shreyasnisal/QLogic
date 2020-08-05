@@ -76,4 +76,12 @@ export default StyleSheet.create({
         fontSize: 24,
         fontWeight: 'bold',
     },
+    toastContainer: {
+        width: '100%',
+        alignItems: 'center',
+    },
+    toast: {
+        position: 'absolute',
+        bottom: 80,
+    }
 })

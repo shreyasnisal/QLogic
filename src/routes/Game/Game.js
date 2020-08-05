@@ -82,7 +82,20 @@ export default class Game extends Component {
             this.timer = setInterval(this.timerFunction, 1000)
         }
 
+        this.props.navigation.addListener('focus', this.getData)
         BackHandler.addEventListener('hardwareBackPress', this.hardwareBackPress)
+    }
+
+    getData = () => {
+        this.getLevelsData()
+    }
+
+    getLevelsData = async () => {
+        let levelsData = JSON.parse(await AsyncStorage.getItem('levelsData'))
+        if (!levelsData) levelsData = []
+        this.setState({
+            levelPrevStars: levelsData[this.state.levelId] ? levelsData[this.state.levelId] : 0
+        })
     }
 
     timerFunction = () => {
@@ -108,6 +121,7 @@ export default class Game extends Component {
     }
 
     componentWillUnmount() {
+        this.props.navigation.removeListener('focus', this.getData)
         BackHandler.removeEventListener('hardwareBackPress', this.hardwareBackPress)
     }
 
@@ -207,6 +221,8 @@ export default class Game extends Component {
             clearInterval(this.timer)
             this.timer = setInterval(this.timerFunction, 1000)
         }
+
+        this.getLevelsData()
     }
 
     nextLevel = () => {
@@ -525,11 +541,12 @@ export default class Game extends Component {
             timerColor,
             levelFailed,
             extraCoins,
+            levelPrevStars,
         } = this.state
 
         return(
             <View style={commonStyles.container}>
-                <Header title={`Level ${levelId + 1}`} onPressBack={this.showExitPopup} onPressRestart={this.restartButton} />
+                <Header title={`Level ${levelId + 1}`} onPressBack={levelCompleted ? this.exitToMenu : this.showExitPopup} onPressRestart={levelCompleted ? this.resetLevel : this.restartButton} />
                 <View style={styles.statesRow}>
                     <View style={styles.stateContainer}>
                         <Text style={styles.stateStaticLabel}>Current State</Text>
@@ -569,7 +586,7 @@ export default class Game extends Component {
                                     key={index}
                                     name={value}
                                     style={[styles.gateBtn, this.isSelectedGate(value) ? styles.selectedGate : null]}
-                                    disabled={false}
+                                    disabled={levelCompleted ? true : false}
                                     onPress={() => {this.selectGate(value)}}
                                 />
                             )
@@ -611,6 +628,7 @@ export default class Game extends Component {
                     visible={levelCompleted}
                     levelNumber={levelId + 1}
                     stars={stars}
+                    prevStars={levelPrevStars}
                     onPressMenu={this.exitToMenu}
                     onPressReplay={this.resetLevel}
                     onPressNext={Levels[levelId + 1] ? this.nextLevel : null}

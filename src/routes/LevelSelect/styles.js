@@ -41,4 +41,12 @@ export default StyleSheet.create({
         fontSize: 20,
         color: Colors.buttonColor,
     },
+    toastContainer: {
+        width: '100%',
+        alignItems: 'center',
+    },
+    toast: {
+        position: 'absolute',
+        bottom: 80,
+    }
 })

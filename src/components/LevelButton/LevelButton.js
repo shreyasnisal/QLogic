@@ -9,6 +9,7 @@ import styles from './styles'
 import MaterialIcons from 'react-native-vector-icons/dist/MaterialIcons'
 import FontAwesome from 'react-native-vector-icons/dist/FontAwesome'
 import Colors from 'common/Colors'
+import Toast from 'components/Toast/Toast'
 
 export default class LevelButton extends Component {
     
@@ -17,7 +18,7 @@ export default class LevelButton extends Component {
 
         return(
             <View style={[styles.btnContainer, style]}>
-                <TouchableOpacity disabled={isLocked} onPress={onPress} style={[styles.btn, isLocked ? styles.lockedBtn : styles.activeBtn]}>
+                <TouchableOpacity onPress={onPress} style={[styles.btn, isLocked ? styles.lockedBtn : styles.activeBtn]}>
                     <Text style={[styles.text, isLocked ? styles.lockedText : styles.unlockedText]}>{levelNumber}</Text>
                 </TouchableOpacity>
                 {stars && <View style={styles.starRow}>

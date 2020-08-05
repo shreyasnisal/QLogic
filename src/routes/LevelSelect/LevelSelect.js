@@ -19,6 +19,7 @@ import CarouselIndicators from 'components/CarouselIndicators/CarouselIndicators
 import Header from 'components/Header/Header'
 import Background from 'components/Background/Background'
 import AsyncStorage from '@react-native-community/async-storage'
+import Toast from 'components/Toast/Toast'
 
 export default class LevelSelect extends Component {
 
@@ -43,6 +44,7 @@ export default class LevelSelect extends Component {
             currentPage: 0,
             levelsData: [],
             coins: 0,
+            showLockedToast: false,
         }
 
         BackHandler.addEventListener('hardwareBackPress', this.backButton)
@@ -57,7 +59,7 @@ export default class LevelSelect extends Component {
         BackHandler.removeEventListener('hardwareBackPress', this.backButton)
     }
 
-    getData = async => {
+    getData = async () => {
         this.getLevelsData()
         this.getCoinsData()
     }
@@ -98,6 +100,17 @@ export default class LevelSelect extends Component {
             currentPage: pageNumber
         })
     }
+
+    lockedLevelPress = () => {
+        this.setState({
+            showLockedToast: true
+        })
+        setTimeout(() => {
+            this.setState({
+                showLockedToast: false,
+            })
+        }, 1000)
+    }
     
     render() {
 
@@ -131,7 +144,7 @@ export default class LevelSelect extends Component {
                                                             isLocked={index > levelsData.length}
                                                             stars={levelsData[index]}
                                                             levelNumber={index + 1}
-                                                            onPress={() => {this.props.navigation.navigate('Game', {levelId: index})}}
+                                                            onPress={index > levelsData.length ? this.lockedLevelPress : () => {this.props.navigation.navigate('Game', {levelId: index})}}
                                                         />
                                                     )
                                                 })}
@@ -147,6 +160,9 @@ export default class LevelSelect extends Component {
                     <Image source={require('../../assets/images/qcoin.png')} style={styles.coinImage} />
                 </View>
                 <CarouselIndicators style={styles.carouselIndicators} numPages={this.state.pages.length} currentPage={this.state.currentPage} />
+                <View style={styles.toastContainer}>
+                    <Toast visible={this.state.showLockedToast} text={'Level Locked'} style={styles.toast} />
+                </View>
             </View>
         )
     }
