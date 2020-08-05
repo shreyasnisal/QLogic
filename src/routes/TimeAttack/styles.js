@@ -84,7 +84,7 @@ export default StyleSheet.create({
         width: '100%',
     },
     stateContainer: {
-        flex: 1,
+        flex: 2,
         height: '100%',
         borderWidth: 1,
         borderColor: Colors.headerTextColor,
@@ -95,9 +95,26 @@ export default StyleSheet.create({
         color: Colors.headerTextColor,
         fontSize: 16,
     },
+    scoreContainer: {
+        flex: 1,
+        height: '100%',
+        borderWidth: 1,
+        borderColor: Colors.headerTextColor,
+        padding: 5,
+        paddingLeft: 10,
+    },
     stateLabel: {
         fontSize: 20,
         color: Colors.headerTextColor,
+        fontWeight: 'bold',
+    },
+    scoreText: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    addScore: {
+        color: Colors.buttonColor,
+        marginLeft: 10,
         fontWeight: 'bold',
     },
     selectedGate: {

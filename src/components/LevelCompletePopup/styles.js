@@ -53,9 +53,11 @@ export default StyleSheet.create({
     },
     btn: {
         width: '10%',
+        height: '100%',
     },
     nextBtn: {
         width: '30%',
+        height: '100%',
     },
     topRow: {
         flexDirection: 'row',

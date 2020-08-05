@@ -9,6 +9,7 @@ import {
     Dimensions,
     findNodeHandle,
     BackHandler,
+    Easing,
 } from 'react-native'
 import commonStyles from 'common/styles'
 import styles from './styles'
@@ -25,6 +26,7 @@ import LevelCompletePopup from 'components/LevelCompletePopup/LevelCompletePopup
 import AsyncStorage from '@react-native-community/async-storage'
 import Line from 'components/Line/Line'
 import Toast from '../../components/Toast/Toast'
+import Animated from 'react-native-reanimated'
 
 export default class TimeAttack extends Component {
 
@@ -32,6 +34,8 @@ export default class TimeAttack extends Component {
     qubitContainer = []
     timer = null
     alertTimer = null
+    fadeInAddScore = null
+    fadeOutAddScore = null
 
     constructor(props) {
         super(props)
@@ -63,6 +67,8 @@ export default class TimeAttack extends Component {
             timeLeft: 15,
             timerColor: Colors.headerTextColor,
             achievedStates: [],
+            addScoreVisible: new Animated.Value(0),
+            addScoreText: 0,
         }
 
         this.timer = setInterval(this.timerFunction, 1000)
@@ -178,6 +184,9 @@ export default class TimeAttack extends Component {
             selectedGate: null,
             controlQubit: null,
             timeLeft: 90,
+            timerColor: Colors.headerTextColor,
+            addScoreVisible: new Animated.Value(),
+            addScoreText: 0,
         })
 
         clearInterval(this.timer)
@@ -318,19 +327,26 @@ export default class TimeAttack extends Component {
     }
 
     incrementScore = (stateText) => {
-        stateScore = 0
-        for (let i = 0; i < stateText.length; i++) {
+        const {addScoreVisible} = this.state
+        stateScore = 1
+        for (let i = 1; i < stateText.length; i++) {
             if (stateText[i] === '+' || stateText[i] === '-') {
                 stateScore++
             }
         }
 
-        if (stateScore === 0)
-            stateScore++
-
         this.setState({
             score: this.state.score + stateScore,
+            addScoreText: stateScore,
         })
+
+        Animated.spring(addScoreVisible, {
+            toValue: 1,
+            useNativeDriver: true,
+        }).start()
+
+        setTimeout(() => this.setState({addScoreVisible: new Animated.Value(0)}), 1000)
+
     }
 
     getStateText = (stateMatrix) => {
@@ -345,7 +361,10 @@ export default class TimeAttack extends Component {
                 }
 
                 if (stateMatrix[i][0] === -1) {
-                    stateText += ' - ' + tempStr
+                    if (stateText === '')
+                        stateText += '- ' + tempStr
+                    else
+                        stateText += ' - ' + tempStr
                 }
                 else if (stateText === '') {
                     stateText += tempStr
@@ -446,6 +465,8 @@ export default class TimeAttack extends Component {
             timeLeft,
             timerColor,
             isTimeUp,
+            addScoreVisible,
+            addScoreText,
         } = this.state
 
         return(
@@ -456,9 +477,18 @@ export default class TimeAttack extends Component {
                         <Text style={styles.stateStaticLabel}>Current State</Text>
                         <Text style={styles.stateLabel}>{this.getStateText(currentState)}</Text>
                     </View>
-                    <View style={styles.stateContainer}>
+                    <View style={styles.scoreContainer}>
+                        <Text style={styles.stateStaticLabel}>Moves</Text>
+                        <Text style={styles.stateLabel}>{moves}</Text>
+                    </View>
+                    <View style={styles.scoreContainer}>
                         <Text style={styles.stateStaticLabel}>Score</Text>
-                        <Text style={styles.stateLabel}>{score}</Text>
+                        <View style={styles.scoreText}>
+                            <Text style={styles.stateLabel}>{score} </Text>
+                            <Animated.View style={[{opacity: addScoreVisible}]}>
+                                <Text style={styles.addScore}>+{addScoreText} </Text>
+                            </Animated.View>
+                        </View>
                     </View>
                 </View>
                 <ScrollView
