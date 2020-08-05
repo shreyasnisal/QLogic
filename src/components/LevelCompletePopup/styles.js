@@ -52,6 +52,28 @@ export default StyleSheet.create({
         marginHorizontal: 5,
     },
     btn: {
+        width: '10%',
+    },
+    nextBtn: {
         width: '30%',
-    }
+    },
+    topRow: {
+        flexDirection: 'row',
+        justifyContent: 'space-between'
+    },
+    coinContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    coinImage: {
+        width: 25,
+        height: 25,
+        resizeMode: 'contain',
+        marginLeft: 5,
+    },
+    coinText: {
+        color: Colors.buttonColor,
+        fontSize: 24,
+        fontWeight: 'bold',
+    },
 })

@@ -4,6 +4,8 @@ import {
     Text,
     TouchableOpacity,
     Animated,
+    Image,
+    Linking,
 } from 'react-native'
 import commonStyles from 'common/styles'
 import styles from './styles'
@@ -12,8 +14,11 @@ import FontAwesome from 'react-native-vector-icons/dist/FontAwesome'
 import Colors from 'common/Colors'
 import SecondaryButton from '../SecondaryButton/SecondaryButton'
 import PrimaryButton from '../PrimaryButton/PrimaryButton'
+import Toast from '../Toast/Toast'
 
 export default class LevelCompletePopup extends Component {
+
+    coinIncrementTimer = null
 
     constructor(props) {
         super(props)
@@ -23,18 +28,52 @@ export default class LevelCompletePopup extends Component {
             star2Scale: new Animated.Value(0),
             star3Scale: new Animated.Value(0),
             showLevel: false,
+            coinsEarned: 0,
         }
     }
 
+    componentDidUpdate(prevProps) {
+        if (!prevProps.visible && this.props.visible) {
+
+            setTimeout(() => this.coinIncrementFunction(this.props.stars), 1500)
+        }
+    }
+    
+    coinIncrementFunction = async (stars) => {
+
+        const totalCoins = stars * 5 + (stars === 3 ? 5 : 0)
+
+        this.coinIncrementTimer = setInterval(() => {
+            this.setState({
+                coinsEarned: this.state.coinsEarned + 1,
+            }, () => {
+                if (this.state.coinsEarned === totalCoins)
+                    clearInterval(this.coinIncrementTimer)
+            })
+        }, 50)
+    }
+
+    onPressWhatsApp = () => {
+        const text = `OMG! I just completed Level ${this.props.levelNumber} on QLogic!\n\nhttps://play.google.com/store/apps/details?id=com.paltangames.qlogic`
+        Linking.openURL('whatsapp://send?text=' + text)
+    }
+
+    onPressTwitter = () => {
+        const text = `OMG! I just completed Level ${this.props.levelNumber} on QLogic!\n\nhttps://play.google.com/store/apps/details?id=com.paltangames.qlogic`
+        Linking.openURL('https://twitter.com/intent/tweet?text=' + text)
+    }
+
     render() {
-        const {levelNumber, stars, visible, onPressMenu, onPressReplay, onPressNext, onCancel} = this.props
-        const {popupScale, star1Scale, star2Scale, star3Scale} = this.state
+        const {levelNumber, stars, visible, onPressMenu, onPressReplay, onPressNext, onCancel, status, onPressWhatsApp, onPressTwitter, coins} = this.props
+        const {popupScale, star1Scale, star2Scale, star3Scale, coinsEarned} = this.state
 
         if (!visible) return null;
 
         if (this.state.showLevel) {
             return(
-                <TouchableOpacity style={[commonStyles.fullScreen, styles.container]} onPress={() => this.setState({showLevel: false})} />
+                <>
+                    <TouchableOpacity style={[commonStyles.fullScreen, styles.container]} onPress={() => this.setState({showLevel: false})} />
+                </>
             )
         }
 
@@ -65,12 +104,45 @@ export default class LevelCompletePopup extends Component {
             useNativeDriver: true,
         }).start()
 
+        if (status === 'FAIL') {
+            return(
+                <TouchableOpacity style={[commonStyles.fullScreen, styles.container]} onPress={() => this.setState({showLevel: true})}>
+                <View style={[commonStyles.fullScreen, styles.container, commonStyles.popupBackground]} />
+                <Animated.View style={[styles.popupContainer, {transform: [{scale: popupScale}]}]}>
+                    <Text style={styles.title}>Level Failed!</Text>
+                    <Text style={styles.infoText}>Looks like you're out of time.</Text>
+                    <View style={styles.starsRow}>
+                        <Animated.View style={{transform: [{scale: star1Scale}]}}>
+                            <FontAwesome style={styles.icon} name='star-o' size={60} color={Colors.headerTextColor} />
+                        </Animated.View>
+                        {<Animated.View style={{transform: [{scale: star2Scale}]}}>
+                            <FontAwesome style={styles.icon} name={'star-o'} size={60} color={stars >= 2 ? Colors.buttonColor : Colors.headerTextColor} />
+                        </Animated.View>}
+                        {<Animated.View style={{transform: [{scale: star3Scale}]}}>
+                            <FontAwesome style={styles.icon} name={'star-o'} size={60} color={stars == 3 ? Colors.buttonColor : Colors.headerTextColor} />
+                        </Animated.View>}
+                    </View>
+                    <View style={styles.buttonsRow}>
+                        <SecondaryButton onPress={onPressMenu} title='Menu' prefixIcon='menu' style={styles.btn} />
+                        <SecondaryButton onPress={onPressReplay} title='Restart' prefixIcon='refresh' style={styles.btn} />
+                    </View>
+                </Animated.View>
+            </TouchableOpacity>
+            )
+        }
+
 
         return(
             <TouchableOpacity style={[commonStyles.fullScreen, styles.container]} onPress={() => this.setState({showLevel: true})}>
                 <View style={[commonStyles.fullScreen, styles.container, commonStyles.popupBackground]} />
                 <Animated.View style={[styles.popupContainer, {transform: [{scale: popupScale}]}]}>
-                    <Text style={styles.title}>Level Completed!</Text>
+                    <View style={styles.topRow}>
+                        <Text style={styles.title}>Level Completed!</Text>
+                        <View style={styles.coinContainer}>
+                            <Text style={styles.coinText}>{coinsEarned} </Text>
+                            <Image source={require('../../assets/images/qcoin.png')} style={styles.coinImage} />
+                        </View>
+                    </View>
                     <Text style={styles.infoText}>Congratulations on completing Level {levelNumber}!</Text>
                     <View style={styles.starsRow}>
                         <Animated.View style={{transform: [{scale: star1Scale}]}}>
@@ -84,9 +156,11 @@ export default class LevelCompletePopup extends Component {
                         </Animated.View>}
                     </View>
                     <View style={styles.buttonsRow}>
-                        <SecondaryButton onPress={onPressMenu} title='Menu' prefixIcon='menu' style={styles.btn} />
-                        <SecondaryButton onPress={onPressReplay} title='Restart' prefixIcon='refresh' style={styles.btn} />
-                        {onPressNext && <PrimaryButton onPress={onPressNext} title='Next' prefixIcon='chevron-right' style={styles.btn} />}
+                        <SecondaryButton onPress={onPressMenu} prefixIcon='menu' style={styles.btn} />
+                        <SecondaryButton onPress={onPressReplay} prefixIcon='refresh' style={styles.btn} />
+                        <SecondaryButton onPress={this.onPressWhatsApp} prefixIcon='whatsapp' isCommunityIcon={true} style={styles.btn} />
+                        <SecondaryButton onPress={this.onPressTwitter} prefixIcon='twitter' isCommunityIcon={true} style={styles.btn} />
+                        {onPressNext && <PrimaryButton onPress={onPressNext} title='Next' prefixIcon='chevron-right' style={styles.nextBtn} />}
                     </View>
                 </Animated.View>
             </TouchableOpacity>

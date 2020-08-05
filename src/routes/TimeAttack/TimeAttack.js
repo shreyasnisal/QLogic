@@ -12,7 +12,6 @@ import {
 } from 'react-native'
 import commonStyles from 'common/styles'
 import styles from './styles'
-import Levels from 'common/Levels'
 import Colors from 'common/Colors'
 import * as GateOperations from 'common/GateOperations'
 import Gates from 'common/Gates'
@@ -27,7 +26,7 @@ import AsyncStorage from '@react-native-community/async-storage'
 import Line from 'components/Line/Line'
 import Toast from '../../components/Toast/Toast'
 
-export default class Game extends Component {
+export default class TimeAttack extends Component {
 
     liney1 = null
     qubitContainer = []
@@ -37,50 +36,36 @@ export default class Game extends Component {
     constructor(props) {
         super(props)
 
-        // recieve level id from the level select screen
-        const {levelId} = this.props.route.params
-
         // set gateHistory array to contain arrays according to number of qubits
         const gateHistory = []
-        for (let i = 0; i < Levels[levelId].numQubits; i++) {
+        for (let i = 0; i < 2; i++) {
             gateHistory[i] = []
-        }
-
-        if (levelId === 0) {
-            this.showIntro()
         }
 
         // add required variables to component's state
         this.state = {
-            levelId: levelId,
-            currentState: Levels[levelId].initialState,
-            targetState: Levels[levelId].targetState,
-            numQubits: Levels[levelId].numQubits,
-            usableGates: Levels[levelId].gates,
+            currentState: [[1], [0], [0], [0]],
+            numQubits: 2,
             gateHistory: gateHistory,
             exitPopupVisible: false,
             selectedGate: null,
             loading: false,
-            levelCompleted: false,
-            levelFailed: false,
+            isTimeUp: false,
             restartPopupVisible: false,
             moves: 0,
-            stars: 1,
+            score: 0,
             controlQubit: null,
+            usableGates: ['X', 'Z', 'H', 'CX', 'CZ', 'CH'],
             lines: [],
-            tipPopupVisible: true,
             introPopupVisible: false,
             gameScrollViewWidth: Dimensions.get('screen').width,
             qubitLines: [],
-            timeLeft: Levels[levelId].time,
+            timeLeft: 15,
             timerColor: Colors.headerTextColor,
-            extraCoins: 0,
+            achievedStates: [],
         }
 
-        //if the level is timed, start the countdown
-        if (Levels[levelId].time) {
-            this.timer = setInterval(this.timerFunction, 1000)
-        }
+        this.timer = setInterval(this.timerFunction, 1000)
 
         BackHandler.addEventListener('hardwareBackPress', this.hardwareBackPress)
     }
@@ -93,7 +78,7 @@ export default class Game extends Component {
             }
 
             if (this.state.timeLeft === 0) {
-                this.levelFailed()
+                this.timeUpFunction()
                 clearInterval(this.timer)
                 clearInterval(this.alertTimer)
             }
@@ -112,13 +97,10 @@ export default class Game extends Component {
     }
 
     hardwareBackPress = () => {
-        const {exitPopupVisible, tipPopupVisible} = this.state
+        const {introPopupVisible} = this.state
 
-        if (exitPopupVisible) {
-            this.hideExitPopup()
-        }
-        else if (tipPopupVisible) {
-            this.exitToMenu()
+        if (introPopupVisible) {
+            this.props.navigation.navigate('Home')
         }
         else {
             this.showExitPopup()
@@ -128,36 +110,31 @@ export default class Game extends Component {
     }
 
     showIntro = async () => {
-        const shownIntro = JSON.parse(await AsyncStorage.getItem('shownIntro'))
+        const shownIntro = JSON.parse(await AsyncStorage.getItem('shownTimeAttackIntro'))
 
         if (!shownIntro) {
             this.setState({
                 introPopupVisible: true,
-                tipPopupVisible: false,
             })
         }
     }
 
     showExitPopup = () => {
+        clearInterval(this.timer)
         this.setState({
             exitPopupVisible: true
         })
     }
 
     hideExitPopup = () => {
+        setInterval(this.timerFunction, 1000)
         this.setState({
             exitPopupVisible: false
         })
     }
 
-    exitToMenu = () => {
-        this.props.navigation.navigate('LevelSelect')
-    }
-
-    hideTipPopup = () => {
-        this.setState({
-            tipPopupVisible: false,
-        })
+    exitToHome = () => {
+        this.props.navigation.navigate('Home')
     }
 
     hideIntroPopup = () => {
@@ -165,128 +142,50 @@ export default class Game extends Component {
 
         this.setState({
             introPopupVisible: false,
-            tipPopupVisible: true,
         })
     }
     
     restartButton = () => {
+        clearInterval(this.timer)
         this.setState({
             restartPopupVisible: true,
         })
     }
 
     hideRestartPopup = () => {
+        setInterval(this.timerFunction, 1000)
         this.setState({
             restartPopupVisible: false
         })
     }
 
     resetLevel = () => {
-        const {levelId} = this.state
         const gateHistory = []
-        for (let i = 0; i < Levels[levelId].numQubits; i++) {
+        for (let i = 0; i < this.state.numQubits; i++) {
             gateHistory[i] = []
         }
 
         this.gameScrollView.scrollTo({x: 0})
 
         this.setState({
-            currentState: Levels[levelId].initialState,
+            currentState: [[1], [0], [0], [0]],
             gateHistory: gateHistory,
-            levelCompleted: false,
+            isTimeUp: false,
             restartPopupVisible: false,
             lines: [],
             moves: 0,
             gameScrollViewWidth: Dimensions.get('screen').width,
             selectedGate: null,
             controlQubit: null,
-            timeLeft: Levels[levelId].time,
+            timeLeft: 90,
         })
 
-        if (Levels[levelId].time) {
-            clearInterval(this.timer)
-            this.timer = setInterval(this.timerFunction, 1000)
-        }
+        clearInterval(this.timer)
+        this.timer = setInterval(this.timerFunction, 1000)
     }
 
-    nextLevel = () => {
-        const {levelId} = this.state
+    timeUpFunction = () => {
 
-        this.props.navigation.goBack()
-        this.props.navigation.navigate('Game', {levelId: levelId + 1})
-    }
-    
-    checkCompletion = (currentState, targetState) => {
-        if (currentState.length !== targetState.length)
-            return false
-        
-        for (let i = 0; i < currentState.length; i++) {
-            for (let j = 0; j < currentState[i].length; j++) {
-                if (currentState[i][j] !== targetState[i][j])
-                    return false
-            }
-        }
-
-        return true
-    }
-
-    levelComplete = async () => {
-        let levelsData = JSON.parse(await AsyncStorage.getItem('levelsData'))
-        let playerCoins = JSON.parse(await AsyncStorage.getItem('coins'))
-        if (!levelsData) levelsData = []
-        if (!playerCoins) playerCoins = 0
-        const {moves, levelId, timeLeft} = this.state
-        let stars = 1
-        let extraCoins = 0
-
-        if (timeLeft) {
-            if (timeLeft > (Levels[levelId].time - Levels[levelId].minTime)) {
-                stars = 3
-            }
-            else if (timeLeft > (Levels[levelId].time - Levels[levelId].maxTime_2star)) {
-                stars = 2
-            }
-
-            clearInterval(this.timer)
-            clearInterval(this.alertTimer)
-        }
-        else {
-            if (moves <= Levels[levelId].minMoves) {
-                stars = 3
-            }
-            else if (moves <= Levels[levelId].maxMoves_2star) {
-                stars = 2
-            }
-        }
-
-        if (!levelsData[levelId] || levelsData[levelId] < stars) {
-
-            let prevCoins = 0
-            if (levelsData[levelId]) {
-                prevCoins = levelsData[levelId] * 5 + (levelsData[levelId] === 3 ? 5 : 0)
-            }
-            const coins = stars * 5 + (stars === 3 ? 5 : 0)
-            extraCoins = coins - prevCoins
-
-            playerCoins += extraCoins
-
-            AsyncStorage.setItem('coins', JSON.stringify(playerCoins))
-
-            levelsData[levelId] = stars
-            AsyncStorage.setItem('levelsData', JSON.stringify(levelsData))
-        }
-
-        this.setState({
-            stars: stars,
-            extraCoins: extraCoins,
-            levelCompleted: true,
-        })
-    }
-
-    levelFailed = () => {
-        this.setState({
-            levelFailed: true,
-        })
     }
 
     addLine = (xPos, y2, qubitIndex) => {
@@ -344,7 +243,7 @@ export default class Game extends Component {
 
     placeGate = (qubitIndex) => {
 
-        const {gateHistory, selectedGate, numQubits, currentState, moves, targetState, controlQubit} = this.state
+        const {gateHistory, selectedGate, numQubits, currentState, moves, controlQubit} = this.state
         let gateMatrix = null
         let newState = null
 
@@ -385,9 +284,7 @@ export default class Game extends Component {
             }
             newState = GateOperations.operateGate(gateMatrix, currentState)
             
-            if (this.checkCompletion(newState, targetState)) {
-                this.levelComplete()
-            }
+            this.addNewState(newState)
     
             for (let i = 0; i < numQubits; i++) {
                 if ((i !== qubitIndex) && i !== controlQubit)
@@ -404,6 +301,35 @@ export default class Game extends Component {
 
         this.setState({
             loading: false,
+        })
+    }
+
+    addNewState = (newState) => {
+        const achievedStates = this.state.achievedStates
+
+        if (!achievedStates.includes(this.getStateText(newState))) {
+            achievedStates.push(this.getStateText(newState))
+            this.incrementScore(this.getStateText(newState))
+        }
+
+        this.setState({
+            achievedStates: achievedStates,
+        })
+    }
+
+    incrementScore = (stateText) => {
+        stateScore = 0
+        for (let i = 0; i < stateText.length; i++) {
+            if (stateText[i] === '+' || stateText[i] === '-') {
+                stateScore++
+            }
+        }
+
+        if (stateScore === 0)
+            stateScore++
+
+        this.setState({
+            score: this.state.score + stateScore,
         })
     }
 
@@ -509,35 +435,30 @@ export default class Game extends Component {
         const {gateHistory,
             exitPopupVisible,
             usableGates,
-            levelCompleted,
-            stars,
+            score,
             lines,
-            tipPopupVisible,
-            levelId,
             introPopupVisible,
             qubitLines,
             restartPopupVisible,
             moves,
             currentState,
-            targetState,
             selectedGate,
             timeLeft,
             timerColor,
-            levelFailed,
-            extraCoins,
+            isTimeUp,
         } = this.state
 
         return(
             <View style={commonStyles.container}>
-                <Header title={`Level ${levelId + 1}`} onPressBack={this.showExitPopup} onPressRestart={this.restartButton} />
+                <Header title={`Time Attack`} onPressBack={this.showExitPopup} onPressRestart={this.restartButton} />
                 <View style={styles.statesRow}>
                     <View style={styles.stateContainer}>
                         <Text style={styles.stateStaticLabel}>Current State</Text>
                         <Text style={styles.stateLabel}>{this.getStateText(currentState)}</Text>
                     </View>
                     <View style={styles.stateContainer}>
-                        <Text style={styles.stateStaticLabel}>Target State</Text>
-                        <Text style={styles.stateLabel}>{this.getStateText(targetState)}</Text>
+                        <Text style={styles.stateStaticLabel}>Score</Text>
+                        <Text style={styles.stateLabel}>{score}</Text>
                     </View>
                 </View>
                 <ScrollView
@@ -576,21 +497,16 @@ export default class Game extends Component {
                         })
                     }
                     </View>
-                    {timeLeft || timeLeft === 0
-                        ? <View style={[styles.timeContainer, {backgroundColor: timerColor}]}><MaterialIcons name='timer' size={25} style={styles.clockIcon} />
-                            <Text style={[styles.movesLabel]}>{`  ${timeLeft}s `}</Text>
-                        </View>
-                        : <View style={styles.movesContainer}>
-                            <Text style={styles.movesLabel}>{`${moves} Moves `}</Text>
-                        </View>
-                    }
+                    <View style={[styles.timeContainer, {backgroundColor: timerColor}]}><MaterialIcons name='timer' size={25} style={styles.clockIcon} />
+                        <Text style={[styles.movesLabel]}>{`  ${timeLeft}s `}</Text>
+                    </View>
                 </View>
                 <Popup
                     visible={exitPopupVisible}
                     title={'Exit Level'}
-                    info={'Are you sure you want to return to the menu? All your progress in this level will be lost.'}
+                    info={'Are you sure you want to return to the menu? Your score for this game will not be considered.'}
                     primaryBtnTitle={'Yes'}
-                    primaryBtnAction={this.exitToMenu}
+                    primaryBtnAction={this.exitToHome}
                     secondaryBtnTitle={'No'}
                     secondaryBtnAction={this.hideExitPopup}
                     cancelable={true}
@@ -599,7 +515,7 @@ export default class Game extends Component {
                 <Popup
                     visible={restartPopupVisible}
                     title={'Restart Level'}
-                    info={'Are you sure you want to restart this level? All progress in this level will be lost.'}
+                    info={'Are you sure you want to restart this level? All progress in this game will be lost.'}
                     primaryBtnTitle={'Yes'}
                     primaryBtnAction={this.resetLevel}
                     secondaryBtnTitle={'No'}
@@ -607,38 +523,6 @@ export default class Game extends Component {
                     cancelable={true}
                     onCancel={this.hideRestartPopup}
                 />
-                <LevelCompletePopup
-                    visible={levelCompleted}
-                    levelNumber={levelId + 1}
-                    stars={stars}
-                    onPressMenu={this.exitToMenu}
-                    onPressReplay={this.resetLevel}
-                    onPressNext={Levels[levelId + 1] ? this.nextLevel : null}
-                />
-                <LevelCompletePopup
-                    visible={levelFailed}
-                    status={'FAIL'}
-                    onPressMenu={this.exitToMenu}
-                    onPressReplay={this.resetLevel}
-                />
-                {Levels[levelId].tipText && <Popup
-                    visible={tipPopupVisible}
-                    size={Levels[levelId].image ? 'large' : null}
-                    title={Levels[levelId].tipHeading}
-                    info={Levels[levelId].tipText}
-                    image={Levels[levelId].image ? Levels[levelId].image : null}
-                    primaryBtnTitle={'Okay'}
-                    primaryBtnAction={this.hideTipPopup}
-                />}
-                {levelId === 0 && <Popup
-                    visible={introPopupVisible}
-                    size='large'
-                    title={'Welcome to QLogic!'}
-                    info={'Your aim is to use quantum gates and take quantum bits (qubits) to the final state given in each level. Happy quantum-puzzling!'}
-                    primaryBtnTitle={'Let\'s Play!'}
-                    image={require('../../assets/images/intro.gif')}
-                    primaryBtnAction={this.hideIntroPopup}
-                />}
                 <View style={styles.toastContainer}>
                     <Toast visible={selectedGate && (selectedGate[selectedGate.length - 1] === 'c')} text='Select control qubit' style={styles.toast} />
                     <Toast visible={selectedGate && (selectedGate[selectedGate.length - 1] === 't')} text='Select target qubit' style={styles.toast} />

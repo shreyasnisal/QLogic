@@ -6,6 +6,7 @@ import {
     BackHandler,
     Linking,
     Settings,
+    Image,
 } from 'react-native'
 import commonStyles from 'common/styles'
 import styles from './styles'
@@ -26,9 +27,10 @@ export default class Home extends Component {
             exitPopupVisible: false,
             rateUsPopupVisible: false,
             settingsPopupVisible: false,
+            coins: 0,
         }
 
-        this.props.navigation.addListener('focus', this.getLevelsData)
+        this.props.navigation.addListener('focus', this.getData)
         BackHandler.addEventListener('hardwareBackPress', this.hardwareBackPress)
     }
 
@@ -56,6 +58,10 @@ export default class Home extends Component {
 
     playButton = () => {
         this.props.navigation.navigate('LevelSelect')
+    }
+
+    timeAttackButton = () => {
+        this.props.navigation.navigate('TimeAttack')
     }
 
     exitButton = () => {
@@ -100,6 +106,11 @@ export default class Home extends Component {
         this.setState({rateUsPopupVisible: false})
     }
 
+    getData = async => {
+        this.getLevelsData()
+        this.getCoinsData()
+    }
+
     getLevelsData = async () => {
         const levelsData = JSON.parse(await AsyncStorage.getItem('levelsData'))
         const rated = JSON.parse(await AsyncStorage.getItem('rated'))
@@ -118,8 +129,15 @@ export default class Home extends Component {
         }
     }
 
+    getCoinsData = async () => {
+        const coins = JSON.parse(await AsyncStorage.getItem('coins'))
+        this.setState({
+            coins: coins ? coins : 0,
+        })
+    }
+
     render() {
-        const {exitPopupVisible, rateUsPopupVisible, settingsPopupVisible} = this.state
+        const {exitPopupVisible, rateUsPopupVisible, settingsPopupVisible, coins} = this.state
 
         return(
             <View style={commonStyles.container}>
@@ -127,8 +145,13 @@ export default class Home extends Component {
                 <Header title='<Q | Logic>' />
                 <View style={styles.buttonsContainer}>
                     <PrimaryButton style={styles.btn} onPress={this.playButton} title='Play' />
-                    <PrimaryButton style={styles.btn} onPress={this.helpButton} title='How to Play' />
+                    <PrimaryButton style={styles.btn} onPress={this.timeAttackButton} title='Time Attack' />
+                    <SecondaryButton style={styles.btn} onPress={this.helpButton} title='How to Play' />
                     <SecondaryButton style={styles.btn} onPress={this.exitButton} title='Exit' />
+                </View>
+                <View style={styles.coinContainer}>
+                    <Text style={styles.coinText}>{coins}</Text>
+                    <Image source={require('../../assets/images/qcoin.png')} style={styles.coinImage} />
                 </View>
                 <Popup
                     visible={exitPopupVisible}

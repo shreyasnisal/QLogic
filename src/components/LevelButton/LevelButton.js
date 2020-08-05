@@ -22,8 +22,8 @@ export default class LevelButton extends Component {
                 </TouchableOpacity>
                 {stars && <View style={styles.starRow}>
                     <FontAwesome name={'star'} size={30} color={Colors.buttonColor} />
-                    {stars >= 2 && <FontAwesome name={'star'} size={30} color={Colors.buttonColor} />}
-                    {stars >= 3 && <FontAwesome name={'star'} size={30} color={Colors.buttonColor} />}
+                    {<FontAwesome name={stars >= 2 ? 'star' : 'star-o'} size={30} color={Colors.buttonColor} />}
+                    {<FontAwesome name={stars >= 3 ? 'star' : 'star-o'} size={30} color={Colors.buttonColor} />}
                 </View>}
                 {isLocked && <View style={styles.lock}>
                     <MaterialIcons name='lock' size={35} color={Colors.lockBlue} />

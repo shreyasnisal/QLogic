@@ -37,7 +37,7 @@ export default class App extends Component {
   }
 
   componentDidMount() {
-    SplashScreen.hide()
+    setTimeout(() => SplashScreen.hide(), 1000)
     Immersive.setImmersive(true)
     Immersive.addImmersiveListener(this.restoreImmersive)
   }

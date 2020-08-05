@@ -5,4 +5,5 @@ export default {
     headerColor: '#000',
     headerTextColor: '#fee5a5',
     lockBlue: '#00cfff',
+    alertRedColor: '#fd8e8e',
 }

@@ -14,12 +14,12 @@ export default class PrimaryButton extends Component {
 
     render() {
 
-        const {style, onPress, titleStyle, title, prefixIcon} = this.props
+        const {style, onPress, titleStyle, title, prefixIcon, isFAIcon} = this.props
 
         return(
             <TouchableOpacity onPress={onPress} style={[style, styles.btnStyle]}>
-                {prefixIcon && <MaterialIcons name={prefixIcon} size={25} color={Colors.backgroundColor} style={[styles.prefixIcon, prefixIcon === 'chevron-right' ? styles.reduceMargin : null]} />}
-                <Text style={[titleStyle, styles.title]}>{title}</Text>
+                {prefixIcon && <MaterialIcons name={prefixIcon} size={25} color={Colors.backgroundColor} style={[title ? styles.prefixIcon : null, prefixIcon === 'chevron-right' ? styles.reduceMargin : null]} />}
+                {title && <Text style={[titleStyle, styles.title]}>{title}</Text>}
             </TouchableOpacity>
         )
     }

@@ -7,6 +7,7 @@ import {
     ScrollView,
     FlatList,
     Dimensions,
+    Image,
 } from 'react-native'
 import PrimaryButton from 'components/PrimaryButton/PrimaryButton'
 import SecondaryButton from 'components/SecondaryButton/SecondaryButton'
@@ -40,19 +41,25 @@ export default class LevelSelect extends Component {
             pages: pages,
             rows: rows,
             currentPage: 0,
-            levelsData: []
+            levelsData: [],
+            coins: 0,
         }
 
         BackHandler.addEventListener('hardwareBackPress', this.backButton)
     }
 
     componentDidMount() {
-        this.props.navigation.addListener('focus', this.getLevelsData)
+        this.props.navigation.addListener('focus', this.getData)
     }
 
     componentWillUnmount() {
-        this.props.navigation.removeListener('focus', this.getLevels)
+        this.props.navigation.removeListener('focus', this.getLevelsData)
         BackHandler.removeEventListener('hardwareBackPress', this.backButton)
+    }
+
+    getData = async => {
+        this.getLevelsData()
+        this.getCoinsData()
     }
 
     getLevelsData = async () => {
@@ -65,6 +72,18 @@ export default class LevelSelect extends Component {
 
         const scrollToPage = Math.floor(levelsData ? (levelsData.length) / 15 : 0)
         this.mScrollView.current.scrollTo({x: scrollToPage * Dimensions.get('screen').width, animated: true})
+
+        this.setState({
+            levelsData: levelsData ? levelsData : [],
+            currentPage: scrollToPage,
+        })
+    }
+
+    getCoinsData = async () => {
+        const coins = JSON.parse(await AsyncStorage.getItem('coins'))
+        this.setState({
+            coins: coins ? coins : 0,
+        })
     }
 
     backButton = () => {
@@ -82,7 +101,7 @@ export default class LevelSelect extends Component {
     
     render() {
 
-        const {levelsData, pages, rows} = this.state
+        const {levelsData, pages, rows, coins} = this.state
 
         return(
             <View style={commonStyles.container}>
@@ -123,6 +142,10 @@ export default class LevelSelect extends Component {
                         )
                     })}
                 </ScrollView>
+                <View style={styles.coinContainer}>
+                    <Text style={styles.coinText}>{coins}</Text>
+                    <Image source={require('../../assets/images/qcoin.png')} style={styles.coinImage} />
+                </View>
                 <CarouselIndicators style={styles.carouselIndicators} numPages={this.state.pages.length} currentPage={this.state.currentPage} />
             </View>
         )
