@@ -9,116 +9,61 @@ import {
     Dimensions,
     findNodeHandle,
     BackHandler,
-    Easing,
 } from 'react-native'
 import commonStyles from 'common/styles'
 import styles from './styles'
 import Colors from 'common/Colors'
 import * as GateOperations from 'common/GateOperations'
 import Gates from 'common/Gates'
+import { getMultiQubitGate } from '../../common/GateOperations'
 import Popup from 'components/Popup/Popup'
 import Gate from 'components/Gate/Gate'
 import Header from 'components/Header/Header'
 import MaterialCommunityIcons from 'react-native-vector-icons/dist/MaterialCommunityIcons'
 import MaterialIcons from 'react-native-vector-icons/dist/MaterialIcons'
-import LevelCompletePopup from 'components/LevelCompletePopup/LevelCompletePopup'
 import AsyncStorage from '@react-native-community/async-storage'
 import Line from 'components/Line/Line'
-import Toast from 'components/Toast/Toast'
-import Animated from 'react-native-reanimated'
-import TimeAttackSettingsPopup from 'components/TimeAttackSettingsPopup/TimeAttackSettingsPopup'
-import TimeAttackCompletePopup from 'components/TImeAttackCompletePopup/TimeAttackCompletePopup'
+import Toast from '../../components/Toast/Toast'
 import GateInfoPopup from 'components/GateInfoPopup/GateInfoPopup'
+import PlaygroundSettingsPopup from 'components/PlaygroundSettingsPopup/PlaygroundSettingsPopup'
 
-export default class TimeAttack extends Component {
+export default class Playground extends Component {
 
     liney1 = null
     qubitContainer = []
     timer = null
     alertTimer = null
-    fadeInAddScore = null
-    fadeOutAddScore = null
 
     constructor(props) {
         super(props)
 
         // set gateHistory array to contain arrays according to number of qubits
         const gateHistory = []
-        for (let i = 0; i < 2; i++) {
+        for (let i = 0; i < 1; i++) {
             gateHistory[i] = []
         }
-        const achievedStates = []
-        achievedStates.push(this.getStateText([[1], [0], [0], [0]]))
 
         // add required variables to component's state
         this.state = {
-            currentState: [[1], [0], [0], [0]],
-            numQubits: 2,
+            currentState: [[1], [0]],
+            numQubits: 1,
+            usableGates: ['X', 'Z', 'H'],
             gateHistory: gateHistory,
             exitPopupVisible: false,
             selectedGate: null,
             loading: false,
-            isTimeUp: false,
             restartPopupVisible: false,
-            moves: 0,
-            score: 0,
             controlQubit: null,
-            usableGates: ['X', 'Z', 'H', 'CX', 'CZ', 'CH'],
             lines: [],
             introPopupVisible: false,
             gameScrollViewWidth: Dimensions.get('screen').width,
             qubitLines: [],
-            timeLeft: 60,
-            timerColor: Colors.headerTextColor,
-            achievedStates: achievedStates,
-            addScoreVisible: new Animated.Value(0),
-            addScoreText: 0,
-            settingsPopupVisible: true,
-            completePopupVisible: false,
             gateInfoPopupVisible: false,
+            settingsPopupVisible: true,
         }
 
-        BackHandler.addEventListener('hardwareBackPress', this.hardwareBackPress)
-        this.props.navigation.addListener('blur', this.blurListener)
-        this.props.navigation.addListener('focus', this.focusListener)
         this.showIntro()
-    }
-
-    blurListener = () => {
-        clearInterval(this.timer)
-        clearInterval(this.alertTimer)
-    }
-
-    focusListener = () => {
-        if (!this.state.settingsPopupVisible && !this.state.gateInfoPopupVisible && !this.state.exitPopupVisible && !this.state.restartPopupVisible) {
-            this.timer = setInterval(this.timerFunction, 1000)
-
-            if (this.state.timeLeft <= 10) {
-                this.alertTimer = setInterval(this.alertTimerFunction, 1000)
-            }
-        }
-    }
-
-    timerFunction = () => {
-        this.setState({timeLeft: this.state.timeLeft - 1}, () => {
-            if (this.state.timeLeft === 10) {
-                // start the alert timer
-                this.alertTimer = setInterval(this.alertTimerFunction, 1000)
-            }
-
-            if (this.state.timeLeft === 0) {
-                this.timeUpFunction()
-                clearInterval(this.timer)
-                clearInterval(this.alertTimer)
-            }
-
-        })
-    }
-
-    alertTimerFunction = () => {
-        this.setState({
-            timerColor: this.state.timerColor === Colors.headerTextColor ? Colors.alertRedColor : Colors.headerTextColor,
-        })
+        BackHandler.addEventListener('hardwareBackPress', this.hardwareBackPress)
     }
 
     componentWillUnmount() {
@@ -126,10 +71,10 @@ export default class TimeAttack extends Component {
     }
 
     hardwareBackPress = () => {
-        const {introPopupVisible} = this.state
+        const {exitPopupVisible} = this.state
 
-        if (introPopupVisible) {
-            this.props.navigation.navigate('Home')
+        if (exitPopupVisible) {
+            this.hideExitPopup()
         }
         else {
             this.showExitPopup()
@@ -139,7 +84,7 @@ export default class TimeAttack extends Component {
     }
 
     showIntro = async () => {
-        const shownIntro = JSON.parse(await AsyncStorage.getItem('shownTimeAttackIntro'))
+        const shownIntro = JSON.parse(await AsyncStorage.getItem('shownPlaygroundIntro'))
 
         if (!shownIntro) {
             this.setState({
@@ -150,20 +95,26 @@ export default class TimeAttack extends Component {
     }
 
     showExitPopup = () => {
-        clearInterval(this.timer)
-        clearInterval(this.alertTimer)
         this.setState({
             exitPopupVisible: true
         })
     }
 
     hideExitPopup = () => {
-        this.timer = setInterval(this.timerFunction, 1000)
-        if (this.state.timeLeft <= 10) {
-            this.alertTimer = setInterval(this.alertTimerFunction, 1000)
-        }
         this.setState({
             exitPopupVisible: false
+        })
+    }
+
+    showSettingsPopup = () => {
+        this.setState({
+            settingsPopupVisible: true
+        })
+    }
+
+    hideSettingsPopup = () => {
+        this.setState({
+            settingsPopupVisible: false
         })
     }
 
@@ -172,7 +123,7 @@ export default class TimeAttack extends Component {
     }
 
     hideIntroPopup = () => {
-        AsyncStorage.setItem('shownTimeAttackIntro', JSON.stringify(true))
+        AsyncStorage.setItem('shownPlaygroundIntro', JSON.stringify(true))
 
         this.setState({
             settingsPopupVisible: true,
@@ -181,121 +132,50 @@ export default class TimeAttack extends Component {
     }
     
     restartButton = () => {
-        clearInterval(this.timer)
-        clearInterval(this.alertTimer)
         this.setState({
             restartPopupVisible: true,
         })
     }
 
     hideRestartPopup = () => {
-        this.timer = setInterval(this.timerFunction, 1000)
-
-        if (this.state.timeLeft <= 10) {
-            this.alertTimer = setInterval(this.alertTimerFunction, 1000)
-        }
-
         this.setState({
             restartPopupVisible: false
         })
     }
 
     showGateInfoPopup = () => {
-        clearInterval(this.timer)
-        clearInterval(this.alertTimer)
         this.setState({
             gateInfoPopupVisible: true,
         })
     }
 
     hideGateInfoPopup = () => {
-
-        if (this.state.timeLeft) {
-            this.timer = setInterval(this.timerFunction, 1000)
-
-            if (this.state.timeLeft <= 10) {
-                this.alertTimer = setInterval(this.alertTimerFunction, 1000)
-            }
-        }
-
         this.setState({
             gateInfoPopupVisible: false,
         })
     }
 
-    onChangeQubits = (numQubits) => {
+    resetLevel = () => {
+        const {numQubits} = this.state
         const currentState = [[1]]
         const gateHistory = []
-        const {qubitLines} = this.state
-        while (numQubits < qubitLines.length) {
-            qubitLines.pop()
+        for (let i = 0; i < numQubits; i++) {
+            gateHistory[i] = []
         }
         for (let i = 1; i < 2**numQubits; i++) {
             currentState[i] = [0]
         }
-        for (let i = 0; i < numQubits; i++) {
-            gateHistory[i] = []
-        }
-        const achievedStates = []
-        achievedStates.push(this.getStateText(currentState))
-        this.setState({
-            numQubits: numQubits,
-            currentState: currentState,
-            timeLeft: numQubits * 30,
-            gateHistory: gateHistory,
-            qubitLines: qubitLines,
-            achievedStates: achievedStates,
-        })
-    }
-
-    startGame = () => {
-        this.timer = setInterval(this.timerFunction, 1000)
-        this.setState({
-            settingsPopupVisible: false,
-        })
-    }
-
-    resetLevel = () => {
-        const gateHistory = []
-        for (let i = 0; i < this.state.numQubits; i++) {
-            gateHistory[i] = []
-        }
-        const currentState = [[1]]
-        for (let i = 1; i < 2**this.state.numQubits; i++) {
-            currentState[i] = [0]
-        }
-        const achievedStates = []
-        achievedStates.push(this.getStateText(currentState))
 
         this.gameScrollView.scrollTo({x: 0})
 
         this.setState({
             currentState: currentState,
             gateHistory: gateHistory,
-            isTimeUp: false,
             restartPopupVisible: false,
-            completePopupVisible: false,
             lines: [],
-            moves: 0,
             gameScrollViewWidth: Dimensions.get('screen').width,
             selectedGate: null,
             controlQubit: null,
-            timeLeft: this.state.numQubits * 30,
-            timerColor: Colors.headerTextColor,
-            addScoreVisible: new Animated.Value(0),
-            addScoreText: 0,
-            score: 0,
-            achievedStates: achievedStates,
-            settingsPopupVisible: true,
-        })
-
-        clearInterval(this.timer)
-        // this.timer = setInterval(this.timerFunction, 1000)
-    }
-
-    timeUpFunction = () => {
-        this.setState({
-            completePopupVisible: true,
         })
     }
 
@@ -354,7 +234,7 @@ export default class TimeAttack extends Component {
 
     placeGate = (qubitIndex) => {
 
-        const {gateHistory, selectedGate, numQubits, currentState, moves, controlQubit} = this.state
+        const {gateHistory, selectedGate, numQubits, currentState, controlQubit} = this.state
         let gateMatrix = null
         let newState = null
 
@@ -394,8 +274,6 @@ export default class TimeAttack extends Component {
                 gateMatrix = GateOperations.getMultiQubitGate(selectedGate, qubitIndex, numQubits)
             }
             newState = GateOperations.operateGate(gateMatrix, currentState)
-            
-            this.addNewState(newState)
     
             for (let i = 0; i < numQubits; i++) {
                 if ((i !== qubitIndex) && i !== controlQubit)
@@ -404,7 +282,6 @@ export default class TimeAttack extends Component {
 
             this.setState({
                 controlQubit: null,
-                moves: moves + 1,
                 selectedGate: null,
                 currentState: newState,
             })
@@ -415,40 +292,34 @@ export default class TimeAttack extends Component {
         })
     }
 
-    addNewState = (newState) => {
-        const achievedStates = this.state.achievedStates
-
-        if (!achievedStates.includes(this.getStateText(newState))) {
-            achievedStates.push(this.getStateText(newState))
-            this.incrementScore(this.getStateText(newState))
+    onChangeQubits = (numQubits) => {
+        const gateHistory = []
+        const currentState = [[1]]
+        let usableGates = ['X', 'Z', 'H', 'CX', 'CZ', 'CH']
+        const {qubitLines} = this.state
+        for (let i = 0; i < numQubits; i++) {
+            gateHistory[i] = []
+        }
+        for (let i = 1; i < 2**numQubits; i++) {
+            currentState[i] = [0]
+        }
+        if (numQubits === 1) {
+            usableGates = ['X', 'Z', 'H']
+        }
+        while (numQubits < qubitLines.length) {
+            qubitLines.pop()
         }
 
         this.setState({
-            achievedStates: achievedStates,
-        })
-    }
-
-    incrementScore = (stateText) => {
-        const {addScoreVisible} = this.state
-        let stateScore = 1
-        for (let i = 1; i < stateText.length; i++) {
-            if (stateText[i] === '+' || stateText[i] === '-') {
-                stateScore++
-            }
-        }
-
-        this.setState({
-            score: this.state.score + stateScore,
-            addScoreText: stateScore,
+            numQubits: numQubits,
+            currentState: currentState,
+            gateHistory: gateHistory,
+            usableGates: usableGates,
+            qubitLines: qubitLines,
+            lines: [],
         })
 
-        Animated.spring(addScoreVisible, {
-            toValue: 1,
-            useNativeDriver: true,
-        }).start()
-
-        setTimeout(() => this.setState({addScoreVisible: new Animated.Value(0)}), 1000)
-
+        // this.resetLevel()
     }
 
     getStateText = (stateMatrix) => {
@@ -463,10 +334,7 @@ export default class TimeAttack extends Component {
                 }
 
                 if (stateMatrix[i][0] === -1) {
-                    if (stateText === '')
-                        stateText += '- ' + tempStr
-                    else
-                        stateText += ' - ' + tempStr
+                    stateText += ' - ' + tempStr
                 }
                 else if (stateText === '') {
                     stateText += tempStr
@@ -556,45 +424,24 @@ export default class TimeAttack extends Component {
         const {gateHistory,
             exitPopupVisible,
             usableGates,
-            score,
             lines,
             introPopupVisible,
             qubitLines,
             restartPopupVisible,
-            moves,
             currentState,
             selectedGate,
-            timeLeft,
-            timerColor,
-            isTimeUp,
-            addScoreVisible,
-            addScoreText,
-            settingsPopupVisible,
-            completePopupVisible,
-            numQubits,
             gateInfoPopupVisible,
+            numQubits,
+            settingsPopupVisible,
         } = this.state
 
         return(
             <View style={commonStyles.container}>
-                <Header title={`Time Attack`} onPressBack={this.showExitPopup} onPressInfo={this.showGateInfoPopup} onPressRestart={this.restartButton} />
+                <Header title={`Playground`} onPressBack={this.showExitPopup} onPressInfo={this.showGateInfoPopup} onPressRestart={this.restartButton} onPressSettings={this.showSettingsPopup} />
                 <View style={styles.statesRow}>
                     <View style={styles.stateContainer}>
                         <Text style={styles.stateStaticLabel}>Current State</Text>
                         <Text style={styles.stateLabel}>{this.getStateText(currentState)}</Text>
-                    </View>
-                    <View style={styles.scoreContainer}>
-                        <Text style={styles.stateStaticLabel}>Moves</Text>
-                        <Text style={styles.stateLabel}>{moves}</Text>
-                    </View>
-                    <View style={styles.scoreContainer}>
-                        <Text style={styles.stateStaticLabel}>Score</Text>
-                        <View style={styles.scoreText}>
-                            <Text style={styles.stateLabel}>{score} </Text>
-                            <Animated.View style={[{opacity: addScoreVisible}]}>
-                                <Text style={styles.addScore}>+{addScoreText} </Text>
-                            </Animated.View>
-                        </View>
                     </View>
                 </View>
                 <ScrollView
@@ -633,14 +480,11 @@ export default class TimeAttack extends Component {
                         })
                     }
                     </View>
-                    <View style={[styles.timeContainer, {backgroundColor: timerColor}]}><MaterialIcons name='timer' size={25} style={styles.clockIcon} />
-                        <Text style={[styles.movesLabel]}>{`  ${timeLeft}s `}</Text>
-                    </View>
                 </View>
                 <Popup
                     visible={exitPopupVisible}
-                    title={'Exit Game'}
-                    info={'Are you sure you want to return to the menu? You will lose progress made in this game.'}
+                    title={'Exit'}
+                    info={'Are you sure you want to exit? All your qubits will reset to the 0 state.'}
                     primaryBtnTitle={'Yes'}
                     primaryBtnAction={this.exitToHome}
                     secondaryBtnTitle={'No'}
@@ -650,8 +494,8 @@ export default class TimeAttack extends Component {
                 />
                 <Popup
                     visible={restartPopupVisible}
-                    title={'Restart Game'}
-                    info={'Are you sure you want to restart the game? All progress in this game will be lost.'}
+                    title={'Restart Level'}
+                    info={'Are you sure you want to reset all qubits to the 0?'}
                     primaryBtnTitle={'Yes'}
                     primaryBtnAction={this.resetLevel}
                     secondaryBtnTitle={'No'}
@@ -661,29 +505,21 @@ export default class TimeAttack extends Component {
                 />
                 <Popup
                     visible={introPopupVisible}
-                    title={'Welcome to Time Attack!'}
-                    info={'Your aim is to achieve as many unique states as possible within the given time. Try to get the highest score!'}
+                    title={'Welcome to the Playground!'}
+                    info={'This is your safe space. You can try out the gates as you like, on any number of qubits. No move counter, no time limit. Enjoy!'}
                     primaryBtnTitle={'Let\'s Go!'}
                     primaryBtnAction={this.hideIntroPopup}
-                />
-                <TimeAttackSettingsPopup
-                    selectedQubits={numQubits}
-                    visible={settingsPopupVisible}
-                    onChangeQubits={this.onChangeQubits}
-                    onPressHome={this.exitToHome}
-                    onPressDone={this.startGame}
-                />
-                <TimeAttackCompletePopup
-                    visible={completePopupVisible}
-                    numQubits={numQubits}
-                    score={score}
-                    moves={moves}
-                    onPressHome={this.exitToHome}
-                    onPressRestart={this.resetLevel}
                 />
                 <GateInfoPopup
                     visible={gateInfoPopupVisible}
                     onPressDone={this.hideGateInfoPopup}
+                />
+                <PlaygroundSettingsPopup
+                    visible={settingsPopupVisible}
+                    onChangeQubits={this.onChangeQubits}
+                    selectedQubits={numQubits}
+                    onPressHome={this.exitToHome}
+                    onPressDone={this.hideSettingsPopup}
                 />
                 <View style={styles.toastContainer}>
                     <Toast visible={selectedGate && (selectedGate[selectedGate.length - 1] === 'c')} text='Select control qubit' style={styles.toast} />

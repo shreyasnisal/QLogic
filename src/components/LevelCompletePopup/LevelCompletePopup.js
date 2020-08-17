@@ -118,7 +118,7 @@ export default class LevelCompletePopup extends Component {
                 <View style={[commonStyles.fullScreen, styles.container]}>
                     <View style={[commonStyles.fullScreen, styles.container, commonStyles.popupBackground]} />
                     <Animated.View style={[styles.popupContainer, {transform: [{scale: popupScale}]}]}>
-                        <Text style={styles.title}>Level Failed!</Text>
+                        <Text style={styles.title}>Level Failed</Text>
                         <Text style={styles.infoText}>Looks like you're out of time.</Text>
                         <View style={styles.starsRow}>
                             <Animated.View style={{transform: [{scale: star1Scale}]}}>
@@ -132,8 +132,8 @@ export default class LevelCompletePopup extends Component {
                             </Animated.View>}
                         </View>
                         <View style={styles.buttonsRow}>
-                            <SecondaryButton onPress={onPressMenu} title='Menu' prefixIcon='menu' style={styles.nextBtn} />
-                            <PrimaryButton onPress={onPressReplay} title='Restart' prefixIcon='refresh' style={styles.nextBtn} />
+                            <SecondaryButton onPress={onPressMenu} title='Menu' prefixIcon='menu' style={styles.bigBtn} />
+                            <PrimaryButton onPress={onPressReplay} title='Restart' prefixIcon='refresh' style={styles.bigBtn} />
                         </View>
                     </Animated.View>
                 </View>
@@ -148,7 +148,7 @@ export default class LevelCompletePopup extends Component {
                     <View style={styles.topRow}>
                         <Text style={styles.title}>Level Completed!</Text>
                         <View style={styles.coinContainer}>
-                            <Text style={styles.coinText}>{coinsEarned} </Text>
+                            <Text style={styles.coinText}>{coinsEarned}</Text>
                             <Image source={require('../../assets/images/qcoin.png')} style={styles.coinImage} />
                         </View>
                     </View>
@@ -166,10 +166,11 @@ export default class LevelCompletePopup extends Component {
                     </View>
                     <View style={styles.buttonsRow}>
                         <SecondaryButton onPress={onPressMenu} prefixIcon='menu' style={styles.btn} />
-                        <SecondaryButton onPress={onPressReplay} prefixIcon='refresh' style={styles.btn} />
                         <SecondaryButton onPress={this.onPressWhatsApp} prefixIcon='whatsapp' isCommunityIcon={true} style={styles.btn} />
-                        <SecondaryButton onPress={this.onPressTwitter} prefixIcon='twitter' isCommunityIcon={true} style={styles.btn} />
-                        {onPressNext && <PrimaryButton onPress={onPressNext} title='Next' prefixIcon='chevron-right' style={styles.nextBtn} />}
+                        {onPressNext && <SecondaryButton onPress={this.onPressTwitter} prefixIcon='twitter' isCommunityIcon={true} style={styles.btn} />}
+                        <SecondaryButton onPress={onPressReplay} prefixIcon='refresh' style={styles.btn} />
+                        {!onPressNext && <PrimaryButton title='Tweet' prefixIcon='twitter' isCommunityIcon={true} style={styles.bigBtn} onPress={this.onPressTwitter} />}
+                        {onPressNext && <PrimaryButton onPress={onPressNext} title='Next' prefixIcon='chevron-right' style={styles.bigBtn} />}
                     </View>
                 </Animated.View>
             </View>

@@ -58,7 +58,7 @@ export default StyleSheet.create({
         paddingHorizontal: 20,
         borderRadius: 5,
         justifyContent: 'center',
-        width: '12%',
+        minWidth: '12%',
     },
     movesLabel: {
         fontSize: 18,
@@ -84,7 +84,7 @@ export default StyleSheet.create({
         width: '100%',
     },
     stateContainer: {
-        flex: 2,
+        flex: 3,
         height: '100%',
         borderWidth: 1,
         borderColor: Colors.headerTextColor,

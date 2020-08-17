@@ -66,8 +66,7 @@ export default class HowToPlay extends Component {
                         <Text style={styles.text}>
                         QLogic is a quantum physics based puzzle game. 
                         A bit is like a switch, which can be on or off, true or false, 0 or 1. 
-                        A qubit (quantum-bit) can have similar states, but it can also be in something called a superposition of states, which is represented as a sum of the two states. 
-                        This means that it is on and off at the same time!
+                        A qubit (quantum-bit) can have similar states, but it can also be in something called a mixture of states, which means that it is 0 and 1 at the same time! 
                         </Text>
                         <Text style={[styles.text, styles.section]}>
                         In quantum computation, a qubit which is 0 and 1 at the same time is said to be in a superposition of the two,
@@ -76,7 +75,7 @@ export default class HowToPlay extends Component {
                     </View>
                     <View style={styles.page}>
                         <Text style={styles.text}>
-                        Given an initial state of qubits, your aim is to take the qubits to a target state. 
+                        Your aim is to take qubits from an initial to a target state. 
                         To do so, you can use any of the gates available in a level. 
                         To use a gate, select it and tap on any of the available locations to place it. 
                         Remember that you cannot undo a move once done.
@@ -118,7 +117,7 @@ export default class HowToPlay extends Component {
                             </View>
                         </View>
                         <View style={[styles.gateInfoContainer, styles.section]}>
-                            <Text style={styles.gateHeading}>Control Gates </Text>
+                            <Text style={styles.gateHeading}>Control Gates (CX, CZ, CH) </Text>
                             <View style={styles.row}>
                                 <Text style={styles.text}>
                                 Control Gates act on 2 qubits- one is the control qubit, the other is the target. 

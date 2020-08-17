@@ -59,13 +59,29 @@ export default StyleSheet.create({
     qubitSwitchBtn_left: {
         borderTopLeftRadius: 4,
         borderBottomLeftRadius: 4,
+        width: '33%',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    qubitSwitchBtn_center: {
+        width: '33%',
+        alignItems: 'center',
+        justifyContent: 'center',
     },
     qubitSwitchBtn_right: {
         borderTopRightRadius: 4,
         borderBottomRightRadius: 4,
+        width: '33%',
+        alignItems: 'center',
+        justifyContent: 'center',
     },
     qubitSwitchBtn_left_selected: {
         borderRightWidth: 0,
+        backgroundColor: Colors.buttonColor,
+    },
+    qubitSwitchBtn_center_selected: {
+        // borderRightWidth: 0,
+        borderLeftWidth: 0,
         backgroundColor: Colors.buttonColor,
     },
     qubitSwitchBtn_right_selected: {

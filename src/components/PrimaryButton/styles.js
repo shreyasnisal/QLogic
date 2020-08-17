@@ -20,7 +20,8 @@ export default StyleSheet.create({
         fontSize: 20,
     },
     prefixIcon: {
-        marginRight: 10,
+        marginRight: '2%',
+        color: Colors.backgroundColor,
     },
     reduceMargin: {
         marginRight: 4,

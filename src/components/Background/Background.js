@@ -7,8 +7,11 @@ import styles from './styles'
 export default class Background extends Component {
 
     render() {
+        const {style} = this.props
+
+
         return(
-            <View style={styles.container}>
+            <View style={[styles.container, style]}>
                 <View style={styles.qubitLineContainer}>
                     <View style={styles.chip} />
                     <View style={styles.line} />

@@ -26,6 +26,7 @@ import LevelCompletePopup from 'components/LevelCompletePopup/LevelCompletePopup
 import AsyncStorage from '@react-native-community/async-storage'
 import Line from 'components/Line/Line'
 import Toast from '../../components/Toast/Toast'
+import GateInfoPopup from 'components/GateInfoPopup/GateInfoPopup'
 
 export default class Game extends Component {
 
@@ -75,15 +76,32 @@ export default class Game extends Component {
             timeLeft: Levels[levelId].time,
             timerColor: Colors.headerTextColor,
             extraCoins: 0,
+            gateInfoPopupVisible: false,
         }
 
         //if the level is timed, start the countdown
-        if (Levels[levelId].time) {
-            this.timer = setInterval(this.timerFunction, 1000)
-        }
+        // if (Levels[levelId].time && !Levels[levelId].tipHeading) {
+        //     this.timer = setInterval(this.timerFunction, 1000)
+        // }
 
-        this.props.navigation.addListener('focus', this.getData)
+        this.props.navigation.addListener('focus', this.focusListener)
         BackHandler.addEventListener('hardwareBackPress', this.hardwareBackPress)
+    }
+
+    blurListener = () => {
+        clearInterval(this.timer)
+        clearInterval(this.alertTimer)
+    }
+
+    focusListener = () => {
+        this.getData()
+        if (this.state.timeLeft) {
+            this.timer = setInterval(this.timerFunction, 1000)
+
+            if (this.state.timeLeft <= 10) {
+                this.alertTimer = setInterval(this.alertTimerFunction, 1000)
+            }
+        }
     }
 
     getData = () => {
@@ -153,12 +171,24 @@ export default class Game extends Component {
     }
 
     showExitPopup = () => {
+        clearInterval(this.timer)
+        clearInterval(this.alertTimer)
+
         this.setState({
             exitPopupVisible: true
         })
     }
 
     hideExitPopup = () => {
+
+        if (this.state.timeLeft) {
+            this.timer = setInterval(this.timerFunction, 1000)
+
+            if (this.state.timeLeft <= 10) {
+                this.alertTimer = setInterval(this.alertTimerFunction, 1000)
+            }
+        }
+
         this.setState({
             exitPopupVisible: false
         })
@@ -169,6 +199,15 @@ export default class Game extends Component {
     }
 
     hideTipPopup = () => {
+
+        if (this.state.timeLeft) {
+            this.timer = setInterval(this.timerFunction, 1000)
+
+            if (this.state.timeLeft <= 10) {
+                this.alertTimer = setInterval(this.alertTimerFunction, 1000)
+            }
+        }
+
         this.setState({
             tipPopupVisible: false,
         })
@@ -184,14 +223,54 @@ export default class Game extends Component {
     }
     
     restartButton = () => {
+
+        clearInterval(this.timer)
+        clearInterval(this.alertTimer)
+
         this.setState({
             restartPopupVisible: true,
         })
     }
 
     hideRestartPopup = () => {
+
+        if (this.state.timeLeft) {
+            this.timer = setInterval(this.timerFunction, 1000)
+
+            if (this.state.timeLeft <= 10) {
+                this.alertTimer = setInterval(this.alertTimerFunction, 1000)
+            }
+        }
+
         this.setState({
             restartPopupVisible: false
+        })
+    }
+
+    showGateInfoPopup = () => {
+        const {timeLeft} = this.state
+        if (timeLeft) {
+            clearInterval(this.timer)
+            clearInterval(this.alertTimer)
+        }
+
+        this.setState({
+            gateInfoPopupVisible: true,
+        })
+    }
+
+    hideGateInfoPopup = () => {
+
+        if (this.state.timeLeft) {
+            this.timer = setInterval(this.timerFunction, 1000)
+
+            if (this.state.timeLeft <= 10) {
+                this.alertTimer = setInterval(this.alertTimerFunction, 1000)
+            }
+        }
+
+        this.setState({
+            gateInfoPopupVisible: false,
         })
     }
 
@@ -208,6 +287,7 @@ export default class Game extends Component {
             currentState: Levels[levelId].initialState,
             gateHistory: gateHistory,
             levelCompleted: false,
+            levelFailed: false,
             restartPopupVisible: false,
             lines: [],
             moves: 0,
@@ -219,6 +299,7 @@ export default class Game extends Component {
 
         if (Levels[levelId].time) {
             clearInterval(this.timer)
+            clearInterval(this.alertTimer)
             this.timer = setInterval(this.timerFunction, 1000)
         }
 
@@ -542,11 +623,12 @@ export default class Game extends Component {
             levelFailed,
             extraCoins,
             levelPrevStars,
+            gateInfoPopupVisible,
         } = this.state
 
         return(
             <View style={commonStyles.container}>
-                <Header title={`Level ${levelId + 1}`} onPressBack={levelCompleted ? this.exitToMenu : this.showExitPopup} onPressRestart={levelCompleted ? this.resetLevel : this.restartButton} />
+                <Header title={`Level ${levelId + 1}`} onPressBack={levelCompleted ? this.exitToMenu : this.showExitPopup} onPressInfo={this.showGateInfoPopup} onPressRestart={levelCompleted ? this.resetLevel : this.restartButton} onPressNext={levelCompleted ? this.nextLevel : null} />
                 <View style={styles.statesRow}>
                     <View style={styles.stateContainer}>
                         <Text style={styles.stateStaticLabel}>Current State</Text>
@@ -657,6 +739,10 @@ export default class Game extends Component {
                     image={require('../../assets/images/intro.gif')}
                     primaryBtnAction={this.hideIntroPopup}
                 />}
+                <GateInfoPopup
+                    visible={gateInfoPopupVisible}
+                    onPressDone={this.hideGateInfoPopup}
+                />
                 <View style={styles.toastContainer}>
                     <Toast visible={selectedGate && (selectedGate[selectedGate.length - 1] === 'c')} text='Select control qubit' style={styles.toast} />
                     <Toast visible={selectedGate && (selectedGate[selectedGate.length - 1] === 't')} text='Select target qubit' style={styles.toast} />

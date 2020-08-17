@@ -11,6 +11,13 @@ export default StyleSheet.create({
     btn: {
         marginVertical: Dimensions.get('screen').height * 0.03,
     },
+    btnRow: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+    },
+    halfBtn: {
+        width: '45%',
+    },
     titleContainer: {
         marginBottom: 10,
     },

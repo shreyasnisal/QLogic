@@ -19,6 +19,7 @@ export default StyleSheet.create({
         flexDirection: 'row',
         marginLeft: 'auto',
         marginRight: 15,
+        alignItems: 'center',
     },
     titleText: {
         position: 'absolute',
@@ -28,5 +29,5 @@ export default StyleSheet.create({
         width: '100%',
         left: 0,
         // fontWeight: 'bold',
-    }
+    },
 })

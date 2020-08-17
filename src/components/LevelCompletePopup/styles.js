@@ -1,5 +1,14 @@
 import {StyleSheet, Dimensions} from 'react-native'
 import Colors from 'common/Colors'
+import DetectNavbar from 'react-native-detect-navbar-android'
+
+const hasSoftNavigation = () => {
+    if (Platform.OS !== 'android') return false
+
+    DetectNavbar.hasSoftKeys().then(bool => {
+        return bool
+    })
+}
 
 export default StyleSheet.create({
     container: {
@@ -21,7 +30,7 @@ export default StyleSheet.create({
         backgroundColor: Colors.backgroundColor,
         width: '60%',
         padding: 20,
-        marginLeft: -Dimensions.get('screen').width * 0.04,
+        marginLeft: hasSoftNavigation() ? -Dimensions.get('screen').width * 0.04 : 0,
         borderRadius: 10,
         elevation: 3,
         zIndex: 3,
@@ -36,7 +45,7 @@ export default StyleSheet.create({
     buttonsRow: {
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'space-evenly',
+        justifyContent: 'space-between',
     },
     title: {
         color: Colors.buttonColor,
@@ -55,6 +64,10 @@ export default StyleSheet.create({
         width: '10%',
         height: '100%',
     },
+    bigBtn: {
+        width: '45%',
+        height: '100%',
+    },
     nextBtn: {
         width: '30%',
         height: '100%',
@@ -68,15 +81,15 @@ export default StyleSheet.create({
         alignItems: 'center',
     },
     coinImage: {
-        width: 25,
-        height: 25,
+        width: 35,
+        height: 35,
         resizeMode: 'contain',
         marginLeft: 5,
     },
     coinText: {
-        color: Colors.buttonColor,
+        color: Colors.headerTextColor,
         fontSize: 24,
-        fontWeight: 'bold',
+        // fontWeight: 'bold',
     },
     toastContainer: {
         width: '100%',

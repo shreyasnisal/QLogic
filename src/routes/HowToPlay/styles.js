@@ -1,5 +1,14 @@
 import {StyleSheet, Dimensions} from 'react-native'
 import Colors from 'common/Colors'
+import DetectNavbar from 'react-native-detect-navbar-android'
+
+const hasSoftNavigation = () => {
+    if (Platform.OS !== 'android') return false
+
+    DetectNavbar.hasSoftKeys().then(bool => {
+        return bool
+    })
+}
 
 export default StyleSheet.create({
     page: {
@@ -33,7 +42,7 @@ export default StyleSheet.create({
     gateInfoContainer: {
         flex: 1,
         width: '90%',
-        marginLeft: -Dimensions.get('screen').width * 0.1,
+        marginLeft: hasSoftNavigation() ? -Dimensions.get('screen').width * 0.1 : 0,
     },
     row: {
         flexDirection: 'row',

@@ -1,4 +1,4 @@
-import {StyleSheet, Dimensions} from 'react-native'
+import {StyleSheet, Dimensions, Platform} from 'react-native'
 import Colors from 'common/Colors'
 import DetectNavbar from 'react-native-detect-navbar-android'
 
@@ -25,36 +25,47 @@ export default StyleSheet.create({
     popupContainer: {
         backgroundColor: Colors.backgroundColor,
         padding: 20,
-        width: '45%',
+        width: '60%',
         borderRadius: 10,
         flexDirection: 'column',
-        marginLeft: hasSoftNavigation ? -Dimensions.get('screen').width * 0.04 : 0,
+        marginLeft: hasSoftNavigation() ? -Dimensions.get('screen').width * 0.04 : 0,
         zIndex: 5,
         elevation: 5,
-    },
-    largePopupContainer: {
-        width: '75%',
-        height: '95%',
-        backgroundColor: Colors.backgroundColor,
-        elevation: 3,
-        zIndex: 3,
-        padding: 20,
-        borderRadius: 10,
     },
     title: {
         color: Colors.buttonColor,
         fontSize: 24,
         fontWeight: 'bold',
     },
-    infoText: {
+    gateInfoContainer: {
+        marginTop: 5,
+        marginBottom: 5,
+    },
+    gateHeading: {
         color: Colors.headerTextColor,
         fontSize: 18,
-        marginTop: 10,
-        marginBottom: 20,
+        fontWeight: 'bold',
+        marginBottom: 3,
     },
-    btnContainer: {
+    text: {
+        color: Colors.headerTextColor,
+        fontSize: 18,
+        width: '90%',
+    },
+    row: {
         flexDirection: 'row',
-        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
+    textRow: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'flex-start',
+    },
+    gateImg: {
+        // marginLeft: '20%',
+        marginRight: '3%',
+        width: 35,
+        height: 35,
     },
     singleBtnContainer: {
         flexDirection: 'row',
@@ -64,12 +75,4 @@ export default StyleSheet.create({
     btn: {
         width: '45%',
     },
-    image: {
-        flex: 1,
-        aspectRatio: 2.88,
-        resizeMode: 'contain',
-    },
-    smallBtn: {
-        width: '27%',
-    }
 })

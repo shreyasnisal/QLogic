@@ -18,10 +18,10 @@ export default class SecondaryButton extends Component {
         const {onPress, style, title, titleStyle, prefixIcon, isCommunityIcon} = this.props
 
         return(
-            <TouchableOpacity onPress={this.props.onPress} style={[this.props.style, styles.btnStyle]}>
+            <TouchableOpacity onPress={this.props.onPress} style={[styles.btnStyle, this.props.style]}>
                 {prefixIcon && !isCommunityIcon && <MaterialIcons name={prefixIcon} size={20} color={Colors.buttonColor} style={title ? styles.prefixIcon : null} />}
                 {prefixIcon && isCommunityIcon && <MaterialCommunityIcons name={prefixIcon} size={20} color={Colors.buttonColor} style={title ? styles.prefixIcon : null} />}
-                {title && <Text style={[this.props.titleStyle, styles.title]}>{this.props.title}</Text>}
+                {title && <Text style={[styles.title, this.props.titleStyle]}>{this.props.title}</Text>}
             </TouchableOpacity>
         )
     }

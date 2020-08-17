@@ -7,6 +7,7 @@ import {
     Linking,
     Settings,
     Image,
+    TouchableOpacity,
 } from 'react-native'
 import commonStyles from 'common/styles'
 import styles from './styles'
@@ -96,6 +97,10 @@ export default class Home extends Component {
         })
     }
 
+    playgroundButton = () => {
+        this.props.navigation.navigate('Playground')
+    }
+
     hideSettingsPopup = () => {
         this.setState({
             settingsPopupVisible: false
@@ -104,6 +109,18 @@ export default class Home extends Component {
 
     hideRateUsPopup = () => {
         this.setState({rateUsPopupVisible: false})
+    }
+
+    showCoinsPopup = () => {
+        this.setState({
+            coinsPopupVisible: true,
+        })
+    }
+
+    hideCoinsPopup = () => {
+        this.setState({
+            coinsPopupVisible: false,
+        })
     }
 
     getData = async => {
@@ -137,22 +154,25 @@ export default class Home extends Component {
     }
 
     render() {
-        const {exitPopupVisible, rateUsPopupVisible, settingsPopupVisible, coins} = this.state
+        const {exitPopupVisible, rateUsPopupVisible, settingsPopupVisible, coins, coinsPopupVisible} = this.state
 
         return(
             <View style={commonStyles.container}>
                 <Background />
-                <Header title='<Q | Logic>' />
+                <Header title='QLogic' />
                 <View style={styles.buttonsContainer}>
                     <PrimaryButton style={styles.btn} onPress={this.playButton} title='Play' />
                     <PrimaryButton style={styles.btn} onPress={this.timeAttackButton} title='Time Attack' />
-                    <SecondaryButton style={styles.btn} onPress={this.helpButton} title='How to Play' />
-                    <SecondaryButton style={styles.btn} onPress={this.exitButton} title='Exit' />
+                    <SecondaryButton style={styles.btn} onPress={this.playgroundButton} title='Playground' />
+                    <View style={styles.btnRow}>
+                        <SecondaryButton style={[styles.btn, styles.halfBtn]} onPress={this.exitButton} title='Exit' />
+                        <SecondaryButton style={[styles.btn, styles.halfBtn]} onPress={this.helpButton} title='How to Play' />
+                    </View>
                 </View>
-                <View style={styles.coinContainer}>
+                <TouchableOpacity style={styles.coinContainer} onPress={this.showCoinsPopup}>
                     <Text style={styles.coinText}>{coins}</Text>
                     <Image source={require('../../assets/images/qcoin.png')} style={styles.coinImage} />
-                </View>
+                </TouchableOpacity>
                 <Popup
                     visible={exitPopupVisible}
                     title={'Exit'}
@@ -172,6 +192,13 @@ export default class Home extends Component {
                     primaryBtnAction={this.openStore}
                     secondaryBtnTitle={'Not Now'}
                     secondaryBtnAction={this.hideRateUsPopup}
+                />
+                <Popup
+                    visible={coinsPopupVisible}
+                    title={'QCoins'}
+                    info={'More features coming soon!'}
+                    primaryBtnTitle={'Okay'}
+                    primaryBtnAction={this.hideCoinsPopup}
                 />
                 <SettingsPopup
                     visible={settingsPopupVisible}
