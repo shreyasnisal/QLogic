@@ -100,6 +100,9 @@ export default StyleSheet.create({
         color: Colors.headerTextColor,
         fontWeight: 'bold',
     },
+    stateLabel_reducedFont: {
+        fontSize: 16,
+    },
     selectedGate: {
         backgroundColor: Colors.headerColor,
     },

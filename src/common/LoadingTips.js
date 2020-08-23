@@ -7,4 +7,6 @@ export default [
     'Qubits can be 0 and 1 at the same time! This is called superposition and written as 0+1 or 0-1',
     '00+01 just means 0(0+1), representing the state of the first qubit followed by the second',
     'You only get QCoins for extra stars obtained when replaying a level',
+    'You can click outside a Level Complete popup to view a completed level',
+    'In QLogic, amplitudes for states don\'t matter; 2*(11) is just 11', 
 ]

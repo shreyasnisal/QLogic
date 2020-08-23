@@ -14,7 +14,14 @@ export default class Header extends Component {
 
     render() {
 
-        const {title, onPressBack, onPressHelp, onPressSettings, onPressRestart, onPressInfo, onPressNext} = this.props
+        const {title,
+            onPressBack,
+            onPressHelp,
+            onPressSettings,
+            onPressRestart,
+            onPressInfo,
+            onPressNext,
+            onPressUndo} = this.props
 
         return(
             <View style={styles.container}>
@@ -22,7 +29,10 @@ export default class Header extends Component {
                 {onPressBack && <TouchableOpacity style={styles.headerIconBtn} onPress={onPressBack}>
                     <MaterialIcons name='keyboard-arrow-left' color={Colors.headerTextColor} size={40} />
                 </TouchableOpacity>}
-                {(onPressHelp || onPressSettings || onPressRestart || onPressInfo || onPressNext) && <View style={styles.headerRightIcons}>
+                {(onPressHelp || onPressSettings || onPressRestart || onPressInfo || onPressNext || onPressUndo) && <View style={styles.headerRightIcons}>
+                    {onPressUndo && <TouchableOpacity style={styles.headerIconBtn} onPress={onPressUndo}>
+                        <MaterialIcons name='undo' color={Colors.headerTextColor} size={30} />
+                    </TouchableOpacity>}
                     {onPressHelp && <TouchableOpacity style={styles.headerIconBtn} onPress={onPressHelp}>
                         <MaterialIcons name='help' color={Colors.headerTextColor} size={30} />
                     </TouchableOpacity>}

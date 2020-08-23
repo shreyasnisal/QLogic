@@ -624,6 +624,7 @@ export default class Game extends Component {
             extraCoins,
             levelPrevStars,
             gateInfoPopupVisible,
+            numQubits,
         } = this.state
 
         return(
@@ -632,11 +633,11 @@ export default class Game extends Component {
                 <View style={styles.statesRow}>
                     <View style={styles.stateContainer}>
                         <Text style={styles.stateStaticLabel}>Current State</Text>
-                        <Text style={styles.stateLabel}>{this.getStateText(currentState)}</Text>
+                        <Text style={[styles.stateLabel, numQubits === 3 ? styles.stateLabel_reducedFont : null]}>{this.getStateText(currentState)}</Text>
                     </View>
                     <View style={styles.stateContainer}>
                         <Text style={styles.stateStaticLabel}>Target State</Text>
-                        <Text style={styles.stateLabel}>{this.getStateText(targetState)}</Text>
+                        <Text style={[styles.stateLabel, numQubits === 3 ? styles.stateLabel_reducedFont : null]}>{this.getStateText(targetState)}</Text>
                     </View>
                 </View>
                 <ScrollView

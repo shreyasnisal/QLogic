@@ -60,6 +60,7 @@ export default class Playground extends Component {
             qubitLines: [],
             gateInfoPopupVisible: false,
             settingsPopupVisible: true,
+            stateStack: [[[1], [0]]],
         }
 
         this.showIntro()
@@ -165,6 +166,9 @@ export default class Playground extends Component {
         for (let i = 1; i < 2**numQubits; i++) {
             currentState[i] = [0]
         }
+        
+        const stateStack = []
+        stateState.push(currentState)
 
         this.gameScrollView.scrollTo({x: 0})
 
@@ -176,6 +180,7 @@ export default class Playground extends Component {
             gameScrollViewWidth: Dimensions.get('screen').width,
             selectedGate: null,
             controlQubit: null,
+            stateStack: stateStack,
         })
     }
 
@@ -234,7 +239,7 @@ export default class Playground extends Component {
 
     placeGate = (qubitIndex) => {
 
-        const {gateHistory, selectedGate, numQubits, currentState, controlQubit} = this.state
+        const {gateHistory, selectedGate, numQubits, currentState, controlQubit, stateStack} = this.state
         let gateMatrix = null
         let newState = null
 
@@ -274,6 +279,7 @@ export default class Playground extends Component {
                 gateMatrix = GateOperations.getMultiQubitGate(selectedGate, qubitIndex, numQubits)
             }
             newState = GateOperations.operateGate(gateMatrix, currentState)
+            stateStack.push(newState)
     
             for (let i = 0; i < numQubits; i++) {
                 if ((i !== qubitIndex) && i !== controlQubit)
@@ -284,6 +290,7 @@ export default class Playground extends Component {
                 controlQubit: null,
                 selectedGate: null,
                 currentState: newState,
+                stateStack: stateStack,
             })
         }
 
@@ -310,6 +317,9 @@ export default class Playground extends Component {
             qubitLines.pop()
         }
 
+        const stateStack = []
+        stateStack.push(currentState)
+
         this.setState({
             numQubits: numQubits,
             currentState: currentState,
@@ -317,9 +327,31 @@ export default class Playground extends Component {
             usableGates: usableGates,
             qubitLines: qubitLines,
             lines: [],
+            stateStack: stateStack,
         })
 
         // this.resetLevel()
+    }
+
+    undoButton = () => {
+        const {stateStack, currentState, gateHistory, numQubits, lines} = this.state
+
+        if (stateStack.length > 1) {
+            stateStack.pop()
+        }
+
+        for (let i = 0; i < numQubits; i++) {
+            const lastGate = gateHistory[i].pop()
+            if (lastGate[lastGate.length - 1] === 'c')
+                lines.pop()
+        }
+
+        this.setState({
+            currentState: stateStack[stateStack.length - 1],
+            stateStack: stateStack,
+            gateHistory: gateHistory,
+            lines: lines,
+        })
     }
 
     getStateText = (stateMatrix) => {
@@ -437,7 +469,14 @@ export default class Playground extends Component {
 
         return(
             <View style={commonStyles.container}>
-                <Header title={`Playground`} onPressBack={this.showExitPopup} onPressInfo={this.showGateInfoPopup} onPressRestart={this.restartButton} onPressSettings={this.showSettingsPopup} />
+                <Header
+                    title={`Playground`}
+                    onPressBack={this.showExitPopup}
+                    onPressInfo={this.showGateInfoPopup}
+                    onPressRestart={this.restartButton}
+                    onPressSettings={this.showSettingsPopup}
+                    onPressUndo={this.undoButton}
+                />
                 <View style={styles.statesRow}>
                     <View style={styles.stateContainer}>
                         <Text style={styles.stateStaticLabel}>Current State</Text>

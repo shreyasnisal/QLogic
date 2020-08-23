@@ -116,7 +116,7 @@ export default class TimeAttackCompletePopup extends Component {
     }
 
     onPressTwitter = () => {
-        const text = `OMG! I just score ${this.props.score} in 2-Qubit Time Attack in QLogic! I challenge you to beat my score!\n\nhttps://play.google.com/store/apps/details?id=com.paltangames.qlogic`
+        const text = `OMG! I just score ${this.props.score} in 2-Qubit Time Attack in QLogic by @paltan_games! I challenge you to beat my score!\n\nhttps://play.google.com/store/apps/details?id=com.paltangames.qlogic`
         Linking.openURL('https://twitter.com/intent/tweet?text=' + text)
     }
 

@@ -68,7 +68,7 @@ export default class LevelCompletePopup extends Component {
     }
 
     onPressTwitter = () => {
-        const text = `OMG! I just completed Level ${this.props.levelNumber} on QLogic!\n\nhttps://play.google.com/store/apps/details?id=com.paltangames.qlogic`
+        const text = `OMG! I just completed Level ${this.props.levelNumber} on QLogic by @paltan_games!\n\nhttps://play.google.com/store/apps/details?id=com.paltangames.qlogic`
         Linking.openURL('https://twitter.com/intent/tweet?text=' + text)
     }
 
