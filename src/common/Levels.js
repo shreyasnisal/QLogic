@@ -183,16 +183,7 @@ export default [
         tipText: 'The CX gate (Controlled X) does an X operation on a target qubit only if the control qubit is in state 1.',
     },
     {
-        // level-19: 01 + 11 > 01 + 10 - 11
-        numQubits: 2,
-        initialState: [[0], [1], [0], [1]],
-        targetState: [[0], [1], [1], [-1]],
-        gates: ['X', 'Z', 'H', 'CX'],
-        minMoves: 1,
-        maxMoves_2star: 3,
-    },
-    {
-        // level-20: 00 > 00 + 11
+        // level-19: 00 > 00 + 11
         numQubits: 2,
         initialState: [[1], [0], [0], [0]],
         targetState: [[1], [0], [0], [1]],
@@ -201,7 +192,7 @@ export default [
         maxMoves_2star: 4,
     },
     {
-        // level-21: 10 + 11 > 10 - 11
+        // level-20: 10 + 11 > 10 - 11
         numQubits: 2,
         initialState: [[0], [0], [1], [1]],
         targetState: [[0], [0], [1], [-1]],
@@ -212,7 +203,7 @@ export default [
         tipText: 'Similar to the CX gate, the CZ gate does a Z operation on the target only if the control qubit is in state 1.',
     },
     {
-        // level-22: 10 > 10 + 11
+        // level-21: 10 > 10 + 11
         numQubits: 2,
         initialState: [[0], [0], [1], [0]],
         targetState: [[0], [0], [1], [1]],
@@ -223,13 +214,22 @@ export default [
         tipText: 'The controlled H gate does an H operation on the target if the control is in state 1.',
     },
     {
-        // level-23: 01 > 01 - 11
+        // level-22: 01 > 01 - 11
         numQubits: 2,
         initialState: [[0], [1], [0], [0]],
         targetState: [[0], [1], [0], [-1]],
         gates: ['CX', 'CZ', 'CH'],
         minMoves: 2,
         maxMoves_2star: 4,
+    },
+    {
+        // level-23: 01 + 11 > 01 + 10 - 11
+        numQubits: 2,
+        initialState: [[0], [1], [0], [1]],
+        targetState: [[0], [1], [1], [-1]],
+        gates: ['X', 'Z', 'H', 'CX'],
+        minMoves: 1,
+        maxMoves_2star: 3,
     },
     {
         // level-24: 11 > -11
