@@ -227,7 +227,7 @@ export default [
         numQubits: 2,
         initialState: [[0], [1], [0], [1]],
         targetState: [[0], [1], [1], [-1]],
-        gates: ['X', 'Z', 'H', 'CX'],
+        gates: ['X', 'Z', 'H', 'CX', 'CZ', 'CH'],
         minMoves: 1,
         maxMoves_2star: 3,
     },
