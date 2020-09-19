@@ -336,9 +336,11 @@ export default class Playground extends Component {
     undoButton = () => {
         const {stateStack, currentState, gateHistory, numQubits, lines} = this.state
 
-        if (stateStack.length > 1) {
-            stateStack.pop()
+        if (stateStack.length <= 1) {
+            return;
         }
+
+        stateStack.pop()
 
         for (let i = 0; i < numQubits; i++) {
             const lastGate = gateHistory[i].pop()
