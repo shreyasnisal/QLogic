@@ -18,6 +18,7 @@ import Header from 'components/Header/Header'
 import Background from '../../components/Background/Background'
 import AsyncStorage from '@react-native-community/async-storage'
 import SettingsPopup from 'components/SettingsPopup/SettingsPopup'
+import UsernamePopup from 'components/UsernamePopup/UsernamePopup'
 
 export default class Home extends Component {
 
@@ -29,6 +30,8 @@ export default class Home extends Component {
             rateUsPopupVisible: false,
             settingsPopupVisible: false,
             coins: 0,
+            usernameVerified: false,
+            usernameAvailable: false,
         }
 
         this.props.navigation.addListener('focus', this.getData)
@@ -203,6 +206,13 @@ export default class Home extends Component {
                 <SettingsPopup
                     visible={settingsPopupVisible}
                     onCancel={this.hideSettingsPopup}
+                />
+                <UsernamePopup
+                    visible
+                    verified = {this.state.usernameVerified}
+                    available = {this.state.usernameAvailable}
+                    onPressVerify = {this.verifyUsername}
+                    onPressSubmit = {this.saveUsername}
                 />
             </View>
         )
