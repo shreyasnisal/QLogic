@@ -9,6 +9,7 @@ import {
     Image,
     TouchableOpacity,
 } from 'react-native'
+import axios from 'axios'
 import commonStyles from 'common/styles'
 import styles from './styles'
 import PrimaryButton from 'components/PrimaryButton/PrimaryButton'
@@ -19,6 +20,7 @@ import Background from '../../components/Background/Background'
 import AsyncStorage from '@react-native-community/async-storage'
 import SettingsPopup from 'components/SettingsPopup/SettingsPopup'
 import UsernamePopup from 'components/UsernamePopup/UsernamePopup'
+import BASE_URL from 'common/constants'
 
 export default class Home extends Component {
 
@@ -30,8 +32,7 @@ export default class Home extends Component {
             rateUsPopupVisible: false,
             settingsPopupVisible: false,
             coins: 0,
-            usernameVerified: false,
-            usernameAvailable: false,
+            usernamePopupVisible: false,
         }
 
         this.props.navigation.addListener('focus', this.getData)
@@ -129,6 +130,7 @@ export default class Home extends Component {
     getData = async => {
         this.getLevelsData()
         this.getCoinsData()
+        this.getUsernameData()
     }
 
     getLevelsData = async () => {
@@ -156,8 +158,30 @@ export default class Home extends Component {
         })
     }
 
+    getUsernameData = async () => {
+        const username = await AsyncStorage.getItem('username')
+        if (!username) {
+            this.setState({
+                usernamePopupVisible: true,
+            })
+        }
+    }
+
+    onUserCreated = (username) => {
+        this.setState({
+            UsernamePopupVisible: false,
+        })
+
+        AsyncStorage.setItem('username', username)
+    }
+
     render() {
-        const {exitPopupVisible, rateUsPopupVisible, settingsPopupVisible, coins, coinsPopupVisible} = this.state
+        const {exitPopupVisible,
+            rateUsPopupVisible,
+            settingsPopupVisible,
+            coins,
+            coinsPopupVisible,
+            usernamePopupVisible} = this.state
 
         return(
             <View style={commonStyles.container}>
@@ -208,11 +232,8 @@ export default class Home extends Component {
                     onCancel={this.hideSettingsPopup}
                 />
                 <UsernamePopup
-                    visible
-                    verified = {this.state.usernameVerified}
-                    available = {this.state.usernameAvailable}
-                    onPressVerify = {this.verifyUsername}
-                    onPressSubmit = {this.saveUsername}
+                    visible = {usernamePopupVisible}
+                    onUserCreated = {this.onUserCreated}
                 />
             </View>
         )

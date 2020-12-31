@@ -50,7 +50,7 @@ export default class LevelCompletePopup extends Component {
 
         const totalCoins = stars * 5 + (stars === 3 ? 5 : 0) - ((prevStars) ? prevStars * 5 + (prevStars === 3 ? 5 : 0) : 0)
 
-        if (totalCoins !== 0) {
+        if (totalCoins > 0) {
             this.coinIncrementTimer = setInterval(() => {
                 this.setState({
                     coinsEarned: this.state.coinsEarned + 1,

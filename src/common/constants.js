@@ -1,0 +1,1 @@
+export const BASE_URL = 'http://192.168.68.106:5001/qlogic-30e7e/us-central1'
