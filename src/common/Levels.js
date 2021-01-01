@@ -474,8 +474,8 @@ export default [
         initialState: [[0], [0], [0], [0], [0], [0], [0], [1]],
         targetState: [[0], [0], [0], [0], [0], [-1], [0], [-1]],
         gates: ['X', 'Z', 'H', 'CX', 'CZ', 'CH'],
-        minMoves: 2,
-        maxMoves_2star: 4,
+        minMoves: 3,
+        maxMoves_2star: 5,
     },
     {
         // level-49: 101 + 001 > 001
@@ -661,7 +661,7 @@ export default [
         // level-69: 100 > 000 - 111               
         numQubits: 3,
         initialState: [[0], [0], [0], [0], [1], [0], [0], [0]],
-        targetState: [[1], [0], [0], [0], [0], [0], [0], [1]],
+        targetState: [[1], [0], [0], [0], [0], [0], [0], [-1]],
         gates: ['H', 'CX'],
         minMoves: 3,
         maxMoves_2star: 5,
@@ -719,5 +719,240 @@ export default [
         gates: ['X', 'Z', 'H', 'CX', 'CZ', 'CH'],
         minMoves: 2,
         maxMoves_2star: 4,
+    },
+    {
+        // level-76: 010 + 111 > 000 + 101         
+        numQubits: 3,
+        initialState: [[0], [0], [1], [0], [0], [0], [0], [1]],
+        targetState: [[1], [0], [0], [0], [0], [1], [0], [0]],
+        gates: ['X', 'Z', 'H', 'CX', 'CZ', 'CH'],
+        time: 60,
+        minTime: 20,
+        maxTime_2star: 35,
+    },
+    {
+        // level-77: 000 + 111 > 101 + 110       
+        numQubits: 3,
+        initialState: [[1], [0], [0], [0], [0], [0], [0], [1]],
+        targetState: [[0], [0], [0], [0], [0], [1], [1], [0]],
+        gates: ['X', 'Z', 'H', 'CX', 'CZ', 'CH'],
+        time: 60,
+        minTime: 25,
+        maxTime_2star: 40,
+    },
+    {
+        // level-78: 001 + 101 > 111   
+        numQubits: 3,
+        initialState: [[0], [1], [0], [0], [0], [1], [0], [0]],
+        targetState: [[0], [0], [0], [0], [0], [0], [0], [1]],
+        gates: ['X', 'Z', 'H', 'CX', 'CZ', 'CH'],
+        time: 60,
+        minTime: 30,
+        maxTime_2star: 45,
+    },
+    {
+        // level-79: 000 + 111 > 010 + 111   
+        numQubits: 3,
+        initialState: [[1], [0], [0], [0], [0], [0], [0], [1]],
+        targetState: [[0], [0], [1], [0], [0], [0], [0], [1]],
+        gates: ['X', 'Z', 'H', 'CX', 'CZ', 'CH'],
+        time: 60,
+        minTime: 25,
+        maxTime_2star: 40,
+    },
+    {
+        // level-80: 011 + 110 > 010 + 011 + 111          
+        numQubits: 3,
+        initialState: [[0], [0], [0], [1], [0], [0], [1], [0]],
+        targetState: [[0], [0], [1], [1], [0], [0], [0], [1]],
+        gates: ['X', 'Z', 'H', 'CX', 'CZ', 'CH'],
+        time: 60,
+        minTime: 25,
+        maxTime_2star: 40,
+    },
+    {
+        // level-81: 010 + 110 > 000 - 010 + 100 - 110           
+        numQubits: 3,
+        initialState: [[0], [0], [1], [0], [0], [0], [1], [0]],
+        targetState: [[1], [0], [-1], [0], [1], [0], [-1], [0]],
+        gates: ['X', 'Z', 'H', 'CX', 'CZ', 'CH'],
+        time: 60,
+        minTime: 20,
+        maxTime_2star: 35,
+    },
+    {
+        // level-82: 001 + 011 > 001 + 010 + 101          
+        numQubits: 3,
+        initialState: [[0], [1], [0], [1], [0], [0], [0], [0]],
+        targetState: [[0], [1], [1], [0], [0], [1], [0], [0]],
+        gates: ['X', 'Z', 'H', 'CX', 'CZ', 'CH'],
+        time: 60,
+        minTime: 25,
+        maxTime_2star: 40,
+    },
+    {
+        // level-83: 000 + 111 > 010 + 011 + 101        
+        numQubits: 3,
+        initialState: [[1], [0], [0], [0], [0], [0], [0], [1]],
+        targetState: [[0], [0], [1], [1], [0], [1], [0], [0]],
+        gates: ['X', 'Z', 'H', 'CX', 'CZ', 'CH'],
+        time: 60,
+        minTime: 20,
+        maxTime_2star: 35,
+    },
+    {
+        // level-84: 010 + 011 + 101 > 010 + 011 + 100 - 101         
+        numQubits: 3,
+        initialState: [[0], [0], [1], [1], [0], [1], [0], [0]],
+        targetState: [[0], [0], [1], [1], [1], [-1], [0], [0]],
+        gates: ['X', 'Z', 'H', 'CX', 'CZ', 'CH'],
+        time: 60,
+        minTime: 20,
+        maxTime_2star: 35,
+    },
+    {
+        // level-85: 000 + 010 + 111 > 000 + 010 + 100 - 110            
+        numQubits: 3,
+        initialState: [[1], [0], [1], [0], [0], [0], [0], [1]],
+        targetState: [[1], [0], [1], [0], [1], [0], [-1], [0]],
+        gates: ['X', 'Z', 'H', 'CX', 'CZ', 'CH'],
+        time: 60,
+        minTime: 25,
+        maxTime_2star: 40,
+    },
+    {
+        // level-86: 000 + 001 + 010 > 011 + 100 + 110            
+        numQubits: 3,
+        initialState: [[1], [1], [1], [0], [0], [0], [0], [0]],
+        targetState: [[0], [0], [0], [1], [1], [0], [1], [0]],
+        gates: ['X', 'Z', 'H', 'CX', 'CZ', 'CH'],
+        minMoves: 3,
+        maxMoves_2star: 5,
+    },
+    {
+        // level-87: 001 + 100 + 110 > 010 + 100 + 101         
+        numQubits: 3,
+        initialState: [[0], [1], [0], [0], [1], [0], [1], [0]],
+        targetState: [[0], [0], [1], [0], [1], [1], [0], [0]],
+        gates: ['X', 'Z', 'H', 'CX', 'CZ', 'CH'],
+        minMoves: 2,
+        maxMoves_2star: 4,
+    },
+    {
+        // level-88: 010 + 100 + 111 > 000 + 001 + 110          
+        numQubits: 3,
+        initialState: [[0], [0], [1], [0], [1], [0], [0], [1]],
+        targetState: [[1], [1], [0], [0], [0], [0], [1], [0]],
+        gates: ['X', 'Z', 'H', 'CX', 'CZ', 'CH'],
+        minMoves: 2,
+        maxMoves_2star: 4,
+    },
+    {
+        // level-89: 000 + 010 + 101 > 100 + 101 + 110          
+        numQubits: 3,
+        initialState: [[1], [0], [1], [0], [0], [1], [0], [0]],
+        targetState: [[0], [0], [0], [0], [1], [1], [1], [0]],
+        gates: ['X', 'Z', 'H', 'CX', 'CZ', 'CH'],
+        minMoves: 2,
+        maxMoves_2star: 4,
+    },
+    {
+        // level-90: 010 + 101 + 111 > 000 + 010 + 101           
+        numQubits: 3,
+        initialState: [[0], [0], [1], [0], [0], [1], [0], [1]],
+        targetState: [[1], [0], [1], [0], [0], [1], [0], [0]],
+        gates: ['X', 'Z', 'H', 'CX', 'CZ', 'CH'],
+        minMoves: 3,
+        maxMoves_2star: 5,
+    },
+    {
+        // level-91: 011 + 110 + 111 > 001 + 011 + 100          
+        numQubits: 3,
+        initialState: [[0], [0], [0], [1], [0], [0], [1], [1]],
+        targetState: [[0], [1], [0], [1], [1], [0], [0], [0]],
+        gates: ['X', 'Z', 'H', 'CX', 'CZ', 'CH'],
+        minMoves: 3,
+        maxMoves_2star: 5,
+    },
+    {
+        // level-92: 001 + 010 > 001 + 010 + 101 + 110            
+        numQubits: 3,
+        initialState: [[0], [1], [1], [0], [0], [0], [0], [0]],
+        targetState: [[0], [1], [1], [0], [0], [1], [1], [0]],
+        gates: ['X', 'Z', 'H', 'CX', 'CZ', 'CH'],
+        minMoves: 1,
+        maxMoves_2star: 3,
+    },
+    {
+        // level-93: 010 + 110 > 010 + 011 + 110           
+        numQubits: 3,
+        initialState: [[0], [0], [1], [0], [0], [0], [1], [0]],
+        targetState: [[0], [0], [1], [1], [0], [0], [1], [0]],
+        gates: ['X', 'Z', 'H', 'CX', 'CZ', 'CH'],
+        minMoves: 2,
+        maxMoves_2star: 4,
+    },
+    {
+        // level-94: 001 + 100 > 001 + 011 + 100 + 110            
+        numQubits: 3,
+        initialState: [[0], [1], [0], [0], [1], [0], [0], [0]],
+        targetState: [[0], [1], [0], [1], [1], [0], [1], [0]],
+        gates: ['X', 'Z', 'H', 'CX', 'CZ', 'CH'],
+        minMoves: 1,
+        maxMoves_2star: 3,
+    },
+    {
+        // level-95: 000 + 010 + 101 + 111 > 001 - 011 + 100 + 110            
+        numQubits: 3,
+        initialState: [[1], [0], [1], [0], [0], [1], [0], [1]],
+        targetState: [[0], [1], [0], [-1], [1], [0], [1], [0]],
+        gates: ['X', 'Z', 'H', 'CX', 'CZ', 'CH'],
+        minMoves: 2,
+        maxMoves_2star: 4,
+    },
+    {
+        // level-96: 100 + 101 + 111 > 011 + 100 + 101 - 110           
+        numQubits: 3,
+        initialState: [[0], [0], [0], [0], [1], [1], [0], [1]],
+        targetState: [[0], [0], [0], [1], [1], [1], [-1], [0]],
+        gates: ['X', 'Z', 'H', 'CX', 'CZ', 'CH'],
+        minMoves: 2,
+        maxMoves_2star: 4,
+    },
+    {
+        // level-97: 010 > 001 + 010 + 011           
+        numQubits: 3,
+        initialState: [[0], [0], [1], [0], [0], [0], [0], [0]],
+        targetState: [[0], [1], [1], [1], [0], [0], [0], [0]],
+        gates: ['X', 'Z', 'H', 'CX', 'CZ', 'CH'],
+        minMoves: 3,
+        maxMoves_2star: 5,
+    },
+    {
+        // level-98: 110 > 010 - 011 + 111          
+        numQubits: 3,
+        initialState: [[0], [0], [0], [0], [0], [0], [1], [0]],
+        targetState: [[0], [0], [1], [-1], [0], [0], [0], [1]],
+        gates: ['X', 'Z', 'H', 'CX', 'CZ', 'CH'],
+        minMoves: 3,
+        maxMoves_2star: 5,
+    },
+    {
+        // level-99: 001 + 111 > 001 + 010 - 011           
+        numQubits: 3,
+        initialState: [[0], [1], [0], [0], [0], [0], [0], [1]],
+        targetState: [[0], [1], [1], [-1], [0], [0], [0], [0]],
+        gates: ['X', 'Z', 'H', 'CX', 'CZ', 'CH'],
+        minMoves: 2,
+        maxMoves_2star: 4,
+    },
+    {
+        // level-100: 000 > 001 + 011 + 100          
+        numQubits: 3,
+        initialState: [[1], [0], [0], [0], [0], [0], [0], [0]],
+        targetState: [[0], [1], [0], [1], [1], [0], [0], [0]],
+        gates: ['X', 'Z', 'H', 'CX', 'CZ', 'CH'],
+        minMoves: 4,
+        maxMoves_2star: 6,
     },
 ]
